@@ -3,9 +3,12 @@ import { computed } from 'vue'
 import { site } from '@/config/site'
 import { formatDateTime } from '@/utils/format'
 import { ui } from '@/config/site'
+import { groupSources } from '@/utils/sources'
 import type { Article } from '@/types'
 
 const props = defineProps<{ article: Article }>()
+
+const sourceNames = computed(() => groupSources(props.article.sources ?? []).map((g) => g.name))
 
 const published = computed(() => props.article.publishedAt ?? props.article.createdAt)
 </script>
@@ -31,10 +34,26 @@ const published = computed(() => props.article.publishedAt ?? props.article.crea
         <i class="fa-regular fa-clock" aria-hidden="true"></i> {{ ui.article.minutes(article.readingMinutes) }}
       </span>
     </p>
+
+    <p v-if="sourceNames.length" class="head__sources">
+      <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+      <strong>{{ ui.sources.basedOn(sourceNames.length) }}:</strong>
+      {{ sourceNames.join(', ') }}
+    </p>
   </header>
 </template>
 
 <style scoped lang="scss">
+.head__sources {
+  font-size: $text-sm;
+  color: $ink-soft;
+
+  i {
+    color: $success;
+    margin-right: 0.3rem;
+  }
+}
+
 .head {
   @include flex(column, stretch, flex-start, 0.9rem);
 
