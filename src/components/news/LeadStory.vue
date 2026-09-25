@@ -3,7 +3,7 @@ import { site } from '@/config/site'
 import StoryMeta from './StoryMeta.vue'
 import SmartLabel from './SmartLabel.vue'
 import ArticleFigure from './ArticleFigure.vue'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 import type { ArticleCard } from '@/types'
 
 defineProps<{ article: ArticleCard }>()
