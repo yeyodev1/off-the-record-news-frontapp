@@ -4,7 +4,7 @@ import { site } from '@/config/site'
 import { useUserStore } from '@/stores/user'
 import { formatToday } from '@/utils/format'
 import BrandMark from '@/components/news/BrandMark.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 
 const userStore = useUserStore()
 const today = formatToday()
