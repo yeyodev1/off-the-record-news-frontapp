@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 
 withDefaults(
   defineProps<{ id: string; label: string; optional?: boolean; hint?: string; inverted?: boolean }>(),
