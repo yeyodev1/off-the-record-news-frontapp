@@ -3,7 +3,7 @@ import { site } from '@/config/site'
 import { useSubscribeForm } from '@/composables/useSubscribeForm'
 import FormField from './FormField.vue'
 import FormSuccess from './FormSuccess.vue'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 
 const { form, submitting, error, doneMessage, submit } = useSubscribeForm('pro')
 </script>
