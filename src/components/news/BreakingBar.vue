@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { site } from '@/config/site'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 import type { ArticleCard } from '@/types'
 
 defineProps<{ items: ArticleCard[] }>()
