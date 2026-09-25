@@ -2,7 +2,7 @@
 import { site } from '@/config/site'
 import SectionHeading from './SectionHeading.vue'
 import ArticleCard from './ArticleCard.vue'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 import type { ArticleCard as Card, Section } from '@/types'
 
 defineProps<{ section: Section; items: Card[] }>()
