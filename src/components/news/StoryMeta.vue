@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { site } from '@/config/site'
 import { formatRelative } from '@/utils/format'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 import type { ArticleCard } from '@/types'
 
 const props = withDefaults(defineProps<{ article: ArticleCard; showSection?: boolean }>(), {
