@@ -127,6 +127,7 @@ export const ui = {
   feed: {
     readStory: 'Leer la nota',
     seeSection: 'Ver todo',
+    more: 'Más noticias',
     loadMore: 'Cargar más',
     loadingMore: 'Cargando…',
     empty: 'Todavía no hay notas publicadas aquí. Vuelve en un rato.',
@@ -149,6 +150,16 @@ export const ui = {
     notFoundText: 'Puede que el enlace esté mal escrito o que la nota ya no esté publicada.',
     backHome: 'Volver a la portada',
     proBadge: 'Pro',
+  },
+  sources: {
+    title: 'Fuentes verificadas',
+    note: (n: number) =>
+      n === 1
+        ? 'Esta nota se basa en la publicación de un medio. Puedes leer el original.'
+        : `Esta nota se basa en ${n} medios e instituciones. Puedes leer cada original.`,
+    open: 'Ver nota original',
+    nth: (i: number) => `Nota ${i}`,
+    basedOn: (n: number) => (n === 1 ? 'Basada en 1 fuente' : `Basada en ${n} fuentes`),
   },
   section: {
     notFoundTitle: 'Esa sección no existe',
