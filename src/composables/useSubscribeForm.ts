@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue'
 import { subscribersService } from '@/services/subscribers.service'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 import type { ApiError, Edition } from '@/types'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
