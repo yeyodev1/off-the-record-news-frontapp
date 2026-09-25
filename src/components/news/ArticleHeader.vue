@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { site } from '@/config/site'
 import { formatDateTime } from '@/utils/format'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 import type { Article } from '@/types'
 
 const props = defineProps<{ article: Article }>()
