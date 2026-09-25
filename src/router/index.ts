@@ -10,16 +10,113 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: site.name },
   },
   {
+    path: '/seccion/:section',
+    name: 'Section',
+    component: () => import('@/views/SectionView.vue'),
+    meta: { title: 'Sección' },
+  },
+  {
+    path: '/nota/:slug',
+    name: 'Article',
+    component: () => import('@/views/ArticleView.vue'),
+    meta: { title: 'Nota' },
+  },
+  {
+    path: '/boletines',
+    name: 'Newsletters',
+    component: () => import('@/views/NewslettersView.vue'),
+    meta: { title: 'Boletines' },
+  },
+  {
+    path: '/pro',
+    name: 'Pro',
+    component: () => import('@/views/ProView.vue'),
+    meta: { title: 'Off the Record Pro' },
+  },
+  {
+    path: '/denuncias',
+    name: 'Tips',
+    component: () => import('@/views/TipsView.vue'),
+    meta: { title: 'Denuncias' },
+  },
+  {
+    path: '/nosotros',
+    name: 'About',
+    component: () => import('@/views/AboutView.vue'),
+    meta: { title: 'Nosotros' },
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/LoginView.vue'),
     meta: { title: 'Ingresar', guestOnly: true },
   },
   {
-    path: '/cuenta',
-    name: 'Account',
-    component: () => import('@/views/AccountView.vue'),
-    meta: { title: 'Mi cuenta', requiresAuth: true },
+    path: '/admin',
+    component: () => import('@/views/admin/AdminLayout.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true, admin: true },
+    children: [
+      {
+        path: '',
+        name: 'AdminDashboard',
+        component: () => import('@/views/admin/AdminDashboardView.vue'),
+        meta: { title: 'Mesa de redacción' },
+      },
+      {
+        path: 'cola',
+        name: 'AdminQueue',
+        component: () => import('@/views/admin/AdminQueueView.vue'),
+        meta: { title: 'Por aprobar' },
+      },
+      {
+        path: 'notas',
+        name: 'AdminArticles',
+        component: () => import('@/views/admin/AdminArticlesView.vue'),
+        meta: { title: 'Notas' },
+      },
+      {
+        path: 'notas/nueva',
+        name: 'AdminArticleNew',
+        component: () => import('@/views/admin/AdminArticleEditView.vue'),
+        meta: { title: 'Nueva nota' },
+      },
+      {
+        path: 'notas/:id',
+        name: 'AdminArticleEdit',
+        component: () => import('@/views/admin/AdminArticleEditView.vue'),
+        meta: { title: 'Editar nota' },
+      },
+      {
+        path: 'senales',
+        name: 'AdminSignals',
+        component: () => import('@/views/admin/AdminSignalsView.vue'),
+        meta: { title: 'Señales' },
+      },
+      {
+        path: 'fuentes',
+        name: 'AdminSources',
+        component: () => import('@/views/admin/AdminSourcesView.vue'),
+        meta: { title: 'Fuentes' },
+      },
+      {
+        path: 'suscriptores',
+        name: 'AdminSubscribers',
+        component: () => import('@/views/admin/AdminSubscribersView.vue'),
+        meta: { title: 'Suscriptores' },
+      },
+      {
+        path: 'denuncias',
+        name: 'AdminTips',
+        component: () => import('@/views/admin/AdminTipsView.vue'),
+        meta: { title: 'Denuncias' },
+      },
+      {
+        path: 'boletines',
+        name: 'AdminNewsletters',
+        component: () => import('@/views/admin/AdminNewslettersView.vue'),
+        meta: { title: 'Boletines' },
+      },
+    ],
   },
   {
     path: '/:pathMatch(.*)*',
@@ -53,8 +150,12 @@ router.beforeEach(async (to) => {
     return { name: 'Login', query: { next: to.fullPath }, replace: true }
   }
 
+  if (to.meta.requiresAdmin && !userStore.isAdmin) {
+    return { name: 'Home', replace: true }
+  }
+
   if (to.meta.guestOnly && userStore.isAuthenticated) {
-    return { name: 'Account', replace: true }
+    return userStore.isAdmin ? { name: 'AdminDashboard', replace: true } : { name: 'Home', replace: true }
   }
 })
 
