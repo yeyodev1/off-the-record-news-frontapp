@@ -9,7 +9,7 @@ import SectionHeading from '@/components/news/SectionHeading.vue'
 import SubscribeBox from '@/components/news/SubscribeBox.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 
 const { feed, latest, sections, loading, error, isEmpty, reload } = useHomeFeed()
 </script>
