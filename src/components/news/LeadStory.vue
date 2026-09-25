@@ -3,7 +3,8 @@ import { site } from '@/config/site'
 import StoryMeta from './StoryMeta.vue'
 import SmartLabel from './SmartLabel.vue'
 import ArticleFigure from './ArticleFigure.vue'
-import { ui } from '@/config/site'
+import ReadMore from './ReadMore.vue'
+import CoverFallback from './CoverFallback.vue'
 import type { ArticleCard } from '@/types'
 
 defineProps<{ article: ArticleCard }>()
@@ -17,6 +18,7 @@ defineProps<{ article: ArticleCard }>()
     </h2>
 
     <ArticleFigure v-if="article.image" :image="article.image" :alt="article.title" eager class="lead__figure" />
+    <CoverFallback v-else :section="article.section" class="lead__figure" />
 
     <p class="lead__lede">{{ article.lede }}</p>
 
@@ -32,9 +34,7 @@ defineProps<{ article: ArticleCard }>()
       </ul>
     </div>
 
-    <RouterLink :to="`/nota/${article.slug}`" class="lead__more">
-      {{ ui.feed.readStory }} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-    </RouterLink>
+    <ReadMore :slug="article.slug" :minutes="article.readingMinutes" />
   </article>
 </template>
 
@@ -77,22 +77,5 @@ defineProps<{ article: ArticleCard }>()
     }
   }
 
-  &__more {
-    align-self: flex-start;
-    font-weight: 700;
-    font-size: $text-sm;
-    color: $accent;
-    @include flex(row, center, flex-start, 0.4rem);
-    border-bottom: 1.5px solid currentColor;
-    padding-bottom: 0.1rem;
-
-    i {
-      @include transition(transform);
-    }
-
-    &:hover i {
-      transform: translateX(3px);
-    }
-  }
 }
 </style>
