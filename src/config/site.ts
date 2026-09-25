@@ -155,10 +155,11 @@ export const ui = {
     title: 'Fuentes verificadas',
     note: (n: number) =>
       n === 1
-        ? 'Esta nota se basa en la publicación de un medio. Puedes leer el original.'
-        : `Esta nota se basa en ${n} medios e instituciones. Puedes leer cada original.`,
+        ? 'Esta nota se basa en la publicación de un medio. Esto es lo que dice:'
+        : `Esta nota se basa en ${n} medios e instituciones. Esto es lo que dice cada uno:`,
     open: 'Ver nota original',
-    nth: (i: number) => `Nota ${i}`,
+    readAt: (name: string) => `Leer en ${name}`,
+    noSummary: 'El medio no publica un resumen de esta nota.',
     basedOn: (n: number) => (n === 1 ? 'Basada en 1 fuente' : `Basada en ${n} fuentes`),
   },
   section: {
