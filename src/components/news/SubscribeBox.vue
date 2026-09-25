@@ -3,7 +3,7 @@ import { site } from '@/config/site'
 import { useSubscribeForm } from '@/composables/useSubscribeForm'
 import FormSuccess from './FormSuccess.vue'
 import SmartLabel from './SmartLabel.vue'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 
 // Desde la portada se suscribe a las dos ediciones diarias; el detalle se elige en /boletines.
 const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsletter', ['manana', 'noche'])
