@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { site } from '@/config/site'
 import BrandMark from './BrandMark.vue'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 </script>
 
 <template>
