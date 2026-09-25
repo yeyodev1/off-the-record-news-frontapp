@@ -1,6 +1,6 @@
 import { computed, ref, type Ref } from 'vue'
 import { useToastStore } from '@/stores/toast'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 
 export function useShare(url: Ref<string>, title: Ref<string>) {
   const toast = useToastStore()
