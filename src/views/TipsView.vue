@@ -2,7 +2,7 @@
 import { site, telegramLink } from '@/config/site'
 import PageIntro from '@/components/news/PageIntro.vue'
 import TipForm from '@/components/news/TipForm.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 
 const telegram = telegramLink()
 </script>
