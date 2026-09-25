@@ -3,7 +3,7 @@ import { site } from '@/config/site'
 import PageIntro from '@/components/news/PageIntro.vue'
 import ProForm from '@/components/news/ProForm.vue'
 import SmartLabel from '@/components/news/SmartLabel.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 </script>
 
 <template>
