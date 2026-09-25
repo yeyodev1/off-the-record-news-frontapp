@@ -7,7 +7,7 @@ import ArticleCard from '@/components/news/ArticleCard.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
 import SmartLabel from '@/components/news/SmartLabel.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 import type { Section } from '@/types'
 
 const route = useRoute()
