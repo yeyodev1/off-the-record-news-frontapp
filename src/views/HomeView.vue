@@ -10,8 +10,15 @@ import SubscribeBox from '@/components/news/SubscribeBox.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
 import { ui } from '@/config/site'
+import { computed } from 'vue'
 
 const { feed, latest, sections, loading, error, isEmpty, reload } = useHomeFeed()
+
+// La columna lateral se corta para que no quede más alta que la principal;
+// el resto baja bajo la nota principal como tarjetas con foto.
+const SIDEBAR_COUNT = 5
+const sidebar = computed(() => latest.value.slice(0, SIDEBAR_COUNT))
+const more = computed(() => latest.value.slice(SIDEBAR_COUNT))
 </script>
 
 <template>
@@ -38,14 +45,21 @@ const { feed, latest, sections, loading, error, isEmpty, reload } = useHomeFeed(
 
       <template v-else>
         <div class="home__top">
-          <div v-if="feed?.lead" class="home__lead">
-            <LeadStory :article="feed.lead" />
+          <div v-if="feed?.lead || more.length" class="home__lead">
+            <LeadStory v-if="feed?.lead" :article="feed.lead" />
+
+            <section v-if="more.length" class="home__more" :aria-label="ui.feed.more">
+              <SectionHeading :title="ui.feed.more" tag="h2" />
+              <div class="home__grid">
+                <ArticleCard v-for="item in more" :key="item.id" :article="item" with-image />
+              </div>
+            </section>
           </div>
 
-          <section v-if="latest.length" class="home__latest" :aria-label="site.labels.latest">
+          <section v-if="sidebar.length" class="home__latest" :aria-label="site.labels.latest">
             <SectionHeading :title="site.labels.latest" tag="h2" />
             <ol class="home__stream">
-              <li v-for="item in latest" :key="item.id">
+              <li v-for="item in sidebar" :key="item.id">
                 <ArticleCard :article="item" variant="brief" />
               </li>
             </ol>
@@ -91,6 +105,15 @@ const { feed, latest, sections, loading, error, isEmpty, reload } = useHomeFeed(
   &__lead {
     flex: 1 1 62%;
     min-width: 0;
+    @include flex(column, stretch, flex-start, $space-xl);
+  }
+
+  &__more {
+    @include flex(column, stretch, flex-start, 1.25rem);
+  }
+
+  &__grid {
+    @include flex-cards(260px, 2rem 1.75rem);
   }
 
   &__latest {
