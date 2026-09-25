@@ -4,7 +4,7 @@ import { useSubscribeForm } from '@/composables/useSubscribeForm'
 import EditionPicker from './EditionPicker.vue'
 import FormField from './FormField.vue'
 import FormSuccess from './FormSuccess.vue'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 
 const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsletter', ['manana'])
 </script>
