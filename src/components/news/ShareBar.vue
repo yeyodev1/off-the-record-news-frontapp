@@ -2,7 +2,7 @@
 import { toRef } from 'vue'
 import { useShare } from '@/composables/useShare'
 import SmartLabel from './SmartLabel.vue'
-import { ui } from './uiCopy'
+import { ui } from '@/config/site'
 
 const props = defineProps<{ url: string; title: string }>()
 const { whatsappUrl, xUrl, copied, copy } = useShare(toRef(props, 'url'), toRef(props, 'title'))
