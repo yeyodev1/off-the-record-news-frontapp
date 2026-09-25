@@ -19,6 +19,9 @@ const when = computed(() => formatRelative(props.article.publishedAt ?? props.ar
       {{ site.sections[article.section] ?? article.section }}
     </RouterLink>
     <time v-if="when" class="meta__time" :datetime="article.publishedAt ?? article.createdAt">{{ when }}</time>
+    <span v-if="article.readingMinutes" class="meta__time">
+      <i class="fa-regular fa-clock" aria-hidden="true"></i> {{ ui.article.minutes(article.readingMinutes) }}
+    </span>
     <span v-if="article.isPro" class="meta__pro">
       <i class="fa-solid fa-lock" aria-hidden="true"></i> {{ ui.article.proBadge }}
     </span>
