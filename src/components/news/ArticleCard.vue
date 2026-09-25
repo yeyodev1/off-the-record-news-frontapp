@@ -2,6 +2,8 @@
 import { site } from '@/config/site'
 import StoryMeta from './StoryMeta.vue'
 import SmartLabel from './SmartLabel.vue'
+import ReadMore from './ReadMore.vue'
+import CoverFallback from './CoverFallback.vue'
 import type { ArticleCard } from '@/types'
 
 /**
@@ -17,13 +19,14 @@ withDefaults(
 <template>
   <article class="card" :class="`card--${variant}`">
     <RouterLink
-      v-if="withImage && article.image"
+      v-if="withImage"
       :to="`/nota/${article.slug}`"
       class="card__thumb"
       tabindex="-1"
       aria-hidden="true"
     >
-      <img :src="article.image.url" alt="" loading="lazy" decoding="async" />
+      <img v-if="article.image" :src="article.image.url" alt="" loading="lazy" decoding="async" />
+      <CoverFallback v-else :section="article.section" />
     </RouterLink>
 
     <div class="card__body">
@@ -33,10 +36,12 @@ withDefaults(
       </h3>
       <p class="card__lede">{{ article.lede }}</p>
 
-      <div v-if="variant === 'brief' && article.whyItMatters" class="card__why">
+      <div v-if="article.whyItMatters" class="card__why">
         <SmartLabel>{{ site.labels.whyItMatters }}</SmartLabel>
         <p>{{ article.whyItMatters }}</p>
       </div>
+
+      <ReadMore :slug="article.slug" :minutes="article.readingMinutes" />
     </div>
   </article>
 </template>
