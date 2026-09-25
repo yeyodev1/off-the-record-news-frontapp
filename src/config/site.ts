@@ -104,6 +104,98 @@ export const site = {
   },
 } as const
 
+/** Textos de interfaz: botones, estados vacíos, errores y formularios. */
+export const ui = {
+  nav: {
+    newsletters: 'Boletines',
+    pro: 'Pro',
+    subscribe: 'Suscríbete',
+    desk: 'Mesa',
+    sectionsAria: 'Secciones',
+    home: 'Portada',
+  },
+  footer: {
+    sections: 'Secciones',
+    brand: 'Off the Record',
+    about: 'Nosotros',
+    tips: 'Denuncias',
+    pro: 'Off the Record Pro',
+    newsletters: 'Boletines',
+    contact: 'Contacto',
+    madeBy: 'Hecho por',
+  },
+  feed: {
+    readStory: 'Leer la nota',
+    seeSection: 'Ver todo',
+    loadMore: 'Cargar más',
+    loadingMore: 'Cargando…',
+    empty: 'Todavía no hay notas publicadas aquí. Vuelve en un rato.',
+    errorTitle: 'No pudimos cargar las noticias',
+    retry: 'Reintentar',
+    breakingAria: 'Noticias de última hora',
+  },
+  article: {
+    by: 'Por',
+    minutes: (n: number) => `${n} min de lectura`,
+    close: 'Cerrar',
+    lockedTitle: 'Esta nota completa es para Off the Record Pro',
+    lockedText: 'El contexto completo, los antecedentes y las fuentes de esta nota están reservados para suscriptores Pro.',
+    lockedCta: 'Conoce Off the Record Pro',
+    share: 'Compartir',
+    copyLink: 'Copiar enlace',
+    copied: 'Enlace copiado',
+    related: 'Más de',
+    notFoundTitle: 'No encontramos esta nota',
+    notFoundText: 'Puede que el enlace esté mal escrito o que la nota ya no esté publicada.',
+    backHome: 'Volver a la portada',
+    proBadge: 'Pro',
+  },
+  section: {
+    notFoundTitle: 'Esa sección no existe',
+    notFoundText: 'Estas son las secciones que cubrimos:',
+  },
+  forms: {
+    email: 'Correo electrónico',
+    emailPlaceholder: 'tu@correo.com',
+    name: 'Nombre',
+    optional: '(opcional)',
+    company: 'Empresa',
+    contact: 'Cómo contactarte',
+    contactPlaceholder: 'Correo, teléfono o usuario de Telegram',
+    tipText: 'Qué pasó',
+    tipPlaceholder: 'Cuéntanos qué viste, dónde y cuándo. Mientras más detalle, mejor.',
+    tipMin: (n: number) => `Mínimo 20 caracteres (${n}/20)`,
+    editions: 'Elige tus boletines',
+    sending: 'Enviando…',
+    invalidEmail: 'Escribe un correo válido.',
+    noEditions: 'Elige al menos un boletín.',
+    shortTip: 'Cuéntanos un poco más: mínimo 20 caracteres.',
+    genericError: 'No se pudo enviar. Revisa tu conexión e inténtalo otra vez.',
+    doneTitle: 'Listo, ya estás en la lista',
+    proDoneTitle: 'Recibimos tu solicitud',
+    tipDoneTitle: 'Mensaje recibido',
+    homeBoxLink: 'Elegir boletines',
+    homeBoxNote: 'Recibirás El Mañanero y el Cierre de la noche.',
+    tipsOr: 'o usa el formulario',
+    tipsPrivacy: 'Nombre y contacto son opcionales. Solo los usamos para verificar lo que nos cuentas.',
+  },
+  pro: {
+    eyebrow: 'Para empresas',
+    featuresTitle: 'Qué incluye',
+    formTitle: 'Hablemos',
+  },
+  about: {
+    ctaTips: 'Envíanos una denuncia',
+    ctaNewsletters: 'Suscríbete a los boletines',
+  },
+  notFound: {
+    code: '404',
+    title: 'Esta página no existe',
+    text: 'Puede que el enlace esté mal escrito o que la página se haya movido.',
+    cta: 'Volver a la portada',
+  },
+} as const
+
 export function whatsappLink(message = 'Hola, quiero más información'): string {
   if (!site.whatsapp) return '#'
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`
