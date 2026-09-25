@@ -1,6 +1,6 @@
 import { computed, reactive, ref } from 'vue'
 import { tipsService } from '@/services/tips.service'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 import type { ApiError } from '@/types'
 
 export const TIP_MIN_LENGTH = 20
