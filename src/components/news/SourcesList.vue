@@ -20,20 +20,17 @@ const groups = computed(() => groupSources(props.sources))
     </div>
 
     <ul class="sources__list">
-      <li v-for="group in groups" :key="group.name" class="sources__item">
+      <li v-for="group in groups" :key="group.name" class="sources__group">
         <div class="sources__who">
           <strong>{{ group.name }}</strong>
           <span v-if="group.domain">{{ group.domain }}</span>
         </div>
-        <div v-if="group.urls.length" class="sources__links">
-          <a
-            v-for="(url, i) in group.urls"
-            :key="url"
-            :href="url"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {{ group.urls.length > 1 ? ui.sources.nth(i + 1) : ui.sources.open }}
+
+        <div v-for="item in group.items" :key="item.url || group.name" class="sources__item">
+          <p v-if="item.summary" class="sources__quote">{{ item.summary }}</p>
+          <p v-else class="sources__empty">{{ ui.sources.noSummary }}</p>
+          <a v-if="item.url" :href="item.url" target="_blank" rel="noopener noreferrer">
+            {{ ui.sources.readAt(group.name) }}
             <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
           </a>
         </div>
@@ -67,25 +64,22 @@ const groups = computed(() => groupSources(props.sources))
     border: 1px solid $line;
   }
 
-  &__item {
-    @include flex(column, flex-start, flex-start, 0.5rem);
-    padding: 0.85rem 1rem;
+  &__group {
+    @include flex(column, stretch, flex-start, 0.75rem);
+    padding: 1rem;
 
     & + & {
       border-top: 1px solid $line;
     }
 
-    @include from('sm') {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
+    @include from('md') {
+      padding: 1.1rem 1.25rem;
     }
   }
 
   &__who {
-    @include flex(column, flex-start, flex-start, 0.1rem);
-    min-width: 0;
+    @include flex(row, baseline, flex-start, 0.25rem 0.6rem);
+    flex-wrap: wrap;
 
     strong {
       font-weight: 700;
@@ -97,13 +91,14 @@ const groups = computed(() => groupSources(props.sources))
     }
   }
 
-  &__links {
-    @include flex(row, center, flex-start, 0.4rem 1rem);
-    flex-wrap: wrap;
-    font-size: $text-sm;
-    font-weight: 600;
+  &__item {
+    @include flex(column, flex-start, flex-start, 0.4rem);
+    padding-left: 0.9rem;
+    border-left: 2px solid $line;
 
     a {
+      font-size: $text-sm;
+      font-weight: 600;
       color: $accent-deep;
       text-decoration: underline;
       text-underline-offset: 3px;
@@ -118,6 +113,29 @@ const groups = computed(() => groupSources(props.sources))
       font-size: 0.65rem;
       margin-left: 0.15rem;
     }
+  }
+
+  &__quote {
+    font-size: $text-sm;
+    color: $ink-soft;
+    line-height: 1.55;
+    max-width: 62ch;
+
+    &::before {
+      content: '«';
+      margin-right: 0.1em;
+    }
+
+    &::after {
+      content: '»';
+      margin-left: 0.1em;
+    }
+  }
+
+  &__empty {
+    font-size: $text-xs;
+    color: $ink-muted;
+    font-style: italic;
   }
 }
 </style>
