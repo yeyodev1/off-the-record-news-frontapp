@@ -8,17 +8,21 @@ $accent-deep: color.adjust($accent, $lightness: -12%);
 $accent-soft: color.mix($accent, #ffffff, 14%);
 
 // Superficies
-$paper: #fdfcfa; // fondo base
+$paper: #ffffff; // fondo base: papel de diario, blanco limpio
 $surface: #ffffff; // superficies elevadas
-$sand: #f1ece6; // bloques suaves
-$line: #e7e1d9; // bordes
+$sand: #f3f3f1; // bloques suaves
+$line: #e4e4e0; // bordes
 
 // Texto
-$ink: #191423; // texto principal
-$ink-soft: #4a4552; // texto secundario
-$ink-muted: #8a8590; // terciario / labels
+$ink: #111111; // texto principal
+$ink-soft: #3b3b3b; // texto secundario
+$ink-muted: #707070; // terciario / labels
 
-$overlay: rgba(#100c14, 0.55);
+// Sello "off the record" y última hora
+$stamp: #e0342b;
+$stamp-soft: rgba($stamp, 0.1);
+
+$overlay: rgba(#0a0a0a, 0.55);
 
 // Estados
 $success: #3bb77e;
