@@ -1,99 +1,116 @@
 <script setup lang="ts">
-import { site, whatsappLink } from '@/config/site'
+import { site } from '@/config/site'
+import { useHomeFeed } from '@/composables/useHomeFeed'
+import BreakingBar from '@/components/news/BreakingBar.vue'
+import LeadStory from '@/components/news/LeadStory.vue'
+import ArticleCard from '@/components/news/ArticleCard.vue'
+import SectionBlock from '@/components/news/SectionBlock.vue'
+import SectionHeading from '@/components/news/SectionHeading.vue'
+import SubscribeBox from '@/components/news/SubscribeBox.vue'
+import SkeletonStory from '@/components/news/SkeletonStory.vue'
+import StateMessage from '@/components/news/StateMessage.vue'
+import { ui } from '@/components/news/uiCopy'
 
-const features = [
-  { icon: 'fa-solid fa-bolt', title: 'Rápido', text: 'Vite 7, Vue 3.5 y builds de segundos.' },
-  { icon: 'fa-solid fa-palette', title: 'Con identidad', text: 'Tokens SCSS propios, sin Tailwind ni librerías UI.' },
-  { icon: 'fa-solid fa-plug', title: 'Conectado', text: 'APIBase listo para hablar con el backapp.' },
-]
+const { feed, latest, sections, loading, error, isEmpty, reload } = useHomeFeed()
 </script>
 
 <template>
   <div class="home">
-    <section class="hero">
-      <p class="hero__eyebrow">{{ site.name }}</p>
-      <h1 class="hero__title">{{ site.tagline }}</h1>
-      <p class="hero__text">{{ site.description }}</p>
-      <div class="hero__actions">
-        <RouterLink to="/login" class="btn btn--primary">Empezar</RouterLink>
-        <a v-if="site.whatsapp" :href="whatsappLink()" class="btn btn--ghost" target="_blank" rel="noopener">
-          <i class="fa-brands fa-whatsapp"></i> Escríbenos
-        </a>
-      </div>
-    </section>
+    <BreakingBar v-if="feed?.breaking?.length" :items="feed.breaking" />
 
-    <section id="nosotros" class="features">
-      <article v-for="feature in features" :key="feature.title" class="feature">
-        <span class="feature__icon"><i :class="feature.icon"></i></span>
-        <h3 class="feature__title">{{ feature.title }}</h3>
-        <p class="feature__text">{{ feature.text }}</p>
-      </article>
-    </section>
+    <h1 class="visually-hidden">{{ site.name }} — {{ site.tagline }}</h1>
+
+    <div class="home__inner">
+      <div v-if="loading" class="home__top">
+        <div class="home__lead"><SkeletonStory :count="1" with-image /></div>
+        <div class="home__latest"><SkeletonStory :count="3" /></div>
+      </div>
+
+      <StateMessage
+        v-else-if="error"
+        :title="ui.feed.errorTitle"
+        :text="error"
+        :action-label="ui.feed.retry"
+        @action="reload"
+      />
+
+      <StateMessage v-else-if="isEmpty" icon="fa-regular fa-newspaper" :text="ui.feed.empty" />
+
+      <template v-else>
+        <div class="home__top">
+          <div v-if="feed?.lead" class="home__lead">
+            <LeadStory :article="feed.lead" />
+          </div>
+
+          <section v-if="latest.length" class="home__latest" :aria-label="site.labels.latest">
+            <SectionHeading :title="site.labels.latest" tag="h2" />
+            <ol class="home__stream">
+              <li v-for="item in latest" :key="item.id">
+                <ArticleCard :article="item" variant="brief" />
+              </li>
+            </ol>
+          </section>
+        </div>
+
+        <SubscribeBox class="home__subscribe" />
+
+        <SectionBlock
+          v-for="block in sections"
+          :key="block.section"
+          :section="block.section"
+          :items="block.items"
+          class="home__section"
+        />
+      </template>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.hero {
-  @include container(880px);
-  @include flex(column, center, center, 1.2rem);
-  text-align: center;
-  padding-block: $space-section $space-xl;
+.home {
+  &__inner {
+    @include container;
+    @include flex(column, stretch, flex-start, $space-xl);
+    padding-top: 1.75rem;
 
-  &__eyebrow {
-    @include eyebrow;
+    @include from('md') {
+      padding-top: 2.5rem;
+    }
   }
 
-  &__title {
-    @include display($display-lg);
+  &__top {
+    @include flex(column, stretch, flex-start, $space-lg);
+
+    @include from('lg') {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 3rem;
+    }
   }
 
-  &__text {
-    font-size: $text-lg;
-    color: $ink-soft;
-    max-width: 52ch;
+  &__lead {
+    flex: 1 1 62%;
+    min-width: 0;
   }
 
-  &__actions {
-    @include flex(row, center, center, 0.8rem);
-    flex-wrap: wrap;
-    margin-top: 0.6rem;
-  }
-}
+  &__latest {
+    flex: 1 1 38%;
+    min-width: 0;
 
-.features {
-  @include container;
-  @include flex-cards(260px, 1.25rem);
-  padding-block: 0 $space-section;
-}
-
-.feature {
-  @include card;
-  padding: 1.8rem 1.6rem;
-  @include transition;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: $shadow-md;
+    @include from('lg') {
+      padding-left: 3rem;
+      border-left: 1px solid $line;
+    }
   }
 
-  &__icon {
-    @include flex(row, center, center);
-    width: 2.6rem;
-    height: 2.6rem;
-    border-radius: $radius-sm;
-    background: $accent-soft;
-    color: $accent-deep;
-    margin-bottom: 1rem;
-  }
+  &__stream {
+    list-style: none;
+    @include flex(column, stretch, flex-start, 1.5rem);
 
-  &__title {
-    @include display($text-xl, 600);
-    margin-bottom: 0.4rem;
-  }
-
-  &__text {
-    font-size: $text-sm;
-    color: $ink-soft;
+    > li + li {
+      padding-top: 1.5rem;
+      border-top: 1px solid $line;
+    }
   }
 }
 </style>
