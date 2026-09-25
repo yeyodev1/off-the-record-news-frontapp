@@ -21,7 +21,8 @@ async function submit() {
   try {
     const user = await userStore.login(email.value.trim(), password.value)
     toast.success(`Hola, ${user.name || user.email}`)
-    const next = typeof route.query.next === 'string' ? route.query.next : '/cuenta'
+    const fallback = user.accountType === 'admin' ? '/admin' : '/'
+    const next = typeof route.query.next === 'string' ? route.query.next : fallback
     router.replace(next)
   } catch (e) {
     error.value = (e as ApiError).message
