@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { site } from '@/config/site'
 import BrandMark from '@/components/news/BrandMark.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 import type { Section } from '@/types'
 
 const year = new Date().getFullYear()
