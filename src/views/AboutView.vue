@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { site } from '@/config/site'
 import PageIntro from '@/components/news/PageIntro.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 </script>
 
 <template>
