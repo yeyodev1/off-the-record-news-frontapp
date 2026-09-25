@@ -9,7 +9,7 @@ export const site = {
   tagline: 'Lo que importa en Ecuador, sin rodeos.',
   description:
     'Noticias de Ecuador en formato breve: qué pasó, por qué importa y qué sigue. Lee en dos minutos, profundiza si quieres.',
-  url: 'https://dev-off-the-record-front.bakano.ec',
+  url: 'https://off-the-record-news-frontapp.vercel.app',
   email: 'redaccion@offtherecord.ec',
   // Solo dígitos con código de país, ej: 593984934039
   whatsapp: '',
