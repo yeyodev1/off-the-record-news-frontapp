@@ -12,7 +12,7 @@ import ArticleCard from '@/components/news/ArticleCard.vue'
 import SectionHeading from '@/components/news/SectionHeading.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
-import { ui } from '@/components/news/uiCopy'
+import { ui } from '@/config/site'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug ?? ''))
