@@ -1,28 +1,114 @@
+import type { Edition, Section } from '@/types'
+
 /**
  * El copy es configuración: todos los textos y datos de la marca viven acá.
  * Los componentes solo consumen y pintan.
  */
 export const site = {
   name: 'Off the Record',
-  tagline: 'Tu nueva app, lista para crecer.',
-  description: 'Off the Record — hecho con Vue 3, TypeScript y SCSS.',
-  url: 'https://cliente.com',
-  email: 'hola@cliente.com',
+  tagline: 'Lo que importa en Ecuador, sin rodeos.',
+  description:
+    'Noticias de Ecuador en formato breve: qué pasó, por qué importa y qué sigue. Lee en dos minutos, profundiza si quieres.',
+  url: 'https://dev-off-the-record-front.bakano.ec',
+  email: 'redaccion@offtherecord.ec',
   // Solo dígitos con código de país, ej: 593984934039
   whatsapp: '',
+  // Usuario del bot sin @. Vacío mientras no exista el bot.
+  telegramBot: '',
   social: {
     instagram: '',
-    facebook: '',
+    x: '',
     tiktok: '',
   },
   nav: [
-    { label: 'Inicio', to: '/' },
-    { label: 'Nosotros', to: '/#nosotros' },
-    { label: 'Contacto', to: '/#contacto' },
+    { label: 'Política', to: '/seccion/politica' },
+    { label: 'Economía', to: '/seccion/economia' },
+    { label: 'Asamblea', to: '/seccion/legislativo' },
+    { label: 'Seguridad', to: '/seccion/seguridad' },
+    { label: 'Negocios', to: '/seccion/negocios' },
+    { label: 'Mundo', to: '/seccion/mundo' },
   ],
+
+  // Rótulos del formato smart brevity
+  labels: {
+    whyItMatters: 'Por qué importa',
+    keyPoints: 'Los detalles',
+    bigPicture: 'El panorama',
+    whatsNext: 'Qué sigue',
+    goDeeper: 'Profundiza',
+    sources: 'Fuentes',
+    breaking: 'Última hora',
+    latest: 'Lo último',
+    pro: 'Pro',
+  },
+
+  sections: {
+    politica: 'Política',
+    economia: 'Economía',
+    legislativo: 'Asamblea',
+    seguridad: 'Seguridad',
+    sociedad: 'Sociedad',
+    mundo: 'Mundo',
+    negocios: 'Negocios',
+    tecnologia: 'Tecnología',
+  } satisfies Record<Section, string>,
+
+  editions: {
+    manana: { name: 'El Mañanero', time: '5:00', blurb: 'Todo lo que pasó ayer y lo que viene hoy, antes del café.' },
+    noche: { name: 'Cierre de la noche', time: '20:00', blurb: 'El resumen del día en tres minutos de lectura.' },
+    economia: { name: 'Economía', time: 'Semanal', blurb: 'Dólares, deuda, empleo y mercados que te afectan.' },
+    legislativo: { name: 'Asamblea', time: 'Semanal', blurb: 'Qué se vota, quién lo empuja y qué cambia para ti.' },
+  } satisfies Record<Edition, { name: string; time: string; blurb: string }>,
+
+  newsletter: {
+    title: 'Boletines Off the Record',
+    subtitle: 'Te llegan a tu correo dos veces al día. Cortos, claros y con lo que de verdad importa.',
+    price: 'Desde 3 USD al mes',
+    cta: 'Quiero suscribirme',
+    pendingNote: 'Te escribiremos para activar tu suscripción y el pago.',
+  },
+
+  pro: {
+    title: 'Off the Record Pro',
+    subtitle:
+      'Inteligencia política y económica para empresas: monitoreo diario, alertas y análisis de lo que se mueve en el poder.',
+    features: [
+      'Monitoreo diario de Asamblea, Ejecutivo e instituciones',
+      'Alertas inmediatas sobre temas que afectan a tu sector',
+      'Notas Pro con el contexto completo y fuentes',
+      'Boletines temáticos a la medida de tu equipo',
+    ],
+    cta: 'Solicitar información',
+  },
+
+  tips: {
+    title: 'Cuéntanos lo que sabes',
+    subtitle:
+      'Si viste algo que debería ser noticia, escríbenos. Revisamos cada mensaje y protegemos tu identidad.',
+    telegramCta: 'Escríbenos por Telegram',
+    formCta: 'Enviar denuncia',
+    success: 'Recibimos tu mensaje. Gracias por confiar en nosotros.',
+  },
+
+  about: {
+    title: 'Qué es Off the Record',
+    paragraphs: [
+      'Off the Record cuenta lo que pasa en Ecuador de forma breve y directa. Cada nota te dice qué pasó, por qué importa y qué sigue, para que te enteres en dos minutos.',
+      'Una mesa de redacción asistida por inteligencia artificial monitorea cientos de fuentes: medios, periodistas, políticos e instituciones. Un equipo de periodistas revisa y aprueba lo que se publica.',
+      'Si quieres más, cada nota tiene un "Profundiza" con el contexto completo y las fuentes citadas.',
+    ],
+  },
+
+  footer: {
+    note: 'Periodismo breve para Ecuador. Redacción asistida por IA y revisada por periodistas.',
+  },
 } as const
 
 export function whatsappLink(message = 'Hola, quiero más información'): string {
   if (!site.whatsapp) return '#'
   return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`
+}
+
+export function telegramLink(): string {
+  return site.telegramBot ? `https://t.me/${site.telegramBot}` : ''
 }
