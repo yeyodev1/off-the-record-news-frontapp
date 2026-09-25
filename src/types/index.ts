@@ -64,6 +64,8 @@ export interface Infographic {
 export interface ArticleSource {
   name: string
   url: string
+  /** Lo que dice esa nota, en palabras del propio medio. */
+  summary?: string
 }
 
 export interface Article {
