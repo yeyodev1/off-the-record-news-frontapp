@@ -62,3 +62,15 @@ export function formatRelative(value: string | Date | null | undefined): string 
   if (abs < 604800) return relative.format(Math.round(diff / 86400), 'day')
   return formatDate(time)
 }
+
+const time = new Intl.DateTimeFormat('es-EC', {
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+  timeZone: 'America/Guayaquil',
+})
+
+/** "14:41" en hora de Ecuador: el rótulo de cada actualización. */
+export function formatTime(value: string | Date): string {
+  return time.format(typeof value === 'string' ? new Date(value) : value)
+}

@@ -12,11 +12,14 @@ import ArticleCard from '@/components/news/ArticleCard.vue'
 import SectionHeading from '@/components/news/SectionHeading.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
+import ArticleUpdates from '@/components/news/ArticleUpdates.vue'
+import ArticleDisclaimer from '@/components/news/ArticleDisclaimer.vue'
+import RetractionNotice from '@/components/news/RetractionNotice.vue'
 import { ui } from '@/config/site'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug ?? ''))
-const { article, related, loading, notFound, error, reload } = useArticle(slug)
+const { article, retracted, related, loading, notFound, error, reload } = useArticle(slug)
 
 // El enlace que se comparte es el canónico del sitio, no el del túnel de desarrollo.
 const shareUrl = computed(() => `${site.url}/nota/${slug.value}`)
@@ -48,12 +51,18 @@ const sectionName = computed(() => (article.value ? site.sections[article.value.
       @action="reload"
     />
 
+    <div v-else-if="retracted" class="article-page__col">
+      <RetractionNotice :article="retracted" />
+    </div>
+
     <template v-else-if="article">
       <article class="article-page__col article-page__story">
         <ArticleHeader :article="article" />
+        <ArticleUpdates v-if="article.updates?.length" :updates="article.updates" />
         <ArticleFigure v-if="article.image" :image="article.image" :alt="article.title" eager />
         <ArticleBody :article="article" />
         <SourcesList v-if="article.sources?.length" :sources="article.sources" />
+        <ArticleDisclaimer v-if="article.disclaimer" :text="article.disclaimer" />
         <ShareBar :url="shareUrl" :title="article.title" />
       </article>
 

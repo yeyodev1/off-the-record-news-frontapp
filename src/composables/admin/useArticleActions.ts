@@ -40,6 +40,10 @@ export function useArticleActions() {
     run(a.id, () => adminService.rejectArticle(a.id), admin.queue.rejected)
   const rewrite = (a: Article, instructions: string) =>
     run(a.id, () => adminService.rewriteArticle(a.id, instructions), admin.rewrite.done)
+  const wait = (a: Article) =>
+    run(a.id, () => adminService.waitArticle(a.id), admin.queue.waited)
+  const retract = (a: Article, reason: string) =>
+    run(a.id, () => adminService.retractArticle(a.id, reason), admin.retract.done)
 
-  return { busyId, publish, reject, rewrite }
+  return { busyId, publish, reject, rewrite, wait, retract }
 }

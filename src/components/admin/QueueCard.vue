@@ -6,10 +6,11 @@ import AdminBadge from './AdminBadge.vue'
 import ScoreBadge from './ScoreBadge.vue'
 import ScoreBreakdown from './ScoreBreakdown.vue'
 import ArticlePreview from './ArticlePreview.vue'
+import VerificationPanel from './VerificationPanel.vue'
 import type { Article } from '@/types'
 
 defineProps<{ article: Article; busy?: boolean }>()
-const emit = defineEmits<{ publish: []; reject: []; rewrite: [] }>()
+const emit = defineEmits<{ publish: []; reject: []; rewrite: []; wait: [] }>()
 </script>
 
 <template>
@@ -31,6 +32,8 @@ const emit = defineEmits<{ publish: []; reject: []; rewrite: [] }>()
 
     <ScoreBreakdown v-if="article.score" :score="article.score" />
 
+    <VerificationPanel :verification="article.verification" compact />
+
     <ArticlePreview :article="article" />
 
     <footer class="queue-card__actions">
@@ -48,6 +51,15 @@ const emit = defineEmits<{ publish: []; reject: []; rewrite: [] }>()
       </RouterLink>
       <button class="queue-card__btn" type="button" :disabled="busy" @click="emit('rewrite')">
         <i class="fa-solid fa-wand-magic-sparkles"></i> {{ admin.queue.rewrite }}
+      </button>
+      <button
+        v-if="article.storyId"
+        class="queue-card__btn"
+        type="button"
+        :disabled="busy"
+        @click="emit('wait')"
+      >
+        <i class="fa-solid fa-hourglass-half"></i> {{ admin.queue.wait }}
       </button>
       <button
         class="queue-card__btn queue-card__btn--reject"

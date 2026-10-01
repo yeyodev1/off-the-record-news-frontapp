@@ -8,6 +8,10 @@ import type {
   PipelineRun,
   Signal,
   Source,
+  Story,
+  TelegramMember,
+  TelegramRole,
+  TelegramTeam,
   Subscriber,
   Tip,
 } from '@/types'
@@ -99,6 +103,71 @@ class AdminService extends APIBase {
       undefined,
       SLOW,
     )
+    return data
+  }
+
+  /** Kill switch: publicada → retirada con aviso; por aprobar → rechazada. */
+  async retractArticle(id: string, reason = ''): Promise<Article> {
+    const { data } = await this.post<Article>(`admin/articles/${id}/retract`, { reason })
+    return data
+  }
+
+  /** La nota no sale y su hecho vuelve a esperar más fuentes. */
+  async waitArticle(id: string): Promise<Article> {
+    const { data } = await this.post<Article>(`admin/articles/${id}/wait`, {})
+    return data
+  }
+
+  async publishUpdate(id: string, updateId: string): Promise<Article> {
+    const { data } = await this.post<Article>(`admin/articles/${id}/updates/${updateId}/publish`, {})
+    return data
+  }
+
+  async rejectUpdate(id: string, updateId: string): Promise<Article> {
+    const { data } = await this.post<Article>(`admin/articles/${id}/updates/${updateId}/reject`, {})
+    return data
+  }
+
+  // ─── Telegram ─────────────────────────────────────────────────────────
+  async telegram(): Promise<TelegramTeam> {
+    const { data } = await this.get<TelegramTeam>('admin/telegram')
+    return data
+  }
+
+  async configureTelegram(): Promise<TelegramTeam> {
+    const { data } = await this.post<TelegramTeam>('admin/telegram/configure', {}, undefined, {
+      timeout: 60000,
+    })
+    return data
+  }
+
+  async setTelegramRole(id: string, role: TelegramRole): Promise<TelegramMember> {
+    const { data } = await this.put<TelegramMember>(`admin/telegram/members/${id}`, { role })
+    return data
+  }
+
+  async removeTelegramMember(id: string): Promise<void> {
+    await this.delete(`admin/telegram/members/${id}`)
+  }
+
+  // ─── Hechos ───────────────────────────────────────────────────────────
+  async stories(params: Query): Promise<Paginated<Story>> {
+    const { data } = await this.get<Paginated<Story>>(`admin/stories${qs(params)}`)
+    return data
+  }
+
+  async story(id: string): Promise<{ story: Story; signals: Signal[] }> {
+    const { data } = await this.get<{ story: Story; signals: Signal[] }>(`admin/stories/${id}`)
+    return data
+  }
+
+  async draftStory(id: string): Promise<Article> {
+    const { data } = await this.post<Article>(`admin/stories/${id}/draft`, {}, undefined, SLOW)
+    return data
+  }
+
+  async discardStory(id: string): Promise<Story> {
+    const { data } = await this.post<Story>(`admin/stories/${id}/discard`, {})
     return data
   }
 

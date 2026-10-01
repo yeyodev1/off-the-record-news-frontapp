@@ -87,6 +87,18 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: 'Editar nota' },
       },
       {
+        path: 'telegram',
+        name: 'AdminTelegram',
+        component: () => import('@/views/admin/AdminTelegramView.vue'),
+        meta: { title: 'Telegram' },
+      },
+      {
+        path: 'hechos',
+        name: 'AdminStories',
+        component: () => import('@/views/admin/AdminStoriesView.vue'),
+        meta: { title: 'Hechos' },
+      },
+      {
         path: 'senales',
         name: 'AdminSignals',
         component: () => import('@/views/admin/AdminSignalsView.vue'),

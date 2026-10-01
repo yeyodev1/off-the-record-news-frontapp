@@ -1,5 +1,5 @@
 import APIBase from './httpBase'
-import type { Article, ArticleCard, HomeFeed, Paginated } from '@/types'
+import type { Article, ArticleCard, HomeFeed, Paginated, RetractedArticle } from '@/types'
 
 export interface ArticleListParams {
   section?: string
@@ -24,8 +24,11 @@ class ArticlesService extends APIBase {
     return data
   }
 
-  async bySlug(slug: string): Promise<Article> {
-    const { data } = await this.get<Article>(`articles/${encodeURIComponent(slug)}`)
+  /** Una nota retirada llega sin contenido, solo con el aviso de retiro. */
+  async bySlug(slug: string): Promise<Article | RetractedArticle> {
+    const { data } = await this.get<Article | RetractedArticle>(
+      `articles/${encodeURIComponent(slug)}`,
+    )
     return data
   }
 }

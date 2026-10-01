@@ -17,13 +17,17 @@ const list = usePagedList<Article, { status: string }>(
   { status: 'pending' },
 )
 const { items, page, pages, total, loading, error, load, remove, replace } = list
-const { busyId, publish, reject, rewrite } = useArticleActions()
+const { busyId, publish, reject, rewrite, wait } = useArticleActions()
 
 const toReject = ref<Article | null>(null)
 const toRewrite = ref<Article | null>(null)
 
 async function onPublish(article: Article) {
   if (await publish(article)) afterLeave(article.id)
+}
+
+async function onWait(article: Article) {
+  if (await wait(article)) afterLeave(article.id)
 }
 
 async function confirmReject() {
@@ -71,6 +75,7 @@ function afterLeave(id: string) {
         @publish="onPublish(article)"
         @reject="toReject = article"
         @rewrite="toRewrite = article"
+        @wait="onWait(article)"
       />
     </TransitionGroup>
 

@@ -1,12 +1,13 @@
 import { ref, watch, type Ref } from 'vue'
 import { articlesService } from '@/services/articles.service'
 import { site } from '@/config/site'
-import type { ApiError, Article, ArticleCard } from '@/types'
+import type { ApiError, Article, ArticleCard, RetractedArticle } from '@/types'
 
 const RELATED_LIMIT = 4
 
 export function useArticle(slug: Ref<string>) {
   const article = ref<Article | null>(null)
+  const retracted = ref<RetractedArticle | null>(null)
   const related = ref<ArticleCard[]>([])
   const loading = ref(true)
   const notFound = ref(false)
@@ -28,9 +29,16 @@ export function useArticle(slug: Ref<string>) {
     notFound.value = false
     error.value = ''
     related.value = []
+    retracted.value = null
     try {
-      article.value = await articlesService.bySlug(slug.value)
-      document.title = `${article.value.title} — ${site.name}`
+      const data = await articlesService.bySlug(slug.value)
+      document.title = `${data.title} — ${site.name}`
+      if (data.status === 'retracted') {
+        article.value = null
+        retracted.value = data as RetractedArticle
+        return
+      }
+      article.value = data as Article
       loadRelated(article.value)
     } catch (e) {
       const apiError = e as ApiError
@@ -44,5 +52,5 @@ export function useArticle(slug: Ref<string>) {
 
   watch(slug, load, { immediate: true })
 
-  return { article, related, loading, notFound, error, reload: load }
+  return { article, retracted, related, loading, notFound, error, reload: load }
 }

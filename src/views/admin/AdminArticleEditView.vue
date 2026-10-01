@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { admin, articleStatusLabels } from '@/config/admin'
 import { useArticleForm } from '@/composables/admin/useArticleForm'
@@ -10,6 +10,10 @@ import SourcesEditor from '@/components/admin/SourcesEditor.vue'
 import ImageField from '@/components/admin/ImageField.vue'
 import FromTextPanel from '@/components/admin/FromTextPanel.vue'
 import ArticleMetaPanel from '@/components/admin/ArticleMetaPanel.vue'
+import VerificationPanel from '@/components/admin/VerificationPanel.vue'
+import UpdatesPanel from '@/components/admin/UpdatesPanel.vue'
+import HistoryPanel from '@/components/admin/HistoryPanel.vue'
+import BaseModal from '@/components/ui/BaseModal.vue'
 
 const route = useRoute()
 const id = typeof route.params.id === 'string' ? route.params.id : undefined
@@ -23,15 +27,31 @@ const {
   saving,
   publishing,
   uploading,
+  retracting,
+  updateBusy,
   isNew,
   load,
   save,
   publish,
   uploadImage,
+  retract,
+  decideUpdate,
 } = useArticleForm(id)
 
-const busy = computed(() => saving.value || publishing.value)
-const canPublish = computed(() => article.value?.status !== 'published')
+const busy = computed(() => saving.value || publishing.value || retracting.value)
+const canPublish = computed(
+  () => article.value?.status !== 'published' && article.value?.status !== 'retracted',
+)
+const isPublished = computed(() => article.value?.status === 'published')
+
+const retractOpen = ref(false)
+const retractReason = ref('')
+
+async function confirmRetract() {
+  retractOpen.value = false
+  await retract(retractReason.value.trim())
+  retractReason.value = ''
+}
 
 onMounted(load)
 </script>
@@ -106,6 +126,17 @@ onMounted(load)
               :article="article"
             />
           </div>
+          <div v-if="article" class="editor__card">
+            <VerificationPanel :verification="article.verification" />
+          </div>
+          <div v-if="article?.updates?.length" class="editor__card">
+            <UpdatesPanel
+              :updates="article.updates"
+              :busy-id="updateBusy"
+              @publish="decideUpdate($event, 'publish')"
+              @reject="decideUpdate($event, 'reject')"
+            />
+          </div>
           <div class="editor__card">
             <ImageField
               :image="article?.image || null"
@@ -114,9 +145,22 @@ onMounted(load)
               @upload="uploadImage"
             />
           </div>
+          <div v-if="article?.history?.length" class="editor__card">
+            <HistoryPanel :history="article.history" />
+          </div>
         </aside>
 
         <div class="editor__bar">
+          <button
+            v-if="isPublished"
+            class="btn btn--ghost editor__btn editor__retract"
+            type="button"
+            :disabled="busy"
+            @click="retractOpen = true"
+          >
+            <i class="fa-solid" :class="retracting ? 'fa-spinner fa-spin' : 'fa-ban'"></i>
+            {{ admin.retract.button }}
+          </button>
           <button class="btn btn--ghost editor__btn" type="submit" :disabled="busy">
             <i class="fa-solid" :class="saving ? 'fa-spinner fa-spin' : 'fa-floppy-disk'"></i>
             {{ admin.editor.save }}
@@ -131,12 +175,32 @@ onMounted(load)
             <i class="fa-solid" :class="publishing ? 'fa-spinner fa-spin' : 'fa-check'"></i>
             {{ admin.editor.publish }}
           </button>
-          <span v-else class="editor__published"
+          <span v-else-if="article" class="editor__published"
             ><i class="fa-solid fa-circle-check"></i>
-            {{ articleStatusLabels.published.label }}</span
+            {{ articleStatusLabels[article.status].label }}</span
           >
         </div>
       </form>
+
+      <BaseModal
+        :open="retractOpen"
+        :title="admin.retract.title"
+        :message="admin.retract.message"
+        :confirm-label="admin.retract.button"
+        danger
+        @confirm="confirmRetract"
+        @cancel="retractOpen = false"
+      >
+        <div class="editor__reason">
+          <label for="retract-reason">{{ admin.retract.reason }}</label>
+          <textarea
+            id="retract-reason"
+            v-model="retractReason"
+            rows="3"
+            :placeholder="admin.retract.reasonPlaceholder"
+          ></textarea>
+        </div>
+      </BaseModal>
     </template>
   </section>
 </template>
@@ -246,6 +310,16 @@ onMounted(load)
     @include from('md') {
       flex: 0 0 auto;
     }
+  }
+
+  &__retract {
+    color: $stamp;
+    margin-right: auto;
+  }
+
+  &__reason {
+    text-align: left;
+    width: 100%;
   }
 
   &__published {

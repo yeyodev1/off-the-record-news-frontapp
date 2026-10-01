@@ -1,4 +1,13 @@
-import type { ArticleOrigin, ArticleStatus, Signal, Source, Subscriber, Tip } from '@/types'
+import type {
+  ArticleOrigin,
+  ArticleStatus,
+  Signal,
+  Source,
+  StoryStatus,
+  Subscriber,
+  TelegramRole,
+  Tip,
+} from '@/types'
 
 /**
  * Copy de la mesa de redacción. Vive aparte de site.ts porque es una
@@ -28,11 +37,13 @@ export const adminNav: AdminNavItem[] = [
     badge: 'pending',
   },
   { label: 'Notas', to: '/admin/notas', icon: 'fa-solid fa-newspaper', primary: true },
-  { label: 'Señales', to: '/admin/senales', icon: 'fa-solid fa-satellite-dish', primary: true },
+  { label: 'Hechos', to: '/admin/hechos', icon: 'fa-solid fa-layer-group', primary: true },
+  { label: 'Señales', to: '/admin/senales', icon: 'fa-solid fa-satellite-dish' },
   { label: 'Fuentes', to: '/admin/fuentes', icon: 'fa-solid fa-rss' },
   { label: 'Suscriptores', to: '/admin/suscriptores', icon: 'fa-solid fa-users' },
   { label: 'Denuncias', to: '/admin/denuncias', icon: 'fa-solid fa-user-secret' },
   { label: 'Boletines', to: '/admin/boletines', icon: 'fa-solid fa-envelope-open-text' },
+  { label: 'Telegram', to: '/admin/telegram', icon: 'fa-brands fa-telegram' },
 ]
 
 export const admin = {
@@ -78,6 +89,8 @@ export const admin = {
     fresh: 'Nuevas',
     scored: 'Valoradas',
     drafted: 'Notas redactadas',
+    clustered: 'Agrupadas en hechos',
+    updates: 'Actualizaciones',
     inProgress: 'En curso',
     errors: 'Errores',
   },
@@ -94,6 +107,41 @@ export const admin = {
     rejected: 'Nota rechazada',
     rejectTitle: '¿Rechazar esta nota?',
     rejectMessage: 'No se publicará. Puedes recuperarla luego desde Notas.',
+    wait: 'Esperar más fuentes',
+    waited: 'El hecho volvió a la watchlist. Se redacta de nuevo cuando llegue otra fuente.',
+  },
+
+  verification: {
+    title: 'Verificación',
+    clean: 'Sin observaciones: cifras, enlaces y nombres están en las fuentes.',
+    summary: (errors: number, warnings: number) =>
+      `${errors} error${errors === 1 ? '' : 'es'} · ${warnings} aviso${warnings === 1 ? '' : 's'}`,
+    help: 'Un error impide que la nota salga sola. Revisa cada punto contra las fuentes antes de publicar.',
+    none: 'Esta nota no pasó por el verificador.',
+  },
+
+  retract: {
+    button: 'Retirar nota',
+    title: '¿Retirar esta nota publicada?',
+    message:
+      'Sale de la portada y su URL muestra un aviso público de retiro. Queda en el historial.',
+    reason: 'Motivo (se muestra al lector, opcional)',
+    reasonPlaceholder: 'Ej: un dato central no se pudo confirmar.',
+    done: 'Nota retirada',
+  },
+
+  updates: {
+    title: 'Actualizaciones',
+    empty: 'Sin actualizaciones.',
+    publish: 'Publicar',
+    reject: 'Descartar',
+    published: 'Actualización publicada',
+    rejected: 'Actualización descartada',
+    pending: 'Por aprobar',
+  },
+
+  history: {
+    title: 'Historial',
   },
 
   rewrite: {
@@ -169,6 +217,60 @@ export const admin = {
       done: 'Nota armada. Revísala antes de publicar.',
       minLength: 'Pega al menos unas líneas de texto.',
     },
+  },
+
+  stories: {
+    title: 'Hechos',
+    subtitle:
+      'Cada hecho junta las piezas de varios medios sobre el mismo acontecimiento. La watchlist espera más fuentes.',
+    empty: 'No hay hechos con ese estado en los últimos 7 días.',
+    sources: (n: number) => (n === 1 ? '1 fuente' : `${n} fuentes`),
+    signals: (n: number) => (n === 1 ? '1 pieza' : `${n} piezas`),
+    official: 'Fuente oficial',
+    accusation: 'Acusación',
+    familyVeto: 'Familia vetada',
+    draft: 'Redactar ahora',
+    drafting: 'Redactando…',
+    drafted: 'Nota redactada. Quedó por aprobar.',
+    discard: 'Descartar',
+    discarded: 'Hecho descartado',
+    openArticle: 'Ver nota',
+    showPieces: 'Ver piezas',
+    hidePieces: 'Ocultar piezas',
+  },
+
+  telegram: {
+    title: 'Telegram',
+    subtitle: 'El bot de la Mesa: aquí das acceso al equipo y ves si todo está conectado.',
+    bot: 'Bot',
+    notConfigured: 'Falta TELEGRAM_BOT_TOKEN en el servidor.',
+    open: 'Abrir en Telegram',
+    webhook: 'Conexión',
+    webhookOk: 'Conectado: Telegram entrega los mensajes al API.',
+    webhookMissing: 'Sin conectar. Toca "Reconfigurar bot".',
+    pending: (n: number) => `${n} mensaje${n === 1 ? '' : 's'} en cola`,
+    lastError: 'Último error de Telegram',
+    configure: 'Reconfigurar bot',
+    configuring: 'Configurando…',
+    configured: 'Bot configurado: webhook, descripción y comandos al día.',
+    mesa: 'Grupo Mesa',
+    mesaSet: (title: string) => `Las tarjetas llegan a ${title || 'el grupo configurado'}.`,
+    mesaMissing:
+      'Todavía no hay grupo. Crea un grupo, agrega al bot y que un editor escriba /mesa ahí.',
+    team: 'Equipo',
+    teamEmpty:
+      'Nadie pidió acceso todavía. Cada persona del equipo le escribe /unirme al bot por privado y aparece aquí.',
+    role: 'Rol',
+    remove: 'Quitar',
+    removed: 'Persona quitada del equipo',
+    roleSaved: 'Rol actualizado. Le avisamos por Telegram.',
+    fromEnv: 'Ids fijos en el servidor',
+    steps: [
+      'Cada persona del equipo abre el bot y escribe /unirme.',
+      'Aquí le asignas Editor (aprueba y publica) o Reportero (sus notas quedan por aprobar).',
+      'Crea un grupo, agrega al bot y que un editor escriba /mesa: ahí llegan las tarjetas con botones.',
+      'En el grupo se usa /nota <texto> para mandar notas y /mata <id> para retirar.',
+    ],
   },
 
   signals: {
@@ -274,6 +376,23 @@ export const articleStatusLabels: Record<ArticleStatus, { label: string; tone: T
   pending: { label: 'Por aprobar', tone: 'warning' },
   published: { label: 'Publicada', tone: 'success' },
   rejected: { label: 'Rechazada', tone: 'stamp' },
+  retracted: { label: 'Retirada', tone: 'stamp' },
+}
+
+export const storyStatusLabels: Record<StoryStatus, { label: string; tone: Tone }> = {
+  ready: { label: 'Lista', tone: 'success' },
+  watchlist: { label: 'Watchlist', tone: 'warning' },
+  covered: { label: 'Con nota', tone: 'accent' },
+  archived: { label: 'Archivado', tone: 'muted' },
+  blocked: { label: 'Bloqueado', tone: 'stamp' },
+  discarded: { label: 'Descartado', tone: 'muted' },
+}
+
+export const telegramRoleLabels: Record<TelegramRole, { label: string; tone: Tone }> = {
+  pending: { label: 'Pendiente', tone: 'warning' },
+  editor: { label: 'Editor', tone: 'success' },
+  reporter: { label: 'Reportero', tone: 'accent' },
+  disabled: { label: 'Desactivado', tone: 'muted' },
 }
 
 export const originLabels: Record<ArticleOrigin, { label: string; icon: string }> = {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { site } from '@/config/site'
-import { formatDateTime } from '@/utils/format'
+import { formatDateTime, formatTime } from '@/utils/format'
 import { ui } from '@/config/site'
 import { groupSources } from '@/utils/sources'
 import type { Article } from '@/types'
@@ -30,6 +30,10 @@ const published = computed(() => props.article.publishedAt ?? props.article.crea
     <p class="head__meta">
       <span class="head__author">{{ ui.article.by }} {{ article.author }}</span>
       <time :datetime="published">{{ formatDateTime(published) }}</time>
+      <time v-if="article.lastUpdatedAt" :datetime="article.lastUpdatedAt" class="head__updated">
+        <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+        {{ ui.article.updatedAt(formatTime(article.lastUpdatedAt)) }}
+      </time>
       <span v-if="article.readingMinutes">
         <i class="fa-regular fa-clock" aria-hidden="true"></i> {{ ui.article.minutes(article.readingMinutes) }}
       </span>
@@ -106,6 +110,11 @@ const published = computed(() => props.article.publishedAt ?? props.article.crea
   &__author {
     color: $ink;
     font-weight: 700;
+  }
+
+  &__updated {
+    color: $stamp;
+    font-weight: 600;
   }
 }
 </style>

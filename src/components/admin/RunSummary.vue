@@ -11,7 +11,9 @@ const metrics = computed(() => [
   { label: admin.run.found, value: props.run.signalsFound },
   { label: admin.run.fresh, value: props.run.signalsNew },
   { label: admin.run.scored, value: props.run.scored },
+  { label: admin.run.clustered, value: props.run.clustered ?? 0 },
   { label: admin.run.drafted, value: props.run.drafted },
+  { label: admin.run.updates, value: props.run.updates ?? 0 },
 ])
 </script>
 

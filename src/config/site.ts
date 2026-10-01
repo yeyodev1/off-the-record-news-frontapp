@@ -14,7 +14,7 @@ export const site = {
   // Solo dígitos con código de país, ej: 593984934039
   whatsapp: '',
   // Usuario del bot sin @. Vacío mientras no exista el bot.
-  telegramBot: '',
+  telegramBot: 'OffTheRecord_agent_bot',
   social: {
     instagram: '',
     x: '',
@@ -150,6 +150,14 @@ export const ui = {
     notFoundText: 'Puede que el enlace esté mal escrito o que la nota ya no esté publicada.',
     backHome: 'Volver a la portada',
     proBadge: 'Pro',
+    updatedAt: (time: string) => `Actualizada a las ${time}`,
+    updatesTitle: 'Actualizaciones',
+    updateLabel: (time: string) => `Actualización ${time}`,
+    disclaimerTitle: 'Cómo hicimos esta nota',
+    retractedTitle: 'Retiramos esta nota',
+    retractedText: (date: string) =>
+      `Off the Record publicó esta nota y la retiró el ${date}. Dejamos este aviso en la misma dirección para que quede registro.`,
+    retractedReason: 'Motivo',
   },
   sources: {
     title: 'Fuentes verificadas',

@@ -33,7 +33,7 @@ export type Section =
   | 'negocios'
   | 'tecnologia'
 
-export type ArticleStatus = 'pending' | 'published' | 'rejected'
+export type ArticleStatus = 'pending' | 'published' | 'rejected' | 'retracted'
 export type ArticleOrigin = 'ai' | 'telegram' | 'manual'
 export type Edition = 'manana' | 'noche' | 'economia' | 'legislativo'
 
@@ -68,6 +68,45 @@ export interface ArticleSource {
   summary?: string
 }
 
+export interface VerificationFlag {
+  level: 'error' | 'aviso'
+  kind: string
+  text: string
+}
+
+/** Resultado del verificador: cifras, enlaces y nombres contra el corpus. */
+export interface Verification {
+  checkedAt: string
+  errors: number
+  warnings: number
+  flags: VerificationFlag[]
+}
+
+/** Bloque "Actualización HH:MM" de una nota publicada. */
+export interface ArticleUpdate {
+  id: string
+  text: string
+  sources: ArticleSource[]
+  publishedAt: string | null
+  /** Solo en el panel. */
+  status?: 'pending' | 'published' | 'rejected'
+  verification?: Verification | null
+  createdAt?: string
+}
+
+export interface Retraction {
+  at: string | null
+  reason: string
+  by?: string
+}
+
+export interface HistoryEntry {
+  action: string
+  by: string
+  at: string
+  note: string
+}
+
 export interface Article {
   id: string
   slug: string
@@ -96,6 +135,49 @@ export interface Article {
   updatedAt: string
   /** Solo en el detalle público: true si el body está reservado a Pro. */
   locked?: boolean
+  updates?: ArticleUpdate[]
+  lastUpdatedAt?: string | null
+  retraction?: Retraction | null
+  /** Descargo de generación asistida, armado por el API. */
+  disclaimer?: string
+  reviewedBy?: string
+  /** Solo en el panel. */
+  verification?: Verification | null
+  history?: HistoryEntry[]
+  storyId?: string | null
+}
+
+/** Nota retirada: el API devuelve solo esto, sin el contenido. */
+export interface RetractedArticle {
+  id: string
+  slug: string
+  title: string
+  section: Section
+  status: 'retracted'
+  publishedAt: string | null
+  retraction: Retraction
+}
+
+export type StoryStatus = 'ready' | 'watchlist' | 'covered' | 'archived' | 'blocked' | 'discarded'
+
+/** Un hecho: el mismo acontecimiento contado por varias fuentes. */
+export interface Story {
+  id: string
+  title: string
+  summary: string
+  status: StoryStatus
+  reason: string
+  score: number
+  bestScore: ScoreBreakdown | null
+  section: Section
+  signalCount: number
+  sourceNames: string[]
+  hasOfficialSource: boolean
+  accusation: boolean
+  familyVeto?: boolean
+  firstSignalAt: string
+  lastSignalAt: string
+  articleId: string | null
 }
 
 export type ArticleCard = Omit<Article, 'body' | 'score' | 'status'>
@@ -133,7 +215,31 @@ export interface Signal {
   status: 'new' | 'scored' | 'discarded' | 'drafted' | 'duplicate'
   score: ScoreBreakdown | null
   articleId: string | null
+  storyId?: string | null
+  accusation?: boolean
   createdAt: string
+}
+
+export type TelegramRole = 'pending' | 'editor' | 'reporter' | 'disabled'
+
+export interface TelegramMember {
+  id: string
+  telegramId: string
+  name: string
+  username: string
+  role: TelegramRole
+  lastSeenAt: string
+  createdAt: string
+}
+
+export interface TelegramTeam {
+  configured: boolean
+  bot: { username: string; name: string } | null
+  webhook: { url: string; pendingUpdates: number; lastError: string } | null
+  mesa: { chatId: string; title: string; setBy: string }
+  envEditors: string[]
+  envReporters: string[]
+  members: TelegramMember[]
 }
 
 export interface Subscriber {
@@ -181,6 +287,8 @@ export interface PipelineRun {
   signalsNew: number
   scored: number
   drafted: number
+  clustered?: number
+  updates?: number
   skippedReason: string
   errors: string[]
 }

@@ -51,6 +51,9 @@ export function useArticleForm(id: string | undefined) {
   const saving = ref(false)
   const publishing = ref(false)
   const uploading = ref(false)
+  const retracting = ref(false)
+  // Id de la actualización con una acción en vuelo.
+  const updateBusy = ref<string | null>(null)
   const isNew = computed(() => !article.value)
 
   function fill(a: Article) {
@@ -159,6 +162,38 @@ export function useArticleForm(id: string | undefined) {
     }
   }
 
+  async function retract(reason: string) {
+    if (!article.value) return
+    retracting.value = true
+    try {
+      fill(await adminService.retractArticle(article.value.id, reason))
+      toast.success(admin.retract.done)
+      refreshStats()
+    } catch (e) {
+      toast.error((e as ApiError).message)
+    } finally {
+      retracting.value = false
+    }
+  }
+
+  async function decideUpdate(updateId: string, decision: 'publish' | 'reject') {
+    if (!article.value) return
+    updateBusy.value = updateId
+    try {
+      const id = article.value.id
+      fill(
+        decision === 'publish'
+          ? await adminService.publishUpdate(id, updateId)
+          : await adminService.rejectUpdate(id, updateId),
+      )
+      toast.success(decision === 'publish' ? admin.updates.published : admin.updates.rejected)
+    } catch (e) {
+      toast.error((e as ApiError).message)
+    } finally {
+      updateBusy.value = null
+    }
+  }
+
   return {
     form,
     article,
@@ -167,10 +202,14 @@ export function useArticleForm(id: string | undefined) {
     saving,
     publishing,
     uploading,
+    retracting,
+    updateBusy,
     isNew,
     load,
     save,
     publish,
     uploadImage,
+    retract,
+    decideUpdate,
   }
 }
