@@ -1,4 +1,4 @@
-import type { Edition, Section } from '@/types'
+import type { Edition, ReadingMode, Section, Stance } from '@/types'
 
 /**
  * El copy es configuración: todos los textos y datos de la marca viven acá.
@@ -102,6 +102,77 @@ export const site = {
   footer: {
     note: 'Periodismo breve para Ecuador. Redacción asistida por IA y revisada por periodistas.',
   },
+
+  // Modos de lectura. Los nombres los decide el fundador; agregar uno es una fila aquí
+  // y su perfil de ponderación en el backend.
+  modes: {
+    noboista: {
+      name: 'Noboísta',
+      short: 'noboísta',
+      icon: 'fa-solid fa-landmark',
+      wants: 'Seguir al gobierno y sus decisiones, y enterarte de lo que la oposición le reclama.',
+      shows: 'Primero los hechos del Ejecutivo y su bloque, con la cobertura oficialista arriba y la respuesta opositora debajo.',
+    },
+    correista: {
+      name: 'Correísta',
+      short: 'correísta',
+      icon: 'fa-solid fa-people-group',
+      wants: 'Seguir a la Revolución Ciudadana y a la oposición, y lo que el gobierno hace contra ella.',
+      shows: 'Primero los hechos del correísmo y la Asamblea, con la cobertura correísta arriba y la versión oficialista debajo.',
+    },
+    anti_ambos: {
+      name: 'Anti-ambos',
+      short: 'anti-ambos',
+      icon: 'fa-solid fa-scale-balanced',
+      wants: 'Que no te vendan ni al uno ni al otro: datos, documentos y contradicciones de los dos lados.',
+      shows: 'Primero los hechos con más pruebas y documentos, y la cobertura institucional y de control antes que la de partidos.',
+    },
+    independiente: {
+      name: 'Independiente',
+      short: 'independiente',
+      icon: 'fa-regular fa-newspaper',
+      wants: 'Todo, sin énfasis.',
+      shows: 'El orden editorial de Off the Record tal cual: valor noticioso y novedad.',
+    },
+  } satisfies Record<ReadingMode, { name: string; short: string; icon: string; wants: string; shows: string }>,
+
+  stances: {
+    oficialista: 'Oficialismo',
+    opositora: 'Oposición',
+    correista: 'Correísmo',
+    institucional: 'Instituciones y control',
+    neutral: 'Otras fuentes',
+    no_aplica: 'Otras fuentes',
+    '': 'Otras fuentes',
+  } satisfies Record<Stance, string>,
+
+  howModes: {
+    title: 'Cómo funcionan los modos de lectura',
+    subtitle:
+      'Eliges un lente para leer Off the Record. El lente cambia el orden y qué cobertura ves primero. Los hechos son los mismos para todos.',
+    changesTitle: 'Qué cambia con el modo',
+    changes: [
+      'El orden de los hechos en la portada y en las secciones: cada hecho tiene una relevancia distinta para cada modo.',
+      'Qué cobertura ves primero dentro de cada nota: "Lo que dicen las partes" abre con la orilla de tu modo y sigue con la otra. Las dos están siempre.',
+      'Si te suscribes y das tu consentimiento, el orden de las notas en tus boletines.',
+    ],
+    neverTitle: 'Qué no cambia nunca',
+    never: [
+      'Los hechos son los mismos para todos. Escribimos una sola versión de cada nota: nunca hay cuatro redacciones del mismo hecho.',
+      'La historia del día aparece primero en todos los modos.',
+      'Lo último se muestra completo y en orden cronológico en todos los modos.',
+      'Nada se oculta: un hecho que baja en tu modo sigue en su sección, en el buscador y en su dirección.',
+      'La línea editorial y las reglas de redacción son las mismas en los cuatro modos.',
+      'Siempre ves en qué modo estás leyendo y puedes cambiarlo con un toque.',
+    ],
+    privacyTitle: 'Tu modo y tus datos',
+    privacy: [
+      'Tu modo vive solo en este dispositivo. No lo guardamos con tu nombre, tu correo ni tu IP. Si cambias de celular, vuelves a elegir.',
+      'Si quieres que tus boletines respeten tu modo, lo guardamos solo con tu consentimiento explícito, cifrado y en un campo propio. Lo borras con un toque desde cualquier correo. Sin consentimiento, tus boletines llegan en modo independiente.',
+      'Contamos cuántas personas leen en cada modo y qué notas lee cada modo, siempre en conjunto y sin identificar a nadie.',
+      'Nunca cruzamos tu modo con denuncias, con la base de Pro ni con ningún dato de identidad.',
+    ],
+  },
 } as const
 
 /** Textos de interfaz: botones, estados vacíos, errores y formularios. */
@@ -121,6 +192,7 @@ export const ui = {
     tips: 'Denuncias',
     pro: 'Off the Record Pro',
     newsletters: 'Boletines',
+    modes: 'Modos de lectura',
     contact: 'Contacto',
     madeBy: 'Hecho por',
   },
@@ -207,6 +279,31 @@ export const ui = {
   about: {
     ctaTips: 'Envíanos una denuncia',
     ctaNewsletters: 'Suscríbete a los boletines',
+  },
+  modes: {
+    chooserTitle: '¿Cómo quieres leer OTR?',
+    chooserSubtitle: 'Puedes cambiarlo cuando quieras.',
+    chooserNote: 'Los hechos son los mismos para todos. Cambia el orden y qué cobertura ves primero.',
+    chooserSkip: 'Ahora no',
+    sheetTitle: 'Elige cómo leer OTR',
+    label: (mode: string) => `Estás leyendo OTR en modo ${mode}`,
+    change: 'Cambiar',
+    selectorAria: 'Modo de lectura',
+    howLink: 'Cómo funcionan los modos',
+    current: 'Modo actual',
+    forMode: (mode: string) => `Lo más relevante en modo ${mode}`,
+    contradictions: 'Lo que ninguno de los dos quiere que veas',
+    contradictionsNote: 'Contradicciones y promesas incumplidas de los dos lados.',
+    otherSide: 'Lo que tu orilla no está mirando',
+    otherSideNote: 'Hechos que pesan en la otra orilla y en la tuya pasan de largo.',
+    otherSideHide: 'Ocultar',
+    otherSideShow: 'Mostrar lo que tu orilla no está mirando',
+    partiesTitle: 'Lo que dicen las partes',
+    partiesNote: (mode: string) => `Ordenado para el modo ${mode}. Todas las fuentes están aquí.`,
+    consent: 'Quiero que mi correo respete mi modo de lectura',
+    consentNote: (mode: string) =>
+      `Guardamos tu modo (${mode}) cifrado y solo para ordenar tus boletines. Lo borras con un enlace en cada correo. Sin marcar esto, tus boletines llegan en modo independiente.`,
+    forgotten: 'Borramos tu modo de lectura. Tus boletines llegarán en modo independiente.',
   },
   notFound: {
     code: '404',

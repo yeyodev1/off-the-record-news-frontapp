@@ -7,12 +7,14 @@ import ArticleCard from '@/components/news/ArticleCard.vue'
 import SectionBlock from '@/components/news/SectionBlock.vue'
 import SectionHeading from '@/components/news/SectionHeading.vue'
 import SubscribeBox from '@/components/news/SubscribeBox.vue'
+import ModeBlocks from '@/components/modes/ModeBlocks.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
 import { ui } from '@/config/site'
 import { computed } from 'vue'
 
-const { feed, latest, sections, loading, error, isEmpty, reload } = useHomeFeed()
+const { feed, latest, sections, forMode, contradictions, otherSide, loading, error, isEmpty, reload } =
+  useHomeFeed()
 
 // La columna lateral se corta para que no quede más alta que la principal;
 // el resto baja bajo la nota principal como tarjetas con foto.
@@ -65,6 +67,10 @@ const more = computed(() => latest.value.slice(SIDEBAR_COUNT))
             </ol>
           </section>
         </div>
+
+        <ModeBlocks
+          v-if="forMode.length || contradictions.length || otherSide.length"
+          :for-mode="forMode" :contradictions="contradictions" :other-side="otherSide" />
 
         <SubscribeBox class="home__subscribe" />
 

@@ -12,6 +12,7 @@ const links = [
   { to: '/denuncias', label: ui.footer.tips },
   { to: '/pro', label: ui.footer.pro },
   { to: '/boletines', label: ui.footer.newsletters },
+  { to: '/modos', label: ui.footer.modes },
 ]
 </script>
 

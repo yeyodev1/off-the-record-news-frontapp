@@ -370,6 +370,60 @@ export const admin = {
     statusDraft: 'Borrador',
     view: 'Ver',
   },
+
+  lens: {
+    title: 'Lente por modo',
+    help: 'La IA propone; tú corriges. Cada corrección queda como par del golden set para calibrar los pesos.',
+    none: 'Todavía sin lente. Recalcula para que la IA lo proponga.',
+    recompute: 'Recalcular con IA',
+    recomputing: 'Calculando…',
+    recomputed: 'Lente recalculado',
+    presence: 'Presencia en el hecho',
+    oficialismo: 'Oficialismo',
+    correismo: 'Correísmo',
+    oposicion: 'Otra oposición',
+    institucional: 'Instituciones y control',
+    solidez: (n: number) => `Solidez S${n}`,
+    documents: 'Documentos primarios',
+    contradiction: 'Contradicción detectada',
+    relevance: 'Relevancia por modo (0-100)',
+    proposed: 'IA',
+    stance: 'Postura',
+    stanceNone: 'Sin valorar',
+    stanceSaveHint: 'Las posturas y los números se guardan con "Guardar".',
+  },
+
+  modes: {
+    title: 'Modos de lectura',
+    subtitle: (days: number) => `Elecciones anónimas de los últimos ${days} días.`,
+    choose: 'eligieron',
+    change: 'cambiaron',
+    views: 'vistas',
+    partisan: 'Eligen un modo partidista',
+    partisanGoal: 'Meta: 20% en 60 días. Si no se llega, se replantea la pantalla de entrada.',
+    thermometer: 'Termómetro de orillas (7 días)',
+    nothing: 'Sin lecturas todavía.',
+    golden: (corrected: number, total: number) => `Golden set: ${corrected} de ${total} hechos corregidos`,
+    error: 'No se pudieron cargar las métricas de modos.',
+  },
+}
+
+export const stanceOptions = [
+  'oficialista',
+  'opositora',
+  'correista',
+  'institucional',
+  'neutral',
+  'no_aplica',
+] as const
+
+export const stanceLabels: Record<(typeof stanceOptions)[number], string> = {
+  oficialista: 'Oficialista',
+  opositora: 'Opositora',
+  correista: 'Correísta',
+  institucional: 'Institucional',
+  neutral: 'Neutral',
+  no_aplica: 'No aplica',
 }
 
 export const articleStatusLabels: Record<ArticleStatus, { label: string; tone: Tone }> = {

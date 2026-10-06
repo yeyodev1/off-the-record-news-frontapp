@@ -8,6 +8,7 @@ import AdminState from '@/components/admin/AdminState.vue'
 import AdminPagination from '@/components/admin/AdminPagination.vue'
 import StatCard from '@/components/admin/StatCard.vue'
 import RunSummary from '@/components/admin/RunSummary.vue'
+import ModesCard from '@/components/admin/ModesCard.vue'
 
 const { stats, loading, error, refreshStats } = useAdminStats()
 const { running, lastResult, runs, page, pages, loadingRuns, runsError, loadRuns, runNow } =
@@ -110,6 +111,8 @@ onMounted(() => loadRuns(1))
         :highlight="card.highlight"
       />
     </div>
+
+    <ModesCard />
 
     <div class="dashboard__cols">
       <section class="dashboard__block">

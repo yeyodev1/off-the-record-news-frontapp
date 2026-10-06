@@ -1,6 +1,7 @@
 import { reactive, ref } from 'vue'
 import { subscribersService } from '@/services/subscribers.service'
 import { ui } from '@/config/site'
+import { useReadingMode } from './useReadingMode'
 import type { ApiError, Edition } from '@/types'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -11,7 +12,10 @@ export function useSubscribeForm(plan: 'newsletter' | 'pro', defaultEditions: Ed
     name: '',
     company: '',
     editions: [...defaultEditions] as Edition[],
+    // Apagado por defecto: el modo solo viaja al servidor si la persona lo pide.
+    modeConsent: false,
   })
+  const { mode } = useReadingMode()
   const submitting = ref(false)
   const error = ref('')
   const doneMessage = ref('')
@@ -33,6 +37,9 @@ export function useSubscribeForm(plan: 'newsletter' | 'pro', defaultEditions: Ed
         plan,
         editions: form.editions,
         company: plan === 'pro' ? form.company.trim() || undefined : undefined,
+        ...(plan === 'newsletter' && form.modeConsent
+          ? { modeConsent: true, readingMode: mode.value }
+          : {}),
       })
       doneMessage.value = message || ' '
     } catch (e) {

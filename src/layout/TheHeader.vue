@@ -4,6 +4,7 @@ import { site } from '@/config/site'
 import { useUserStore } from '@/stores/user'
 import { formatToday } from '@/utils/format'
 import BrandMark from '@/components/news/BrandMark.vue'
+import ModeBar from '@/components/modes/ModeBar.vue'
 import { ui } from '@/config/site'
 
 const userStore = useUserStore()
@@ -46,6 +47,8 @@ onMounted(() => {
         </li>
       </ul>
     </nav>
+
+    <ModeBar />
   </header>
 </template>
 

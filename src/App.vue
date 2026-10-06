@@ -4,6 +4,7 @@ import { useRoute } from 'vue-router'
 import TheHeader from '@/layout/TheHeader.vue'
 import TheFooter from '@/layout/TheFooter.vue'
 import ToastList from '@/components/ui/ToastList.vue'
+import ModeChooser from '@/components/modes/ModeChooser.vue'
 
 const route = useRoute()
 // El panel de la mesa tiene su propio layout: sin cabecera ni pie públicos.
@@ -22,6 +23,7 @@ const isAdmin = computed(() => Boolean(route.meta.admin))
     </main>
     <TheFooter v-if="!isAdmin" />
     <ToastList />
+    <ModeChooser v-if="!isAdmin" />
   </div>
 </template>
 

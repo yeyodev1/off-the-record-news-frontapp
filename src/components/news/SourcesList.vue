@@ -1,26 +1,40 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { ui } from '@/config/site'
-import { groupSources } from '@/utils/sources'
+import { site, ui } from '@/config/site'
+import { groupSources, partiesFor } from '@/utils/sources'
+import { useReadingMode } from '@/composables/useReadingMode'
 import SmartLabel from './SmartLabel.vue'
 import type { ArticleSource } from '@/types'
 
 const props = defineProps<{ sources: ArticleSource[] }>()
+const { mode, info } = useReadingMode()
 
 const groups = computed(() => groupSources(props.sources))
+// Con posturas valoradas, la lista se vuelve "Lo que dicen las partes" ordenada
+// por el modo; sin ellas, una sola lista como siempre.
+const blocks = computed(
+  () =>
+    partiesFor(props.sources, mode.value) ?? [{ stance: null as null | string, groups: groups.value }],
+)
+const hasParties = computed(() => Boolean(blocks.value[0]?.stance))
 </script>
 
 <template>
   <section class="sources" :aria-label="ui.sources.title">
     <div class="sources__head">
       <SmartLabel tag="h2">
-        <i class="fa-solid fa-circle-check" aria-hidden="true"></i> {{ ui.sources.title }}
+        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+        {{ hasParties ? ui.modes.partiesTitle : ui.sources.title }}
       </SmartLabel>
       <p class="sources__note">{{ ui.sources.note(groups.length) }}</p>
+      <p v-if="hasParties" class="sources__mode">{{ ui.modes.partiesNote(info.short) }}</p>
     </div>
 
-    <ul class="sources__list">
-      <li v-for="group in groups" :key="group.name" class="sources__group">
+    <ul v-for="block in blocks" :key="block.stance ?? 'all'" class="sources__list">
+      <li v-if="block.stance" class="sources__stance">
+        {{ site.stances[block.stance as keyof typeof site.stances] }}
+      </li>
+      <li v-for="group in block.groups" :key="group.name" class="sources__group">
         <div class="sources__who">
           <strong>{{ group.name }}</strong>
           <span v-if="group.domain">{{ group.domain }}</span>
@@ -56,6 +70,29 @@ const groups = computed(() => groupSources(props.sources))
     font-size: $text-sm;
     color: $ink-soft;
     max-width: 60ch;
+  }
+
+  &__mode {
+    font-size: $text-xs;
+    color: $ink-muted;
+  }
+
+  &__stance {
+    padding: 0.5rem 1rem;
+    background: $sand;
+    font-size: $text-xs;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: $ink;
+
+    @include from('md') {
+      padding-inline: 1.25rem;
+    }
+  }
+
+  &__stance + &__group {
+    border-top: 1px solid $line;
   }
 
   &__list {

@@ -1,6 +1,7 @@
 import { ref, watch, type Ref } from 'vue'
 import { articlesService } from '@/services/articles.service'
 import { site } from '@/config/site'
+import { useReadingMode } from './useReadingMode'
 import type { ApiError, Article, ArticleCard, RetractedArticle } from '@/types'
 
 const RELATED_LIMIT = 4
@@ -12,6 +13,7 @@ export function useArticle(slug: Ref<string>) {
   const loading = ref(true)
   const notFound = ref(false)
   const error = ref('')
+  const { mode } = useReadingMode()
 
   async function loadRelated(current: Article) {
     try {
@@ -31,7 +33,7 @@ export function useArticle(slug: Ref<string>) {
     related.value = []
     retracted.value = null
     try {
-      const data = await articlesService.bySlug(slug.value)
+      const data = await articlesService.bySlug(slug.value, mode.value)
       document.title = `${data.title} — ${site.name}`
       if (data.status === 'retracted') {
         article.value = null

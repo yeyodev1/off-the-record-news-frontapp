@@ -4,7 +4,7 @@ import { adminService, type ArticleInput } from '@/services/admin.service'
 import { useToastStore } from '@/stores/toast'
 import { admin } from '@/config/admin'
 import { useAdminStats } from './useAdminStats'
-import type { ApiError, Article, ArticleSource, Section } from '@/types'
+import type { ApiError, Article, ArticleSource, ModeRelevance, Section } from '@/types'
 
 interface ArticleForm {
   title: string
@@ -19,6 +19,8 @@ interface ArticleForm {
   isPro: boolean
   isBreaking: boolean
   sources: ArticleSource[]
+  /** Relevancia por modo vigente; null mientras la IA no la calcule. */
+  modeRelevance: ModeRelevance | null
 }
 
 function blank(): ArticleForm {
@@ -35,6 +37,7 @@ function blank(): ArticleForm {
     isPro: false,
     isBreaking: false,
     sources: [],
+    modeRelevance: null,
   }
 }
 
@@ -52,6 +55,7 @@ export function useArticleForm(id: string | undefined) {
   const publishing = ref(false)
   const uploading = ref(false)
   const retracting = ref(false)
+  const lensBusy = ref(false)
   // Id de la actualización con una acción en vuelo.
   const updateBusy = ref<string | null>(null)
   const isNew = computed(() => !article.value)
@@ -71,6 +75,7 @@ export function useArticleForm(id: string | undefined) {
       isPro: a.isPro,
       isBreaking: a.isBreaking,
       sources: a.sources.map((s) => ({ ...s })),
+      modeRelevance: a.modeRelevance ? { ...a.modeRelevance } : null,
     })
   }
 
@@ -103,8 +108,14 @@ export function useArticleForm(id: string | undefined) {
       isPro: form.isPro,
       isBreaking: form.isBreaking,
       sources: form.sources
-        .map((s) => ({ name: s.name.trim(), url: s.url.trim() }))
+        .map((s) => ({
+          name: s.name.trim(),
+          url: s.url.trim(),
+          ...(s.summary ? { summary: s.summary } : {}),
+          ...(s.stance ? { stance: s.stance } : {}),
+        }))
         .filter((s) => s.name || s.url),
+      ...(form.modeRelevance ? { modeRelevance: clampRelevance(form.modeRelevance) } : {}),
     }
   }
 
@@ -176,6 +187,19 @@ export function useArticleForm(id: string | undefined) {
     }
   }
 
+  async function recomputeLens() {
+    if (!article.value) return
+    lensBusy.value = true
+    try {
+      fill(await adminService.recomputeLens(article.value.id))
+      toast.success(admin.lens.recomputed)
+    } catch (e) {
+      toast.error((e as ApiError).message)
+    } finally {
+      lensBusy.value = false
+    }
+  }
+
   async function decideUpdate(updateId: string, decision: 'publish' | 'reject') {
     if (!article.value) return
     updateBusy.value = updateId
@@ -203,6 +227,7 @@ export function useArticleForm(id: string | undefined) {
     publishing,
     uploading,
     retracting,
+    lensBusy,
     updateBusy,
     isNew,
     load,
@@ -210,6 +235,17 @@ export function useArticleForm(id: string | undefined) {
     publish,
     uploadImage,
     retract,
+    recomputeLens,
     decideUpdate,
+  }
+}
+
+function clampRelevance(r: ModeRelevance): ModeRelevance {
+  const c = (n: number) => Math.max(0, Math.min(100, Math.round(Number(n) || 0)))
+  return {
+    noboista: c(r.noboista),
+    correista: c(r.correista),
+    anti_ambos: c(r.anti_ambos),
+    independiente: c(r.independiente),
   }
 }

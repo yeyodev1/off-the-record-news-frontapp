@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { admin } from '@/config/admin'
+import { admin, stanceLabels, stanceOptions } from '@/config/admin'
 import type { ArticleSource } from '@/types'
 
 const sources = defineModel<ArticleSource[]>({ required: true })
@@ -25,6 +25,10 @@ function removeAt(index: number) {
         :aria-label="f.sourceName"
       />
       <input v-model="src.url" type="url" :placeholder="f.sourceUrl" :aria-label="f.sourceUrl" />
+      <select v-model="src.stance" class="sources-editor__stance" :aria-label="admin.lens.stance">
+        <option value="">{{ admin.lens.stanceNone }}</option>
+        <option v-for="key in stanceOptions" :key="key" :value="key">{{ stanceLabels[key] }}</option>
+      </select>
       <button
         type="button"
         class="sources-editor__remove"
@@ -60,6 +64,11 @@ function removeAt(index: number) {
       flex: 1 1 180px;
       min-width: 0;
     }
+  }
+
+  &__stance {
+    flex: 0 1 9.5rem;
+    min-width: 0;
   }
 
   &__remove {

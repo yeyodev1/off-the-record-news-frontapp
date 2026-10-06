@@ -1,5 +1,5 @@
 import APIBase from './httpBase'
-import type { Edition, Subscriber } from '@/types'
+import type { Edition, ReadingMode, Subscriber } from '@/types'
 
 export interface SubscribePayload {
   email: string
@@ -7,6 +7,9 @@ export interface SubscribePayload {
   plan: 'newsletter' | 'pro'
   editions: Edition[]
   company?: string
+  /** Consentimiento separado para guardar el modo (dato sensible, §6). */
+  modeConsent?: boolean
+  readingMode?: ReadingMode
 }
 
 class SubscribersService extends APIBase {

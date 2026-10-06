@@ -46,6 +46,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: 'Nosotros' },
   },
   {
+    path: '/modos',
+    name: 'Modes',
+    component: () => import('@/views/ModesView.vue'),
+    meta: { title: 'Modos de lectura' },
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('@/views/LoginView.vue'),

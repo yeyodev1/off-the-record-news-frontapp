@@ -5,8 +5,10 @@ import EditionPicker from './EditionPicker.vue'
 import FormField from './FormField.vue'
 import FormSuccess from './FormSuccess.vue'
 import { ui } from '@/config/site'
+import { useReadingMode } from '@/composables/useReadingMode'
 
 const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsletter', ['manana'])
+const { info } = useReadingMode()
 </script>
 
 <template>
@@ -39,6 +41,14 @@ const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsl
       </FormField>
     </div>
 
+    <label class="nl-form__consent">
+      <input v-model="form.modeConsent" type="checkbox" />
+      <span>
+        <strong>{{ ui.modes.consent }}</strong>
+        <small>{{ ui.modes.consentNote(info.short) }}</small>
+      </span>
+    </label>
+
     <p v-if="error" class="nl-form__error" role="alert">{{ error }}</p>
 
     <div class="nl-form__submit">
@@ -68,6 +78,31 @@ const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsl
 
   &__row {
     @include flex-cards(240px, 1rem);
+  }
+
+  &__consent {
+    @include flex(row, flex-start, flex-start, 0.65rem);
+    margin: 0;
+    cursor: pointer;
+
+    input {
+      flex: 0 0 auto;
+      width: 1.1rem;
+      height: 1.1rem;
+      margin-top: 0.2rem;
+      accent-color: $ink;
+    }
+
+    span {
+      @include flex(column, flex-start, flex-start, 0.25rem);
+      font-size: $text-sm;
+    }
+
+    small {
+      font-size: $text-xs;
+      color: $ink-muted;
+      line-height: 1.45;
+    }
   }
 
   &__error {

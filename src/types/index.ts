@@ -37,6 +37,34 @@ export type ArticleStatus = 'pending' | 'published' | 'rejected' | 'retracted'
 export type ArticleOrigin = 'ai' | 'telegram' | 'manual'
 export type Edition = 'manana' | 'noche' | 'economia' | 'legislativo'
 
+/** Modo de lectura: cambia el orden y qué cobertura se ve primero, nunca el texto. */
+export type ReadingMode = 'noboista' | 'correista' | 'anti_ambos' | 'independiente'
+
+/** Postura de una fuente frente al hecho. "" = todavía sin valorar. */
+export type Stance =
+  | 'oficialista'
+  | 'opositora'
+  | 'correista'
+  | 'institucional'
+  | 'neutral'
+  | 'no_aplica'
+  | ''
+
+export type ModeRelevance = Record<ReadingMode, number>
+
+/** Lo que la IA lee del hecho para calcular la relevancia por modo. Solo en el panel. */
+export interface ArticleLens {
+  oficialismo: number
+  correismo: number
+  oposicion: number
+  institucional: number
+  solidez: 1 | 2 | 3
+  documentosPrimarios: boolean
+  contradiccion: boolean
+  nota: string
+  assessedAt: string
+}
+
 export interface ScoreBreakdown {
   total: number
   cercania: number
@@ -66,6 +94,7 @@ export interface ArticleSource {
   url: string
   /** Lo que dice esa nota, en palabras del propio medio. */
   summary?: string
+  stance?: Stance
 }
 
 export interface VerificationFlag {
@@ -145,6 +174,9 @@ export interface Article {
   verification?: Verification | null
   history?: HistoryEntry[]
   storyId?: string | null
+  lens?: ArticleLens | null
+  modeRelevance?: ModeRelevance | null
+  modeRelevanceAuto?: ModeRelevance | null
 }
 
 /** Nota retirada: el API devuelve solo esto, sin el contenido. */
@@ -187,6 +219,10 @@ export interface HomeFeed {
   breaking: ArticleCard[]
   latest: ArticleCard[]
   bySection: { section: Section; items: ArticleCard[] }[]
+  modo?: ReadingMode
+  forMode?: ArticleCard[]
+  contradictions?: ArticleCard[]
+  otherSide?: ArticleCard[]
 }
 
 export interface Source {
@@ -302,4 +338,13 @@ export interface AdminStats {
   subscribersPending: number
   tipsNew: number
   lastRun: PipelineRun | null
+}
+
+export interface ModeStats {
+  days: number
+  distribution: { modo: ReadingMode; elegir: number; cambiar: number; vistas: number }[]
+  /** 0-1: parte de las elecciones que fueron noboísta o correísta. */
+  partisanShare: number
+  thermometer: Record<ReadingMode, { slug: string; title: string; views: number }[]>
+  golden: { total: number; corrected: number }
 }

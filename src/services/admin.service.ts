@@ -3,6 +3,7 @@ import type {
   AdminStats,
   Article,
   Edition,
+  ModeStats,
   NewsletterIssue,
   Paginated,
   PipelineRun,
@@ -115,6 +116,16 @@ class AdminService extends APIBase {
   /** La nota no sale y su hecho vuelve a esperar más fuentes. */
   async waitArticle(id: string): Promise<Article> {
     const { data } = await this.post<Article>(`admin/articles/${id}/wait`, {})
+    return data
+  }
+
+  async recomputeLens(id: string): Promise<Article> {
+    const { data } = await this.post<Article>(`admin/articles/${id}/lens`, {}, undefined, SLOW)
+    return data
+  }
+
+  async modeStats(days = 60): Promise<ModeStats> {
+    const { data } = await this.get<ModeStats>(`admin/modes/stats${qs({ days })}`)
     return data
   }
 

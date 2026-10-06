@@ -1,12 +1,15 @@
 import APIBase from './httpBase'
-import type { Article, ArticleCard, HomeFeed, Paginated, RetractedArticle } from '@/types'
+import type { Article, ArticleCard, HomeFeed, Paginated, ReadingMode, RetractedArticle } from '@/types'
 
 export interface ArticleListParams {
   section?: string
   tag?: string
   page?: number
   limit?: number
+  modo?: ReadingMode
 }
+
+const modoQuery = (modo?: ReadingMode) => (modo ? `?modo=${encodeURIComponent(modo)}` : '')
 
 class ArticlesService extends APIBase {
   async list(params: ArticleListParams = {}): Promise<Paginated<ArticleCard>> {
@@ -19,15 +22,15 @@ class ArticlesService extends APIBase {
     return data
   }
 
-  async top(): Promise<HomeFeed> {
-    const { data } = await this.get<HomeFeed>('articles/top')
+  async top(modo?: ReadingMode): Promise<HomeFeed> {
+    const { data } = await this.get<HomeFeed>(`articles/top${modoQuery(modo)}`)
     return data
   }
 
   /** Una nota retirada llega sin contenido, solo con el aviso de retiro. */
-  async bySlug(slug: string): Promise<Article | RetractedArticle> {
+  async bySlug(slug: string, modo?: ReadingMode): Promise<Article | RetractedArticle> {
     const { data } = await this.get<Article | RetractedArticle>(
-      `articles/${encodeURIComponent(slug)}`,
+      `articles/${encodeURIComponent(slug)}${modoQuery(modo)}`,
     )
     return data
   }

@@ -1,4 +1,4 @@
-import type { ArticleSource } from '@/types'
+import type { ArticleSource, ReadingMode, Stance } from '@/types'
 
 export interface SourceItem {
   url: string
@@ -38,4 +38,40 @@ export function groupSources(sources: ArticleSource[]): SourceGroup[] {
     groups.set(key, group)
   }
   return [...groups.values()]
+}
+
+type StanceBucket = Exclude<Stance, 'no_aplica' | ''>
+
+export interface PartyBlock {
+  stance: StanceBucket
+  groups: SourceGroup[]
+}
+
+// Qué orilla abre "Lo que dicen las partes" en cada modo. Todas se muestran siempre;
+// el modo solo decide cuál va primero (§3 del spec).
+const STANCE_ORDER: Record<ReadingMode, StanceBucket[]> = {
+  noboista: ['oficialista', 'opositora', 'correista', 'institucional', 'neutral'],
+  correista: ['correista', 'opositora', 'oficialista', 'institucional', 'neutral'],
+  anti_ambos: ['institucional', 'neutral', 'oficialista', 'opositora', 'correista'],
+  independiente: ['oficialista', 'opositora', 'correista', 'institucional', 'neutral'],
+}
+
+function bucketOf(stance: Stance | undefined): StanceBucket {
+  if (!stance || stance === 'no_aplica') return 'neutral'
+  return stance
+}
+
+/**
+ * Fuentes agrupadas por postura y ordenadas según el modo. Devuelve null si la
+ * mesa todavía no valoró ninguna postura: la nota se ve como siempre.
+ */
+export function partiesFor(sources: ArticleSource[], mode: ReadingMode): PartyBlock[] | null {
+  const hasStance = sources.some((s) => s.stance && s.stance !== 'no_aplica' && s.stance !== 'neutral')
+  if (!hasStance) return null
+  return STANCE_ORDER[mode]
+    .map((stance) => ({
+      stance,
+      groups: groupSources(sources.filter((s) => bucketOf(s.stance) === stance)),
+    }))
+    .filter((block) => block.groups.length > 0)
 }
