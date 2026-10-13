@@ -245,7 +245,6 @@ function clampRelevance(r: ModeRelevance): ModeRelevance {
   return {
     noboista: c(r.noboista),
     correista: c(r.correista),
-    anti_ambos: c(r.anti_ambos),
     independiente: c(r.independiente),
   }
 }
