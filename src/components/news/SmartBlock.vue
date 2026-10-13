@@ -23,8 +23,9 @@ withDefaults(defineProps<{ label: string; text?: string; items?: string[] }>(), 
   @include flex(column, stretch, flex-start, 0.5rem);
 
   &__text {
-    font-size: $text-base;
-    line-height: 1.65;
+    font-family: $font-serif;
+    font-size: 18px;
+    line-height: 1.55;
   }
 
   &__list {
@@ -34,7 +35,9 @@ withDefaults(defineProps<{ label: string; text?: string; items?: string[] }>(), 
     li {
       position: relative;
       padding-left: 1.2rem;
-      line-height: 1.6;
+      font-family: $font-serif;
+      font-size: 18px;
+      line-height: 1.55;
 
       &::before {
         content: '';
