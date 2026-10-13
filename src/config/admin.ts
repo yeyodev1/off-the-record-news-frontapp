@@ -292,6 +292,9 @@ export const admin = {
     title: 'Fuentes',
     subtitle:
       'Instituciones, medios, programas, políticos, periodistas, sociedad civil, lo internacional y lo viral. Los periodistas suman fuentes en el Google Sheet.',
+    sheetUrl:
+      'https://docs.google.com/spreadsheets/d/1dxY21vqJh7qdusmH32njMBz4ImeWgWbTMSF7YKCAbZc/edit',
+    openSheet: 'Abrir Sheet de fuentes',
     sync: 'Traer del Sheet',
     syncing: 'Trayendo…',
     synced: (r: { created: number; updated: number; deactivated: number; skipped?: string }) =>
