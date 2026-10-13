@@ -27,7 +27,7 @@ const presence = computed(() =>
 )
 
 function setValue(mode: keyof ModeRelevance, raw: string) {
-  const base = relevance.value ?? { noboista: 0, correista: 0, anti_ambos: 0, independiente: 0 }
+  const base = relevance.value ?? { noboista: 0, correista: 0, independiente: 0 }
   relevance.value = { ...base, [mode]: Number(raw) }
 }
 </script>
@@ -55,8 +55,12 @@ function setValue(mode: keyof ModeRelevance, raw: string) {
       </ul>
       <div class="lens__flags">
         <span class="lens__flag">{{ t.solidez(lens.solidez) }}</span>
-        <span v-if="lens.documentosPrimarios" class="lens__flag"><i class="fa-solid fa-file-lines"></i> {{ t.documents }}</span>
-        <span v-if="lens.contradiccion" class="lens__flag lens__flag--alert"><i class="fa-solid fa-code-compare"></i> {{ t.contradiction }}</span>
+        <span v-if="lens.documentosPrimarios" class="lens__flag"
+          ><i class="fa-solid fa-file-lines"></i> {{ t.documents }}</span
+        >
+        <span v-if="lens.contradiccion" class="lens__flag lens__flag--alert"
+          ><i class="fa-solid fa-code-compare"></i> {{ t.contradiction }}</span
+        >
       </div>
       <p v-if="lens.nota" class="lens__note">{{ lens.nota }}</p>
     </template>
@@ -73,7 +77,9 @@ function setValue(mode: keyof ModeRelevance, raw: string) {
           :value="relevance?.[mode] ?? ''"
           @input="setValue(mode, ($event.target as HTMLInputElement).value)"
         />
-        <small v-if="article.modeRelevanceAuto">{{ t.proposed }} {{ article.modeRelevanceAuto[mode] }}</small>
+        <small v-if="article.modeRelevanceAuto"
+          >{{ t.proposed }} {{ article.modeRelevanceAuto[mode] }}</small
+        >
       </label>
     </fieldset>
     <p class="lens__help">{{ t.stanceSaveHint }}</p>
