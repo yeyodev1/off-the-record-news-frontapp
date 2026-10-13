@@ -35,7 +35,8 @@ const published = computed(() => props.article.publishedAt ?? props.article.crea
         {{ ui.article.updatedAt(formatTime(article.lastUpdatedAt)) }}
       </time>
       <span v-if="article.readingMinutes">
-        <i class="fa-regular fa-clock" aria-hidden="true"></i> {{ ui.article.minutes(article.readingMinutes) }}
+        <i class="fa-regular fa-clock" aria-hidden="true"></i>
+        {{ ui.article.minutes(article.readingMinutes) }}
       </span>
     </p>
 
@@ -93,7 +94,7 @@ const published = computed(() => props.article.publishedAt ?? props.article.crea
 
   &__title {
     font-size: $display-md;
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1.02;
     letter-spacing: -0.035em;
   }
