@@ -1,40 +1,47 @@
 <script setup lang="ts">
 import { ui } from '@/config/site'
 
-defineProps<{ slug: string; minutes: number }>()
+/** Botón "Profundiza · N min de lectura →": lleva a la página del hecho. */
+withDefaults(defineProps<{ slug: string; minutes: number; short?: boolean }>(), { short: false })
 </script>
 
 <template>
-  <RouterLink :to="`/nota/${slug}`" class="more">
-    {{ ui.feed.readStory }}
-    <span v-if="minutes" class="more__time">· {{ ui.article.minutes(minutes) }}</span>
-    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+  <RouterLink :to="`/nota/${slug}`" class="deeper-btn">
+    {{ short ? ui.home.profundizaShort(minutes || 1) : ui.home.profundiza(minutes || 1) }}
+    <span class="deeper-btn__arrow" aria-hidden="true">→</span>
   </RouterLink>
 </template>
 
 <style scoped lang="scss">
-.more {
-  @include flex(row, center, flex-start, 0.4rem);
+.deeper-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   align-self: flex-start;
-  font-size: $text-sm;
+  background: $accent;
+  color: $paper;
+  padding: 10px 16px;
+  border-radius: 3px;
+  font-family: $font-display;
+  font-size: 14px;
   font-weight: 700;
-  color: $accent-deep;
-  border-bottom: 2px solid $accent;
-  padding-bottom: 0.1rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  @include transition(background);
   @include focus-ring;
 
-  &__time {
-    font-weight: 500;
-    color: $ink-soft;
+  &:hover {
+    background: $accent-deep;
   }
 
-  i {
-    font-size: 0.75rem;
+  &__arrow {
+    font-size: 16px;
+    line-height: 1;
     @include transition(transform);
   }
 
-  &:hover i {
-    transform: translateX(3px);
+  &:hover &__arrow {
+    transform: translateX(2px);
   }
 }
 </style>
