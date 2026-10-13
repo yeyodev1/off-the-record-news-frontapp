@@ -42,6 +42,9 @@ async function confirmDelete() {
 <template>
   <section>
     <AdminPageHeader :title="admin.sources.title" :subtitle="admin.sources.subtitle">
+      <a class="btn btn--ghost sources__new" :href="admin.sources.sheetUrl" target="_blank" rel="noopener">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ admin.sources.openSheet }}
+      </a>
       <button
         class="btn btn--ghost sources__new"
         type="button"
