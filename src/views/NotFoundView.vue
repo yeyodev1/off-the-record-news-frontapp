@@ -22,7 +22,7 @@ import { ui } from '@/config/site'
 
   &__code {
     font-family: $font-display;
-    font-weight: 900;
+    font-weight: 700;
     font-size: $display-lg;
     line-height: 0.9;
     color: $stamp;
@@ -31,7 +31,7 @@ import { ui } from '@/config/site'
 
   &__title {
     font-size: $display-sm;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: -0.03em;
     border-top: 4px solid $ink;
     padding-top: 0.75rem;
