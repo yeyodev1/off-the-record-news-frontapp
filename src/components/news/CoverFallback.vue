@@ -36,7 +36,7 @@ defineProps<{ section: Section }>()
 
   &__section {
     font-family: $font-display;
-    font-weight: 900;
+    font-weight: 700;
     font-size: clamp(1.6rem, 5vw, 2.4rem);
     letter-spacing: -0.03em;
     line-height: 1;
