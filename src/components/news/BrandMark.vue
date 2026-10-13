@@ -25,7 +25,7 @@ withDefaults(defineProps<{ inverted?: boolean; size?: 'md' | 'lg' }>(), {
 
   &__name {
     font-family: $font-display;
-    font-weight: 900;
+    font-weight: 700;
     font-size: 1.35rem;
     letter-spacing: -0.035em;
     white-space: nowrap;
