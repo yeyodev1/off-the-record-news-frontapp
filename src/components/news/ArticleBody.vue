@@ -12,9 +12,21 @@ defineProps<{ article: Article }>()
   <div class="body">
     <p class="body__lede">{{ article.lede }}</p>
 
-    <SmartBlock v-if="article.whyItMatters" :label="site.labels.whyItMatters" :text="article.whyItMatters" />
-    <SmartBlock v-if="article.bigPicture" :label="site.labels.bigPicture" :text="article.bigPicture" />
-    <SmartBlock v-if="article.keyPoints?.length" :label="site.labels.keyPoints" :items="article.keyPoints" />
+    <SmartBlock
+      v-if="article.whyItMatters"
+      :label="site.labels.whyItMatters"
+      :text="article.whyItMatters"
+    />
+    <SmartBlock
+      v-if="article.bigPicture"
+      :label="site.labels.bigPicture"
+      :text="article.bigPicture"
+    />
+    <SmartBlock
+      v-if="article.keyPoints?.length"
+      :label="site.labels.keyPoints"
+      :items="article.keyPoints"
+    />
     <InfographicBars v-if="article.infographic?.items?.length" :data="article.infographic" />
     <SmartBlock v-if="article.whatsNext" :label="site.labels.whatsNext" :text="article.whatsNext" />
 
@@ -31,9 +43,9 @@ defineProps<{ article: Article }>()
   @include flex(column, stretch, flex-start, 1.75rem);
 
   &__lede {
-    font-size: $text-lg;
+    font-family: $font-serif;
+    font-size: 20px;
     line-height: 1.5;
-    font-weight: 500;
   }
 }
 </style>
