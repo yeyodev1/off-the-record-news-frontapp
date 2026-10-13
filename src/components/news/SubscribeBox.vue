@@ -6,7 +6,10 @@ import SmartLabel from './SmartLabel.vue'
 import { ui } from '@/config/site'
 
 // Desde la portada se suscribe a las dos ediciones diarias; el detalle se elige en /boletines.
-const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsletter', ['manana', 'noche'])
+const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsletter', [
+  'manana',
+  'noche',
+])
 </script>
 
 <template>
@@ -71,7 +74,7 @@ const { form, submitting, error, doneMessage, submit } = useSubscribeForm('newsl
 
   &__title {
     font-size: $display-sm;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: -0.03em;
   }
 
