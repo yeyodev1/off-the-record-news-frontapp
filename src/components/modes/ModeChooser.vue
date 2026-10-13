@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router'
 import { ui } from '@/config/site'
 import { useReadingMode } from '@/composables/useReadingMode'
 import { useBodyScroll } from '@/composables/useBodyScroll'
-import ModeOptions from './ModeOptions.vue'
+import ModePills from './ModePills.vue'
 import type { ReadingMode } from '@/types'
 
 /**
@@ -48,15 +48,32 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   <Teleport to="body">
     <Transition name="modal">
       <div v-if="variant === 'modal'" class="chooser" @click.self="dismiss">
-        <div class="chooser__box" role="dialog" aria-modal="true" :aria-label="ui.modes.chooserTitle">
-          <button type="button" class="chooser__close" :aria-label="ui.modes.chooserSkip" @click="dismiss">
+        <div
+          class="chooser__box"
+          role="dialog"
+          aria-modal="true"
+          :aria-label="ui.modes.chooserTitle"
+        >
+          <button
+            type="button"
+            class="chooser__close"
+            :aria-label="ui.modes.chooserSkip"
+            @click="dismiss"
+          >
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
           </button>
           <h2 class="chooser__title">{{ ui.modes.chooserTitle }}</h2>
           <p class="chooser__subtitle">{{ ui.modes.chooserSubtitle }}</p>
-          <ModeOptions :current="hasChosen ? mode : null" @pick="pick" />
+          <ModePills
+            size="lg"
+            :current="hasChosen ? mode : null"
+            :label="ui.modes.selectorAria"
+            @pick="pick"
+          />
           <p class="chooser__note">{{ ui.modes.chooserNote }}</p>
-          <RouterLink to="/modos" class="chooser__how" @click="dismiss">{{ ui.modes.howLink }}</RouterLink>
+          <RouterLink to="/modos" class="chooser__how" @click="dismiss">{{
+            ui.modes.howLink
+          }}</RouterLink>
         </div>
       </div>
     </Transition>
@@ -65,9 +82,13 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
       <aside v-if="variant === 'sheet'" class="sheet" :aria-label="ui.modes.sheetTitle">
         <div class="sheet__head">
           <p class="sheet__title">{{ ui.modes.sheetTitle }}</p>
-          <button type="button" class="sheet__skip" @click="dismiss">{{ ui.modes.chooserSkip }}</button>
+          <button type="button" class="sheet__skip" @click="dismiss">
+            {{ ui.modes.chooserSkip }}
+          </button>
         </div>
-        <ModeOptions compact @pick="pick" />
+        <div class="sheet__pills no-scrollbar">
+          <ModePills size="sm" :label="ui.modes.selectorAria" @pick="pick" />
+        </div>
         <p class="sheet__note">
           {{ ui.modes.chooserNote }}
           <RouterLink to="/modos">{{ ui.modes.howLink }}</RouterLink>
@@ -89,18 +110,20 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
   &__box {
     position: relative;
-    @include flex(column, stretch, flex-start, 0.9rem);
+    @include flex(column, center, flex-start, 14px);
     width: 100%;
-    max-width: 640px;
+    max-width: 680px;
     max-height: calc(100vh - 2rem);
     overflow-y: auto;
-    padding: 2rem 1.25rem 1.5rem;
+    padding: 40px 20px 28px;
     background: $paper;
-    border-top: 6px solid $ink;
+    border-top: 4px solid $ink;
     box-shadow: $shadow-lg;
+    text-align: center;
+    font-family: $font-display;
 
     @include from('md') {
-      padding: 2.5rem 2.25rem 2rem;
+      padding: 56px 48px 40px;
     }
   }
 
@@ -119,32 +142,41 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   }
 
   &__title {
-    font-size: $display-sm;
-    font-weight: 900;
-    letter-spacing: -0.03em;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.035em;
     line-height: 1.05;
-    padding-right: 2rem;
+
+    @include from('md') {
+      font-size: 40px;
+    }
   }
 
   &__subtitle {
-    color: $ink-soft;
-    margin-top: -0.4rem;
+    font-family: $font-serif;
+    font-style: italic;
+    font-size: 18px;
+    color: $ink-body;
+    margin: -4px 0 10px;
   }
 
   &__note {
-    font-size: $text-sm;
-    color: $ink-soft;
-    border-left: 3px solid $accent;
-    padding-left: 0.7rem;
+    font-family: $font-serif;
+    font-size: 15px;
+    line-height: 1.45;
+    color: $ink-2;
+    max-width: 440px;
+    margin-top: 8px;
   }
 
   &__how {
-    align-self: flex-start;
-    font-size: $text-sm;
+    font-size: 13px;
     font-weight: 600;
-    color: $accent-deep;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    color: $accent;
+
+    &:hover {
+      color: $accent-deep;
+    }
   }
 }
 
@@ -174,7 +206,11 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   }
 
   &__title {
-    font-weight: 800;
+    font-weight: 700;
+  }
+
+  &__pills {
+    overflow-x: auto;
   }
 
   &__skip {
