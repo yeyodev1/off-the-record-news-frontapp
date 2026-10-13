@@ -13,10 +13,10 @@ withDefaults(defineProps<{ tag?: string; tone?: 'accent' | 'stamp' | 'muted' }>(
 // Rótulo del formato: versalitas chicas, como el antetítulo de un diario.
 .label {
   font-family: $font-principal;
-  font-size: 0.7rem;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 
   &--accent {
