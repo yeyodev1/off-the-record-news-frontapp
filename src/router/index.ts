@@ -34,6 +34,12 @@ const routes: Array<RouteRecordRaw> = [
     meta: { title: 'Off the Record Pro' },
   },
   {
+    path: '/podcast',
+    name: 'Podcast',
+    component: () => import('@/views/PodcastView.vue'),
+    meta: { title: 'Podcast' },
+  },
+  {
     path: '/denuncias',
     name: 'Tips',
     component: () => import('@/views/TipsView.vue'),
@@ -117,6 +123,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: 'Fuentes' },
       },
       {
+        path: 'pro',
+        name: 'AdminPro',
+        component: () => import('@/views/admin/AdminProView.vue'),
+        meta: { title: 'OTR PRO' },
+      },
+      {
         path: 'suscriptores',
         name: 'AdminSubscribers',
         component: () => import('@/views/admin/AdminSubscribersView.vue'),
@@ -173,7 +185,9 @@ router.beforeEach(async (to) => {
   }
 
   if (to.meta.guestOnly && userStore.isAuthenticated) {
-    return userStore.isAdmin ? { name: 'AdminDashboard', replace: true } : { name: 'Home', replace: true }
+    return userStore.isAdmin
+      ? { name: 'AdminDashboard', replace: true }
+      : { name: 'Home', replace: true }
   }
 })
 
