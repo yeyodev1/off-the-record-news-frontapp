@@ -40,6 +40,7 @@ export const adminNav: AdminNavItem[] = [
   { label: 'Hechos', to: '/admin/hechos', icon: 'fa-solid fa-layer-group', primary: true },
   { label: 'Señales', to: '/admin/senales', icon: 'fa-solid fa-satellite-dish' },
   { label: 'Fuentes', to: '/admin/fuentes', icon: 'fa-solid fa-rss' },
+  { label: 'OTR PRO', to: '/admin/pro', icon: 'fa-solid fa-lock' },
   { label: 'Suscriptores', to: '/admin/suscriptores', icon: 'fa-solid fa-users' },
   { label: 'Denuncias', to: '/admin/denuncias', icon: 'fa-solid fa-user-secret' },
   { label: 'Boletines', to: '/admin/boletines', icon: 'fa-solid fa-envelope-open-text' },
@@ -289,7 +290,16 @@ export const admin = {
 
   sources: {
     title: 'Fuentes',
-    subtitle: 'Medios, periodistas, políticos e instituciones que vigila la mesa.',
+    subtitle:
+      'Instituciones, medios, programas, políticos, periodistas, sociedad civil, lo internacional y lo viral. Los periodistas suman fuentes en el Google Sheet.',
+    sync: 'Traer del Sheet',
+    syncing: 'Trayendo…',
+    synced: (r: { created: number; updated: number; deactivated: number; skipped?: string }) =>
+      r.skipped ??
+      `Sheet al día: ${r.created} nuevas, ${r.updated} actualizadas, ${r.deactivated} apagadas`,
+    fromSheet: 'Del Sheet',
+    everyMinutes: 'Cada cuántos minutos (0 = automático)',
+    notes: 'Notas (cargo, cuenta de X…)',
     empty: 'No hay fuentes todavía.',
     add: 'Nueva fuente',
     editTitle: 'Editar fuente',
@@ -309,6 +319,47 @@ export const admin = {
     deleteMessage: 'La mesa dejará de vigilarla.',
     activated: 'Fuente activada',
     paused: 'Fuente pausada',
+  },
+
+  followUps: {
+    title: 'Patitas de la noticia',
+    empty: 'La IA no propuso seguimientos para esta nota.',
+    framingTitle: 'Titular por mirada',
+    framingPending: 'Se arma al publicar (texto base mientras tanto).',
+  },
+
+  pro: {
+    title: 'OTR PRO',
+    subtitle:
+      'Tráileres de las notas PRO para la portada gratuita y empresas interesadas en el servicio.',
+    tabTeasers: 'Tráileres',
+    tabLeads: 'Interesados',
+    pasteLabel: 'Pega la nota que se envió a los clientes PRO',
+    pastePlaceholder:
+      'Ej.: Carondelet negocia tres nombres para reemplazar a Rosero en el CPCCS: …',
+    generate: 'Armar tráiler',
+    generating: 'Armando…',
+    generated: 'Tráiler armado. Revísalo y publícalo.',
+    publish: 'Publicar en portada',
+    unpublish: 'Archivar',
+    published: 'Tráiler publicado',
+    archived: 'Tráiler archivado',
+    saved: 'Tráiler guardado',
+    deleted: 'Tráiler eliminado',
+    emptyTeasers: 'Todavía no hay tráileres. Pega una nota PRO para armar el primero.',
+    emptyLeads: 'Todavía no hay empresas interesadas.',
+    titleLabel: 'Titular del tráiler',
+    whyLabel: 'Por qué importa',
+    meeting: 'Pide reunión',
+    plans: { semanal: 'Informe semanal', diario: 'Semanal + diario 24/7' },
+    teaserStatus: { draft: 'Borrador', published: 'En portada', archived: 'Archivado' },
+    leadStatus: {
+      new: 'Nuevo',
+      contacted: 'Contactado',
+      meeting: 'Reunión agendada',
+      won: 'Cliente',
+      lost: 'Perdido',
+    },
   },
 
   subscribers: {
@@ -403,7 +454,8 @@ export const admin = {
     partisanGoal: 'Meta: 20% en 60 días. Si no se llega, se replantea la pantalla de entrada.',
     thermometer: 'Termómetro de orillas (7 días)',
     nothing: 'Sin lecturas todavía.',
-    golden: (corrected: number, total: number) => `Golden set: ${corrected} de ${total} hechos corregidos`,
+    golden: (corrected: number, total: number) =>
+      `Golden set: ${corrected} de ${total} hechos corregidos`,
     error: 'No se pudieron cargar las métricas de modos.',
   },
 }
@@ -470,10 +522,14 @@ export const sourceKindLabels: Record<Source['kind'], string> = {
 }
 
 export const sourceCategoryLabels: Record<Source['category'], string> = {
-  medio: 'Medio',
-  periodista: 'Periodista',
-  politico: 'Político',
   institucion: 'Institución',
+  medio: 'Medio',
+  programa: 'Programa / noticiero',
+  politico: 'Político',
+  periodista: 'Periodista',
+  sociedad_civil: 'Sociedad civil',
+  internacional: 'Internacional',
+  redes: 'Redes / viral',
 }
 
 export const subscriberStatusLabels: Record<Subscriber['status'], { label: string; tone: Tone }> = {
