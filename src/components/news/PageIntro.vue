@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import SmartLabel from './SmartLabel.vue'
 
-withDefaults(defineProps<{ eyebrow?: string; title: string; subtitle?: string; inverted?: boolean }>(), {
-  eyebrow: '',
-  subtitle: '',
-  inverted: false,
-})
+withDefaults(
+  defineProps<{ eyebrow?: string; title: string; subtitle?: string; inverted?: boolean }>(),
+  {
+    eyebrow: '',
+    subtitle: '',
+    inverted: false,
+  },
+)
 </script>
 
 <template>
@@ -23,7 +26,7 @@ withDefaults(defineProps<{ eyebrow?: string; title: string; subtitle?: string; i
 
   &__title {
     font-size: $display-md;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: -0.035em;
     line-height: 1;
   }
