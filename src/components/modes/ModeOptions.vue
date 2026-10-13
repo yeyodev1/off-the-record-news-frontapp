@@ -3,7 +3,7 @@ import { site } from '@/config/site'
 import { READING_MODES } from '@/composables/useReadingMode'
 import type { ReadingMode } from '@/types'
 
-/** Los cuatro modos como botones. `compact` deja solo el nombre (hoja inferior). */
+/** Las tres miradas como botones. `compact` deja solo el nombre (hoja inferior). */
 withDefaults(defineProps<{ current?: ReadingMode | null; compact?: boolean }>(), {
   current: null,
   compact: false,
@@ -18,6 +18,7 @@ const emit = defineEmits<{ pick: [mode: ReadingMode] }>()
         type="button"
         class="modes__btn"
         :class="{ 'modes__btn--on': current === key }"
+        :style="{ '--mode': site.modes[key].color }"
         :aria-pressed="current === key"
         @click="emit('pick', key)"
       >
@@ -36,15 +37,9 @@ const emit = defineEmits<{ pick: [mode: ReadingMode] }>()
   list-style: none;
   @include flex-cards(220px, 0.6rem);
 
-  // Hoja inferior: 2 x 2 en el celular, los cuatro en fila desde tablet.
+  // Hoja inferior: las tres en fila.
   &--compact {
-    @include flex-cards(calc(50% - 0.5rem), 0.5rem);
-
-    @include from('md') {
-      > * {
-        flex-basis: calc(25% - 0.5rem);
-      }
-    }
+    @include flex-cards(calc(33% - 0.5rem), 0.5rem);
   }
 
   &__btn {
@@ -54,7 +49,8 @@ const emit = defineEmits<{ pick: [mode: ReadingMode] }>()
     padding: 0.85rem 1rem;
     text-align: left;
     background: $surface;
-    border: 1px solid $ink;
+    border: 1px solid $box-line;
+    border-left: 4px solid var(--mode);
     color: $ink;
     @include transition(background);
     @include focus-ring;
@@ -64,11 +60,12 @@ const emit = defineEmits<{ pick: [mode: ReadingMode] }>()
     }
 
     &--on {
-      background: $ink;
+      background: var(--mode);
+      border-color: var(--mode);
       color: $paper;
 
       &:hover {
-        background: $ink;
+        background: var(--mode);
       }
 
       .modes__wants {
