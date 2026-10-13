@@ -17,6 +17,8 @@ const form = reactive<SourceInput>({
   query: '',
   weight: 1,
   isActive: true,
+  everyMinutes: 0,
+  notes: '',
 })
 
 watch(
@@ -32,20 +34,33 @@ watch(
       query: s?.query ?? '',
       weight: s?.weight ?? 1,
       isActive: s?.isActive ?? true,
+      everyMinutes: s?.everyMinutes ?? 0,
+      notes: s?.notes ?? '',
     })
   },
 )
 
-// Perplexity se alimenta de una consulta; RSS y web, de una URL.
+// Perplexity se alimenta de una consulta; RSS y web, de una URL. Las personas
+// sin consulta se buscan por nombre y notas, en grupo con otras.
+const isPerson = computed(() =>
+  ['politico', 'periodista', 'sociedad_civil'].includes(form.category),
+)
 const valid = computed(() => {
   if (!form.name.trim()) return false
   if (form.weight < 0.5 || form.weight > 2) return false
-  return form.kind === 'perplexity' ? Boolean(form.query.trim()) : Boolean(form.url.trim())
+  if (form.kind === 'perplexity') return isPerson.value || Boolean(form.query.trim())
+  return Boolean(form.url.trim())
 })
 
 function submit() {
   if (!valid.value) return
-  emit('save', { ...form, name: form.name.trim(), url: form.url.trim(), query: form.query.trim() })
+  emit('save', {
+    ...form,
+    name: form.name.trim(),
+    url: form.url.trim(),
+    query: form.query.trim(),
+    notes: (form.notes ?? '').trim(),
+  })
 }
 </script>
 
@@ -89,6 +104,10 @@ function submit() {
       <label for="source-url">{{ t.url }}</label>
       <input id="source-url" v-model="form.url" type="url" placeholder="https://" />
     </div>
+    <div>
+      <label for="source-notes">{{ t.notes }}</label>
+      <input id="source-notes" v-model="form.notes" type="text" />
+    </div>
     <div class="source-form__row">
       <div>
         <label for="source-weight">{{ t.weight }}</label>
@@ -99,6 +118,16 @@ function submit() {
           min="0.5"
           max="2"
           step="0.1"
+        />
+      </div>
+      <div>
+        <label for="source-every">{{ t.everyMinutes }}</label>
+        <input
+          id="source-every"
+          v-model.number="form.everyMinutes"
+          type="number"
+          min="0"
+          step="10"
         />
       </div>
       <label class="source-form__check">
