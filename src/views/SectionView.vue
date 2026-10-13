@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { site } from '@/config/site'
 import { useSectionFeed } from '@/composables/useSectionFeed'
-import ArticleCard from '@/components/news/ArticleCard.vue'
+import StreamStory from '@/components/home/StreamStory.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
 import SmartLabel from '@/components/news/SmartLabel.vue'
@@ -12,7 +12,8 @@ import type { Section } from '@/types'
 
 const route = useRoute()
 const section = computed(() => String(route.params.section ?? ''))
-const { items, name, isValid, hasMore, loading, loadingMore, error, reload, loadMore } = useSectionFeed(section)
+const { items, name, isValid, hasMore, loading, loadingMore, error, reload, loadMore } =
+  useSectionFeed(section)
 
 const allSections = Object.entries(site.sections) as [Section, string][]
 </script>
@@ -48,12 +49,16 @@ const allSections = Object.entries(site.sections) as [Section, string][]
         @action="reload"
       />
 
-      <StateMessage v-else-if="!items.length" icon="fa-regular fa-newspaper" :text="ui.feed.empty" />
+      <StateMessage
+        v-else-if="!items.length"
+        icon="fa-regular fa-newspaper"
+        :text="ui.feed.empty"
+      />
 
       <template v-else>
         <ol class="section-page__list">
           <li v-for="item in items" :key="item.id">
-            <ArticleCard :article="item" variant="brief" with-image :show-section="false" />
+            <StreamStory :article="item" :show-section="false" />
           </li>
         </ol>
 
@@ -75,7 +80,7 @@ const allSections = Object.entries(site.sections) as [Section, string][]
 
 <style scoped lang="scss">
 .section-page {
-  @include container(760px);
+  @include container(712px);
   @include flex(column, stretch, flex-start, 2rem);
   padding-top: 2rem;
 
@@ -91,18 +96,21 @@ const allSections = Object.entries(site.sections) as [Section, string][]
 
   &__title {
     font-size: $display-lg;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: -0.04em;
     line-height: 0.95;
   }
 
   &__list {
     list-style: none;
-    @include flex(column, stretch, flex-start, 2rem);
+    @include flex(column, stretch, flex-start, 0);
 
-    > li + li {
-      padding-top: 2rem;
-      border-top: 1px solid $line;
+    > li + li :deep(.story) {
+      padding-top: 22px;
+
+      @include from('md') {
+        padding-top: 28px;
+      }
     }
   }
 
