@@ -11,7 +11,8 @@ import SourceDialog from '@/components/admin/SourceDialog.vue'
 import BaseModal from '@/components/ui/BaseModal.vue'
 import type { Source } from '@/types'
 
-const { filters, items, loading, error, saving, load, save, toggle, remove } = useSources()
+const { filters, items, loading, error, saving, syncing, load, save, toggle, remove, syncSheet } =
+  useSources()
 
 const dialogOpen = ref(false)
 const editing = ref<Source | null>(null)
@@ -41,6 +42,15 @@ async function confirmDelete() {
 <template>
   <section>
     <AdminPageHeader :title="admin.sources.title" :subtitle="admin.sources.subtitle">
+      <button
+        class="btn btn--ghost sources__new"
+        type="button"
+        :disabled="syncing"
+        @click="syncSheet"
+      >
+        <i class="fa-solid fa-table" :class="{ 'fa-spin': syncing }"></i>
+        {{ syncing ? admin.sources.syncing : admin.sources.sync }}
+      </button>
       <button class="btn btn--dark sources__new" type="button" @click="openNew">
         <i class="fa-solid fa-plus"></i> {{ admin.sources.add }}
       </button>
