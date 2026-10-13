@@ -1,5 +1,13 @@
 import APIBase from './httpBase'
-import type { Article, ArticleCard, HomeFeed, Paginated, ReadingMode, RetractedArticle } from '@/types'
+import type {
+  Article,
+  ArticleCard,
+  HomeFeed,
+  Paginated,
+  ReadingMode,
+  RetractedArticle,
+  StreamOrder,
+} from '@/types'
 
 export interface ArticleListParams {
   section?: string
@@ -7,6 +15,7 @@ export interface ArticleListParams {
   page?: number
   limit?: number
   modo?: ReadingMode
+  orden?: StreamOrder
 }
 
 const modoQuery = (modo?: ReadingMode) => (modo ? `?modo=${encodeURIComponent(modo)}` : '')
