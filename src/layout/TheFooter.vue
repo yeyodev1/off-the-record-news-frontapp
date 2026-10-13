@@ -2,10 +2,10 @@
 import { site } from '@/config/site'
 import BrandMark from '@/components/news/BrandMark.vue'
 import { ui } from '@/config/site'
-import type { Section } from '@/types'
 
 const year = new Date().getFullYear()
-const sections = Object.entries(site.sections) as [Section, string][]
+// Solo las secciones que OTR cubre (sin Portada, que ya es el logo).
+const sections = site.nav.filter((link) => link.to !== '/')
 
 const links = [
   { to: '/nosotros', label: ui.footer.about },
@@ -28,8 +28,8 @@ const links = [
       <nav class="footer__col footer__col--sections" :aria-label="ui.footer.sections">
         <h2 class="footer__heading">{{ ui.footer.sections }}</h2>
         <ul>
-          <li v-for="[slug, name] in sections" :key="slug">
-            <RouterLink :to="`/seccion/${slug}`">{{ name }}</RouterLink>
+          <li v-for="link in sections" :key="link.to">
+            <RouterLink :to="link.to">{{ link.label }}</RouterLink>
           </li>
         </ul>
       </nav>
@@ -47,7 +47,9 @@ const links = [
         <h2 class="footer__heading">{{ ui.footer.contact }}</h2>
         <ul>
           <li>
-            <a :href="`mailto:${site.email}`"><i class="fa-solid fa-envelope" aria-hidden="true"></i> {{ site.email }}</a>
+            <a :href="`mailto:${site.email}`"
+              ><i class="fa-solid fa-envelope" aria-hidden="true"></i> {{ site.email }}</a
+            >
           </li>
         </ul>
       </div>
