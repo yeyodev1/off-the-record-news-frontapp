@@ -35,7 +35,7 @@ const when = computed(() =>
 
   &__title {
     font-size: $display-md;
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.03em;
     text-decoration: line-through;
