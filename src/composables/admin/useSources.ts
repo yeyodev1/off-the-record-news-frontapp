@@ -64,8 +64,25 @@ export function useSources() {
     }
   }
 
+  const syncing = ref(false)
+
+  /** Trae ahora el Google Sheet de fuentes; el cron lo hace cada hora. */
+  async function syncSheet() {
+    syncing.value = true
+    try {
+      const result = await adminService.syncSources()
+      toast.success(admin.sources.synced(result))
+      if (result.errors?.length) toast.error(result.errors.slice(0, 3).join(' · '))
+      await load()
+    } catch (e) {
+      toast.error((e as ApiError).message)
+    } finally {
+      syncing.value = false
+    }
+  }
+
   watch(() => ({ ...filters }), load)
   onMounted(load)
 
-  return { filters, items, loading, error, saving, load, save, toggle, remove }
+  return { filters, items, loading, error, saving, syncing, load, save, toggle, remove, syncSheet }
 }
