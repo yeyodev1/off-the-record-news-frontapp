@@ -1,84 +1,176 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { site } from '@/config/site'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { site, ui } from '@/config/site'
 import { useUserStore } from '@/stores/user'
 import { formatToday } from '@/utils/format'
-import BrandMark from '@/components/news/BrandMark.vue'
 import ModeBar from '@/components/modes/ModeBar.vue'
-import { ui } from '@/config/site'
+import HeaderMenu from './HeaderMenu.vue'
+import ProButton from './ProButton.vue'
 
 const userStore = useUserStore()
+const route = useRoute()
 const today = formatToday()
+const menuOpen = ref(false)
+
+// Al navegar desde el menú del celular, se cierra.
+watch(
+  () => route.fullPath,
+  () => (menuOpen.value = false),
+)
 
 // Solo se consulta /auth/me si hay token guardado: el visitante común no paga esa llamada.
 onMounted(() => {
   if (userStore.hasToken) userStore.restore()
 })
+
+const isActive = (to: string) => (to === '/' ? route.path === '/' : route.path.startsWith(to))
 </script>
 
 <template>
   <header class="masthead">
+    <!-- Escritorio: barra superior -->
     <div class="masthead__top">
-      <p class="masthead__date">{{ today }}</p>
-
-      <RouterLink to="/" class="masthead__logo" :aria-label="`${site.name} — ${ui.nav.home}`">
-        <BrandMark size="lg" />
-      </RouterLink>
-
-      <div class="masthead__actions">
-        <RouterLink v-if="userStore.isAdmin" to="/admin" class="masthead__desk">
-          <i class="fa-solid fa-newspaper" aria-hidden="true"></i> {{ ui.nav.desk }}
+      <div class="masthead__top-inner">
+        <RouterLink
+          v-for="link in site.topLinks"
+          :key="link.to"
+          :to="link.to"
+          class="masthead__toplink"
+        >
+          {{ link.label }}
         </RouterLink>
-        <RouterLink to="/boletines" class="btn btn--primary masthead__cta">{{ ui.nav.subscribe }}</RouterLink>
+        <RouterLink v-if="userStore.isAdmin" to="/admin" class="masthead__toplink">{{
+          ui.nav.desk
+        }}</RouterLink>
+        <span class="masthead__date">{{ today }}</span>
+        <ProButton />
       </div>
     </div>
 
+    <!-- Celular: menú · logo · PRO -->
+    <div class="masthead__mobile">
+      <button
+        type="button"
+        class="masthead__burger"
+        :aria-label="ui.header.menu"
+        :aria-expanded="menuOpen"
+        @click="menuOpen = true"
+      >
+        <i class="fa-solid fa-bars" aria-hidden="true"></i>
+      </button>
+      <RouterLink to="/" class="masthead__mlogo" :aria-label="`${site.name} — ${ui.nav.home}`">
+        {{ site.name }} <span class="masthead__stamp masthead__stamp--sm">EC</span>
+      </RouterLink>
+      <ProButton compact />
+    </div>
+
+    <!-- Escritorio: logo, eslogan y secciones -->
+    <div class="masthead__brand">
+      <RouterLink to="/" class="masthead__logo" :aria-label="`${site.name} — ${ui.nav.home}`">
+        <span class="masthead__name">{{ site.name }}</span>
+        <span class="masthead__stamp" aria-hidden="true">EC</span>
+      </RouterLink>
+      <p class="masthead__tagline">{{ site.tagline }}</p>
+    </div>
+
     <nav class="masthead__nav" :aria-label="ui.nav.sectionsAria">
-      <ul class="masthead__links">
-        <li v-for="link in site.nav" :key="link.to">
-          <RouterLink :to="link.to" class="masthead__link">{{ link.label }}</RouterLink>
-        </li>
-        <li class="masthead__divider" aria-hidden="true"></li>
-        <li>
-          <RouterLink to="/boletines" class="masthead__link masthead__link--extra">{{ ui.nav.newsletters }}</RouterLink>
-        </li>
-        <li>
-          <RouterLink to="/pro" class="masthead__link masthead__link--extra">{{ ui.nav.pro }}</RouterLink>
-        </li>
-      </ul>
+      <RouterLink
+        v-for="link in site.nav"
+        :key="link.to"
+        :to="link.to"
+        class="masthead__link"
+        :class="{ 'masthead__link--on': isActive(link.to) }"
+      >
+        {{ link.label }}
+      </RouterLink>
     </nav>
 
     <ModeBar />
+    <HeaderMenu :open="menuOpen" @close="menuOpen = false" />
   </header>
 </template>
 
 <style scoped lang="scss">
 .masthead {
-  position: sticky;
-  top: 0;
-  z-index: 100;
   background: $paper;
-  border-bottom: 1px solid $ink;
+  color: $ink;
+  font-family: $font-display;
 
   &__top {
-    @include container;
-    @include flex(row, center, space-between, 0.75rem);
-    padding-block: 0.8rem;
+    display: none;
+    border-bottom: 1px solid $line;
 
     @include from('md') {
-      padding-block: 1.1rem;
+      display: block;
+    }
+  }
+
+  &__top-inner {
+    @include container(1080px);
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 10px 40px !important;
+    font-size: 13px;
+    font-weight: 600;
+    color: $ink-2;
+  }
+
+  &__toplink {
+    white-space: nowrap;
+
+    &:hover {
+      color: $ink;
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
   }
 
   &__date {
-    display: none;
-    flex: 1 1 0;
-    font-size: $text-xs;
+    margin-left: auto;
+    font-size: 13px;
+    font-weight: 400;
     color: $ink-muted;
+    white-space: nowrap;
 
     &::first-letter {
       text-transform: uppercase;
     }
+  }
+
+  &__mobile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid $line;
+
+    @include from('md') {
+      display: none;
+    }
+  }
+
+  &__burger {
+    font-size: 18px;
+    line-height: 1;
+    width: 28px;
+    text-align: left;
+    @include focus-ring;
+  }
+
+  &__mlogo {
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  &__brand {
+    display: none;
+    text-align: center;
+    padding: 26px 40px 20px;
 
     @include from('md') {
       display: block;
@@ -86,102 +178,76 @@ onMounted(() => {
   }
 
   &__logo {
-    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
   }
 
-  &__actions {
-    @include flex(row, center, flex-end, 0.9rem);
-
-    @include from('md') {
-      flex: 1 1 0;
-    }
-  }
-
-  &__desk {
-    display: none;
-    font-size: $text-xs;
+  &__name {
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: $ink;
+    font-size: 52px;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
 
-    @include from('sm') {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
+  &__stamp {
+    display: inline-block;
+    border: 2px solid $stamp;
+    color: $stamp;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0;
+    padding: 1px 6px;
+    transform: rotate(-6deg);
+    border-radius: 2px;
+    line-height: 1.3;
 
-    &:hover {
-      color: $accent;
+    &--sm {
+      font-size: 9px;
+      padding: 0 3px;
+      vertical-align: middle;
     }
   }
 
-  &__cta {
-    padding: 0.5rem 0.75rem;
-    border-radius: 0;
-    white-space: nowrap;
-
-    @include from('sm') {
-      padding: 0.55rem 1rem;
-    }
-    font-size: $text-xs;
-    letter-spacing: 0.06em;
+  &__tagline {
+    font-family: $font-serif;
+    font-style: italic;
+    font-size: 18px;
+    color: $ink-body;
+    margin-top: 8px;
+    line-height: 1.4;
   }
 
   &__nav {
-    border-top: 1px solid $line;
-  }
+    display: none;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 40px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 
-  &__links {
-    @include container;
-    @include flex(row, center, flex-start, 1.4rem);
-    list-style: none;
-    overflow-x: auto;
-    scrollbar-width: none;
-    white-space: nowrap;
-    // En móvil el borde derecho se desvanece: indica que hay más secciones.
-    mask-image: linear-gradient(to right, #000 85%, transparent);
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
-
-    @include from('lg') {
-      justify-content: center;
-      mask-image: none;
+    @include from('md') {
+      display: flex;
     }
   }
 
   &__link {
-    display: inline-block;
-    padding: 0.7rem 0;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: $ink-soft;
-    border-bottom: 3px solid transparent;
+    color: $ink-muted;
+    padding-bottom: 6px;
+    border-bottom: 2px solid transparent;
+    line-height: 1.3;
     @include transition(color);
 
     &:hover {
       color: $ink;
     }
 
-    &.router-link-active {
+    &--on {
       color: $ink;
-      border-color: $accent;
+      border-bottom-color: $ink;
     }
-
-    &--extra {
-      color: $accent;
-    }
-  }
-
-  &__divider {
-    width: 1px;
-    height: 1rem;
-    background: $line;
-    flex-shrink: 0;
   }
 }
 </style>
