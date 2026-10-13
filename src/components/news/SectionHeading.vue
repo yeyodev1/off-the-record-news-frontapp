@@ -25,7 +25,7 @@ withDefaults(defineProps<{ title: string; to?: string; linkLabel?: string; tag?:
 
   &__title {
     font-size: $text-xl;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: -0.02em;
   }
 
