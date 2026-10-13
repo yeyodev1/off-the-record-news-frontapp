@@ -37,18 +37,15 @@ export type ArticleStatus = 'pending' | 'published' | 'rejected' | 'retracted'
 export type ArticleOrigin = 'ai' | 'telegram' | 'manual'
 export type Edition = 'manana' | 'noche' | 'economia' | 'legislativo'
 
-/** Modo de lectura: cambia el orden y qué cobertura se ve primero, nunca el texto. */
-export type ReadingMode = 'noboista' | 'correista' | 'anti_ambos' | 'independiente'
+/**
+ * Modo de lectura: cambia el orden, qué cobertura se ve primero y el encuadre
+ * del titular. Los hechos son los mismos para todos.
+ */
+export type ReadingMode = 'noboista' | 'correista' | 'independiente'
 
 /** Postura de una fuente frente al hecho. "" = todavía sin valorar. */
 export type Stance =
-  | 'oficialista'
-  | 'opositora'
-  | 'correista'
-  | 'institucional'
-  | 'neutral'
-  | 'no_aplica'
-  | ''
+  'oficialista' | 'opositora' | 'correista' | 'institucional' | 'neutral' | 'no_aplica' | ''
 
 export type ModeRelevance = Record<ReadingMode, number>
 
@@ -177,6 +174,11 @@ export interface Article {
   lens?: ArticleLens | null
   modeRelevance?: ModeRelevance | null
   modeRelevanceAuto?: ModeRelevance | null
+  /** Solo en el panel: ideas de seguimiento ("patitas") para la Mesa. */
+  followUps?: string[]
+  framing?: Partial<
+    Record<'noboista' | 'correista', { title: string; lede: string; whyItMatters: string } | null>
+  > | null
 }
 
 /** Nota retirada: el API devuelve solo esto, sin el contenido. */
@@ -216,24 +218,73 @@ export type ArticleCard = Omit<Article, 'body' | 'score' | 'status'>
 
 export interface HomeFeed {
   lead: ArticleCard | null
+  /** "Las 5 cosas que tienes que saber": la historia del día y cuatro más en el orden del modo. */
+  topFive: ArticleCard[]
   breaking: ArticleCard[]
   latest: ArticleCard[]
-  bySection: { section: Section; items: ArticleCard[] }[]
   modo?: ReadingMode
-  forMode?: ArticleCard[]
-  contradictions?: ArticleCard[]
   otherSide?: ArticleCard[]
 }
+
+/** Orden del stream de la portada. */
+export type StreamOrder = 'principales' | 'leidas' | 'ultimo'
+
+/** Tráiler de una nota de OTR PRO: el dato reservado nunca llega al navegador. */
+export interface ProTeaser {
+  id: string
+  title: string
+  whyItMatters: string
+  section: Section
+  publishedAt: string | null
+  /** Solo en el panel. */
+  status?: 'draft' | 'published' | 'archived'
+  createdBy?: string
+  createdAt?: string
+}
+
+export interface ProTeasersFeed {
+  items: ProTeaser[]
+  sealedThisWeek: number
+}
+
+export type ProPlan = 'semanal' | 'diario'
+
+export interface ProLead {
+  id: string
+  name: string
+  email: string
+  phone: string
+  company: string
+  role: string
+  plan: ProPlan
+  wantsMeeting: boolean
+  message: string
+  status: 'new' | 'contacted' | 'meeting' | 'won' | 'lost'
+  createdAt: string
+}
+
+export type SourceCategory =
+  | 'institucion'
+  | 'medio'
+  | 'programa'
+  | 'politico'
+  | 'periodista'
+  | 'sociedad_civil'
+  | 'internacional'
+  | 'redes'
 
 export interface Source {
   id: string
   name: string
   kind: 'rss' | 'perplexity' | 'web'
-  category: 'medio' | 'periodista' | 'politico' | 'institucion'
+  category: SourceCategory
   url: string
   query: string
   weight: number
   isActive: boolean
+  everyMinutes?: number
+  notes?: string
+  fromSheet?: boolean
   lastCheckedAt: string | null
   lastError: string
   createdAt: string
