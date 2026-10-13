@@ -7,6 +7,8 @@ import type {
   NewsletterIssue,
   Paginated,
   PipelineRun,
+  ProLead,
+  ProTeaser,
   Signal,
   Source,
   Story,
@@ -34,7 +36,17 @@ function qs(params: Query): string {
 }
 
 export type ArticleInput = Partial<Omit<Article, 'id' | 'slug' | 'createdAt' | 'updatedAt'>>
-export type SourceInput = Omit<Source, 'id' | 'createdAt' | 'lastCheckedAt' | 'lastError'>
+export type SourceInput = Omit<
+  Source,
+  'id' | 'createdAt' | 'lastCheckedAt' | 'lastError' | 'fromSheet'
+>
+export interface SheetSyncResult {
+  created: number
+  updated: number
+  deactivated: number
+  skipped?: string
+  errors?: string[]
+}
 
 class AdminService extends APIBase {
   async stats(): Promise<AdminStats> {
@@ -130,7 +142,10 @@ class AdminService extends APIBase {
   }
 
   async publishUpdate(id: string, updateId: string): Promise<Article> {
-    const { data } = await this.post<Article>(`admin/articles/${id}/updates/${updateId}/publish`, {})
+    const { data } = await this.post<Article>(
+      `admin/articles/${id}/updates/${updateId}/publish`,
+      {},
+    )
     return data
   }
 
@@ -216,6 +231,47 @@ class AdminService extends APIBase {
 
   async deleteSource(id: string): Promise<void> {
     await this.delete(`admin/sources/${id}`)
+  }
+
+  async syncSources(): Promise<SheetSyncResult> {
+    const { data } = await this.post<SheetSyncResult>('admin/sources/sync', {})
+    return data
+  }
+
+  // ——— OTR PRO
+
+  async proTeasers(params: Query = {}): Promise<Paginated<ProTeaser>> {
+    const { data } = await this.get<Paginated<ProTeaser>>(`admin/pro/teasers${qs(params)}`)
+    return data
+  }
+
+  async proTeaserFromText(text: string): Promise<ProTeaser> {
+    const { data } = await this.post<ProTeaser>(
+      'admin/pro/teasers/from-text',
+      { text },
+      undefined,
+      SLOW,
+    )
+    return data
+  }
+
+  async updateProTeaser(id: string, body: Partial<ProTeaser>): Promise<ProTeaser> {
+    const { data } = await this.put<ProTeaser>(`admin/pro/teasers/${id}`, body)
+    return data
+  }
+
+  async deleteProTeaser(id: string): Promise<void> {
+    await this.delete(`admin/pro/teasers/${id}`)
+  }
+
+  async proLeads(params: Query = {}): Promise<Paginated<ProLead>> {
+    const { data } = await this.get<Paginated<ProLead>>(`admin/pro/leads${qs(params)}`)
+    return data
+  }
+
+  async setProLeadStatus(id: string, status: ProLead['status']): Promise<ProLead> {
+    const { data } = await this.put<ProLead>(`admin/pro/leads/${id}`, { status })
+    return data
   }
 
   // ─── Mesa (pipeline) ──────────────────────────────────────────────────
