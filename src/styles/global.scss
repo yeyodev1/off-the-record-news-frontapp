@@ -47,10 +47,45 @@ h2,
 h3,
 h4 {
   font-family: $font-display;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.08;
-  letter-spacing: -0.015em;
-  text-wrap: balance;
+  letter-spacing: -0.025em;
+  text-wrap: pretty;
+}
+
+// Titulares enlazados: subrayado de 2px al pasar (README, Interacciones).
+.headline-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.12em;
+  }
+}
+
+// Fila con scroll horizontal sin barra (píldoras en el celular).
+.no-scrollbar {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.reorder-enter-active,
+.reorder-leave-active {
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+.reorder-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+.reorder-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
 }
 
 p {
