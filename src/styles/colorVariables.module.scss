@@ -2,25 +2,47 @@
 // papel y acento, no de "rosa" o "gris 700".
 @use 'sass:color';
 
-// Acento de marca
-$accent: #1a5cff;
-$accent-deep: color.adjust($accent, $lightness: -12%);
+// Tokens de la portada v2 (design_handoff_otr_portada/README.md).
+
+// Acento de marca: el azul de secciones, números y "Profundiza"
+$accent: #0b3bd6;
+$accent-deep: #072a9c;
 $accent-soft: color.mix($accent, #ffffff, 14%);
 
 // Superficies
-$paper: #ffffff; // fondo base: papel de diario, blanco limpio
-$surface: #ffffff; // superficies elevadas
-$sand: #f3f3f1; // bloques suaves
-$line: #e4e4e0; // bordes
+$paper: #ffffff;
+$surface: #ffffff;
+$sand: #f4f2ec; // barra de modo
+$cream: #fbfaf7; // cajas (5 cosas, otra orilla)
+$cream-2: #f1efe9;
+$canvas: #eceae4;
+$line: #e6e4de; // filetes
+$box-line: #d9d6ce; // borde de cajas
+$pill-line: #e0ddd5; // borde de píldoras y columna
 
 // Texto
-$ink: #111111; // texto principal
-$ink-soft: #3b3b3b; // texto secundario
-$ink-muted: #707070; // terciario / labels
+$ink: #111111;
+$ink-2: #333333;
+$ink-soft: #444444;
+$ink-body: #555555;
+$ink-muted: #666666;
+$ink-quiet: #777777;
+$ink-faint: #888888;
 
-// Sello "off the record" y última hora
-$stamp: #e0342b;
+// Sello "off the record", última hora y botón PRO
+$stamp: #c8102e;
+$stamp-deep: #a80d26;
 $stamp-soft: rgba($stamp, 0.1);
+
+// OTR PRO
+$navy: #0a1230;
+$navy-text: #9fb0ff;
+$navy-soft: #d7ddff;
+
+// Miradas
+$mode-noboista: #5b2d8e;
+$mode-correista: #1aa3b2;
+$mode-independiente: #111111;
 
 $overlay: rgba(#0a0a0a, 0.55);
 
@@ -43,6 +65,10 @@ $text-light: $surface;
 $text-secondary: $ink-soft;
 
 // Sombras — suaves, nada de "card de dashboard"
-$shadow-sm: 0 1px 2px rgba($ink, 0.04), 0 4px 12px rgba($ink, 0.04);
-$shadow-md: 0 2px 6px rgba($ink, 0.05), 0 18px 40px rgba($ink, 0.08);
+$shadow-sm:
+  0 1px 2px rgba($ink, 0.04),
+  0 4px 12px rgba($ink, 0.04);
+$shadow-md:
+  0 2px 6px rgba($ink, 0.05),
+  0 18px 40px rgba($ink, 0.08);
 $shadow-lg: 0 30px 70px rgba($ink, 0.14);
