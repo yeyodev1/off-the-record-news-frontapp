@@ -20,13 +20,19 @@ const panelId = useId()
     >
       <span>{{ site.labels.goDeeper }}</span>
       <i v-if="locked" class="fa-solid fa-lock deeper__lock" aria-hidden="true"></i>
-      <i class="fa-solid fa-chevron-down deeper__chevron" :class="{ 'deeper__chevron--open': open }" aria-hidden="true"></i>
+      <i
+        class="fa-solid fa-chevron-down deeper__chevron"
+        :class="{ 'deeper__chevron--open': open }"
+        aria-hidden="true"
+      ></i>
     </button>
 
     <Transition name="rise">
       <div v-show="open" :id="panelId" class="deeper__panel">
         <ProLock v-if="locked" />
-        <p v-for="(paragraph, index) in body" v-else :key="index" class="deeper__p">{{ paragraph }}</p>
+        <p v-for="(paragraph, index) in body" v-else :key="index" class="deeper__p">
+          {{ paragraph }}
+        </p>
       </div>
     </Transition>
   </section>
@@ -42,7 +48,7 @@ const panelId = useId()
     @include flex(row, center, flex-start, 0.6rem);
     padding: 1rem 0;
     font-family: $font-display;
-    font-weight: 900;
+    font-weight: 700;
     font-size: $text-xl;
     letter-spacing: -0.02em;
     text-align: left;
@@ -74,7 +80,9 @@ const panelId = useId()
   }
 
   &__p {
-    line-height: 1.75;
+    font-family: $font-serif;
+    font-size: 18px;
+    line-height: 1.6;
   }
 }
 </style>
