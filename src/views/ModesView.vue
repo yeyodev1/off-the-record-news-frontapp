@@ -26,7 +26,9 @@ function pick(next: ReadingMode) {
       <h2 class="modes-page__h2">{{ ui.modes.chooserTitle }}</h2>
       <dl class="modes-page__modes">
         <div v-for="key in READING_MODES" :key="key" class="modes-page__mode">
-          <dt><i :class="site.modes[key].icon" aria-hidden="true"></i> {{ site.modes[key].name }}</dt>
+          <dt>
+            <i :class="site.modes[key].icon" aria-hidden="true"></i> {{ site.modes[key].name }}
+          </dt>
           <dd>{{ site.modes[key].shows }}</dd>
         </div>
       </dl>
@@ -79,7 +81,7 @@ function pick(next: ReadingMode) {
 
   &__h2 {
     font-size: $text-xl;
-    font-weight: 900;
+    font-weight: 700;
     letter-spacing: -0.02em;
   }
 
