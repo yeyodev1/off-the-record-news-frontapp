@@ -3,6 +3,7 @@ import { articlesService } from '@/services/articles.service'
 import { useReadingMode } from './useReadingMode'
 import type { ApiError, HomeFeed } from '@/types'
 
+/** "Las 5 cosas que tienes que saber" y el bloque de la otra orilla, según el modo. */
 export function useHomeFeed() {
   const feed = ref<HomeFeed | null>(null)
   const loading = ref(true)
@@ -23,33 +24,12 @@ export function useHomeFeed() {
     }
   }
 
-  // La nota principal no se repite en "Lo último".
-  const latest = computed(() => {
-    const leadId = feed.value?.lead?.id
-    return (feed.value?.latest ?? []).filter((item) => item.id !== leadId)
-  })
-
-  const sections = computed(() => (feed.value?.bySection ?? []).filter((block) => block.items.length))
-
-  const isEmpty = computed(() => !loading.value && !error.value && !feed.value?.lead && !latest.value.length)
-
-  const forMode = computed(() => feed.value?.forMode ?? [])
-  const contradictions = computed(() => feed.value?.contradictions ?? [])
+  const topFive = computed(() => feed.value?.topFive ?? [])
   const otherSide = computed(() => feed.value?.otherSide ?? [])
+  const isEmpty = computed(() => !loading.value && !error.value && !topFive.value.length)
 
   onMounted(() => load())
   watch(mode, () => load({ quiet: Boolean(feed.value) }))
 
-  return {
-    feed,
-    latest,
-    sections,
-    forMode,
-    contradictions,
-    otherSide,
-    loading,
-    error,
-    isEmpty,
-    reload: () => load(),
-  }
+  return { feed, topFive, otherSide, loading, error, isEmpty, reload: () => load() }
 }
