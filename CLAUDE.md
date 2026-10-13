@@ -62,3 +62,10 @@ En componentes: `$ink`, `$accent`, `@include from('md')`, `@include container` �
 - Componentes PascalCase; singletons de layout con prefijo `The`; vistas con sufijo `View`.
 - BEM en clases: `.header__nav`, `.btn--primary`.
 - Comentarios y copy en español; explican el porqué, no el qué.
+
+## Portada v2 (diseño de Andersson, 13/10/2026)
+
+- Referencia: `design_handoff_otr_portada` (portada-v2.html). Tokens en `colorVariables.module.scss`; Familjen Grotesk + Source Serif 4.
+- Cabecera (`TheHeader`, `ProButton`, `HeaderMenu`), barra de modo (`ModeBar` + `ModePills`), "Las 5 cosas" (`home/TopFiveBox`), stream con pestañas y scroll infinito (`home/StoryStream`, `useStream`), tarjeta PRO sellada (`home/ProTeaserCard`) cada 4 notas, "Lo que tu orilla no está mirando" (`home/OtherSideBox`).
+- Tres miradas: noboísta, correísta, independiente. El API ya devuelve el titular encuadrado según `?modo=`.
+- Fotos de alto fijo con `StoryPhoto`: si el medio bloquea la imagen cae a la portada de marca.
