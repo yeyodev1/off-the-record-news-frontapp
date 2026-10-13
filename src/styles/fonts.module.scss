@@ -1,8 +1,9 @@
 // Solo variables. Las fuentes se cargan con <link> en index.html: este archivo
 // se inyecta en cada SFC vía vite.config.ts, así que no debe emitir CSS.
 
-// Titulares: grotesca condensada y pesada, de diario. Texto: sans legible.
-$font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
-$font-principal: 'Public Sans', system-ui, sans-serif;
+// Familjen Grotesk para UI y titulares; Source Serif 4 para el cuerpo de las notas.
+$font-display: 'Familjen Grotesk', 'Helvetica Neue', Arial, sans-serif;
+$font-principal: $font-display;
+$font-serif: 'Source Serif 4', Georgia, serif;
 $font-secondary: $font-principal;
 $font-body: $font-principal;
