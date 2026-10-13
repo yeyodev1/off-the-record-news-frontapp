@@ -52,7 +52,6 @@ export interface PartyBlock {
 const STANCE_ORDER: Record<ReadingMode, StanceBucket[]> = {
   noboista: ['oficialista', 'opositora', 'correista', 'institucional', 'neutral'],
   correista: ['correista', 'opositora', 'oficialista', 'institucional', 'neutral'],
-  anti_ambos: ['institucional', 'neutral', 'oficialista', 'opositora', 'correista'],
   independiente: ['oficialista', 'opositora', 'correista', 'institucional', 'neutral'],
 }
 
@@ -66,7 +65,9 @@ function bucketOf(stance: Stance | undefined): StanceBucket {
  * mesa todavía no valoró ninguna postura: la nota se ve como siempre.
  */
 export function partiesFor(sources: ArticleSource[], mode: ReadingMode): PartyBlock[] | null {
-  const hasStance = sources.some((s) => s.stance && s.stance !== 'no_aplica' && s.stance !== 'neutral')
+  const hasStance = sources.some(
+    (s) => s.stance && s.stance !== 'no_aplica' && s.stance !== 'neutral',
+  )
   if (!hasStance) return null
   return STANCE_ORDER[mode]
     .map((stance) => ({
