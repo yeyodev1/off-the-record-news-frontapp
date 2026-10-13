@@ -6,7 +6,7 @@ import type { Edition, ReadingMode, Section, Stance } from '@/types'
  */
 export const site = {
   name: 'Off the Record',
-  tagline: 'Lo que importa en Ecuador, sin rodeos.',
+  tagline: 'Todo lo que tienes que saber, desde todas las miradas.',
   description:
     'Noticias de Ecuador en formato breve: qué pasó, por qué importa y qué sigue. Lee en dos minutos, profundiza si quieres.',
   url: 'https://otr.com.ec',
@@ -20,14 +20,35 @@ export const site = {
     x: '',
     tiktok: '',
   },
+  // Solo Ecuador y solo estas cinco secciones (reunión del 13/10/2026): sin "Mundo".
   nav: [
+    { label: 'Portada', to: '/' },
     { label: 'Política', to: '/seccion/politica' },
     { label: 'Economía', to: '/seccion/economia' },
     { label: 'Asamblea', to: '/seccion/legislativo' },
     { label: 'Seguridad', to: '/seccion/seguridad' },
     { label: 'Negocios', to: '/seccion/negocios' },
-    { label: 'Mundo', to: '/seccion/mundo' },
   ],
+
+  // Barra superior de la cabecera
+  topLinks: [
+    { label: 'Newsletter gratuita', to: '/boletines' },
+    { label: 'Podcast', to: '/podcast' },
+    { label: 'Entrar', to: '/login' },
+  ],
+
+  // Quiénes firman. Las notas de la mesa automática firman como redacción, con el sello OTR.
+  hosts: {
+    names: 'Boscán y La Moni',
+    boscan: { name: 'Andersson Boscán', photo: '/img/boscan.jpg' },
+    moni: { name: 'Mónica Velásquez', photo: '/img/la-moni.jpg' },
+  },
+  authorPhotos: {
+    'Andersson Boscán': '/img/boscan.jpg',
+    'Mónica Velásquez': '/img/la-moni.jpg',
+    'La Moni': '/img/la-moni.jpg',
+  } as Record<string, string>,
+  newsroomName: 'Redacción OTR',
 
   // Rótulos del formato smart brevity
   labels: {
@@ -35,6 +56,8 @@ export const site = {
     keyPoints: 'Los detalles',
     bigPicture: 'El panorama',
     whatsNext: 'Qué sigue',
+    inNumbers: 'En cifras',
+    context: 'El contexto',
     goDeeper: 'Profundiza',
     sources: 'Fuentes',
     breaking: 'Última hora',
@@ -54,31 +77,77 @@ export const site = {
   } satisfies Record<Section, string>,
 
   editions: {
-    manana: { name: 'El Mañanero', time: '5:00', blurb: 'Todo lo que pasó ayer y lo que viene hoy, antes del café.' },
-    noche: { name: 'Cierre de la noche', time: '20:00', blurb: 'El resumen del día en tres minutos de lectura.' },
-    economia: { name: 'Economía', time: 'Semanal', blurb: 'Dólares, deuda, empleo y mercados que te afectan.' },
-    legislativo: { name: 'Asamblea', time: 'Semanal', blurb: 'Qué se vota, quién lo empuja y qué cambia para ti.' },
+    manana: {
+      name: 'El Mañanero',
+      time: '5:00',
+      blurb: 'Todo lo que pasó ayer y lo que viene hoy, antes del café.',
+    },
+    noche: {
+      name: 'Cierre de la noche',
+      time: '20:00',
+      blurb: 'El resumen del día en tres minutos de lectura.',
+    },
+    economia: {
+      name: 'Economía',
+      time: 'Semanal',
+      blurb: 'Dólares, deuda, empleo y mercados que te afectan.',
+    },
+    legislativo: {
+      name: 'Asamblea',
+      time: 'Semanal',
+      blurb: 'Qué se vota, quién lo empuja y qué cambia para ti.',
+    },
   } satisfies Record<Edition, { name: string; time: string; blurb: string }>,
 
   newsletter: {
     title: 'Boletines Off the Record',
-    subtitle: 'Te llegan a tu correo dos veces al día. Cortos, claros y con lo que de verdad importa.',
+    subtitle:
+      'Te llegan a tu correo dos veces al día. Cortos, claros y con lo que de verdad importa.',
     price: 'Desde 3 USD al mes',
     cta: 'Quiero suscribirme',
     pendingNote: 'Te escribiremos para activar tu suscripción y el pago.',
   },
 
+  // OTR PRO: la venta casi automática que el fundador narró el 13/10/2026.
   pro: {
-    title: 'Off the Record Pro',
+    title: 'Off the Record PRO',
+    eyebrow: 'Para CEOs y directorios',
     subtitle:
-      'Inteligencia política y económica para empresas: monitoreo diario, alertas y análisis de lo que se mueve en el poder.',
+      'Inteligencia e información para CEOs y boards ejecutivos. Compilamos todo lo que un ejecutivo tiene que conocer para decidir y usamos nuestras fuentes políticas para encontrar lo que los medios no publican.',
+    why: 'Los medios no cuentan por qué se fue el viceministro de Pesca: no le interesa al gran público. A una atunera sí. Hacemos periodismo con intereses empresariales.',
+    unpublished:
+      'Lo no publicado: muchas noticias se saben pero no se publican porque no son verificables al estándar de un periódico. Cuando vienen de buenas fuentes, conviene que las sepas. Eso es el off the record.',
     features: [
-      'Monitoreo diario de Asamblea, Ejecutivo e instituciones',
-      'Alertas inmediatas sobre temas que afectan a tu sector',
-      'Notas Pro con el contexto completo y fuentes',
-      'Boletines temáticos a la medida de tu equipo',
+      'Informe semanal con lo más duro e importante de la semana y lo no publicado',
+      'Notificaciones diarias, 24/7 todo el año: lo público y lo que no es público',
+      'Pregúntale a la redacción: "Averíguame la postura del presidente sobre los apagones"',
+      'Pronto: elige tus temas (comercio exterior, petróleo…) para no recibir ruido',
     ],
-    cta: 'Solicitar información',
+    delivery:
+      'Se entrega por la aplicación de Off the Record y, muy pronto, con tu sesión PRO en esta misma página.',
+    plans: [
+      {
+        key: 'semanal',
+        name: 'Informe semanal',
+        price: 'USD 1.500',
+        per: 'al mes',
+        items: ['Informe semanal completo', 'Lo no publicado, cada semana'],
+      },
+      {
+        key: 'diario',
+        name: 'Semanal + diario 24/7',
+        price: 'Hasta USD 3.000',
+        per: 'al mes',
+        items: [
+          'Todo el informe semanal',
+          'Notificaciones diarias, 24/7',
+          'Preguntas directas a la redacción',
+        ],
+      },
+    ],
+    terms: 'Contrato mínimo de 6 meses. Para medianas y grandes empresas.',
+    cta: 'Quiero OTR PRO',
+    meeting: 'Prefiero una reunión con un ejecutivo de ventas',
   },
 
   tips: {
@@ -105,36 +174,50 @@ export const site = {
 
   // Modos de lectura. Los nombres los decide el fundador; agregar uno es una fila aquí
   // y su perfil de ponderación en el backend.
+  // Tres miradas (reunión del 13/10/2026). El color es el del diseño de la portada.
   modes: {
     noboista: {
       name: 'Noboísta',
       short: 'noboísta',
+      abbr: 'Noboísta',
+      color: '#5B2D8E',
       icon: 'fa-solid fa-landmark',
       wants: 'Seguir al gobierno y sus decisiones, y enterarte de lo que la oposición le reclama.',
-      shows: 'Primero los hechos del Ejecutivo y su bloque, con la cobertura oficialista arriba y la respuesta opositora debajo.',
+      shows:
+        'Primero los hechos del Ejecutivo y su bloque, contados desde lo que hace y responde el gobierno, con la respuesta opositora debajo.',
     },
     correista: {
       name: 'Correísta',
       short: 'correísta',
+      abbr: 'Correísta',
+      color: '#1AA3B2',
       icon: 'fa-solid fa-people-group',
-      wants: 'Seguir a la Revolución Ciudadana y a la oposición, y lo que el gobierno hace contra ella.',
-      shows: 'Primero los hechos del correísmo y la Asamblea, con la cobertura correísta arriba y la versión oficialista debajo.',
-    },
-    anti_ambos: {
-      name: 'Anti-ambos',
-      short: 'anti-ambos',
-      icon: 'fa-solid fa-scale-balanced',
-      wants: 'Que no te vendan ni al uno ni al otro: datos, documentos y contradicciones de los dos lados.',
-      shows: 'Primero los hechos con más pruebas y documentos, y la cobertura institucional y de control antes que la de partidos.',
+      wants:
+        'Seguir a la Revolución Ciudadana y a la oposición, y lo que el gobierno hace contra ella.',
+      shows:
+        'Primero los hechos del correísmo y la Asamblea, contados desde lo que dice y enfrenta la oposición, con la versión oficialista debajo.',
     },
     independiente: {
-      name: 'Independiente',
+      name: 'Independientes',
       short: 'independiente',
+      abbr: 'Indep.',
+      color: '#111111',
       icon: 'fa-regular fa-newspaper',
       wants: 'Todo, sin énfasis.',
       shows: 'El orden editorial de Off the Record tal cual: valor noticioso y novedad.',
     },
-  } satisfies Record<ReadingMode, { name: string; short: string; icon: string; wants: string; shows: string }>,
+  } satisfies Record<
+    ReadingMode,
+    {
+      name: string
+      short: string
+      abbr: string
+      color: string
+      icon: string
+      wants: string
+      shows: string
+    }
+  >,
 
   stances: {
     oficialista: 'Oficialismo',
@@ -149,20 +232,21 @@ export const site = {
   howModes: {
     title: 'Cómo funcionan los modos de lectura',
     subtitle:
-      'Eliges un lente para leer Off the Record. El lente cambia el orden y qué cobertura ves primero. Los hechos son los mismos para todos.',
+      'Eliges una mirada para leer Off the Record: noboísta, correísta o independiente. La mirada cambia el orden, qué cobertura ves primero y desde dónde se cuenta cada titular. Los hechos son los mismos para todos.',
     changesTitle: 'Qué cambia con el modo',
     changes: [
       'El orden de los hechos en la portada y en las secciones: cada hecho tiene una relevancia distinta para cada modo.',
       'Qué cobertura ves primero dentro de cada nota: "Lo que dicen las partes" abre con la orilla de tu modo y sigue con la otra. Las dos están siempre.',
-      'Si te suscribes y das tu consentimiento, el orden de las notas en tus boletines.',
+      'El encuadre del titular, la entrada y el "Por qué importa": el mismo hecho contado desde lo que le importa a tu mirada.',
+      'Si te suscribes y das tu consentimiento, el orden y los titulares de tus boletines.',
     ],
     neverTitle: 'Qué no cambia nunca',
     never: [
-      'Los hechos son los mismos para todos. Escribimos una sola versión de cada nota: nunca hay cuatro redacciones del mismo hecho.',
+      'Los hechos son los mismos para todos: las mismas cifras, los mismos nombres y las mismas fuentes. Un verificador automático descarta cualquier titular de una mirada que diga algo que la nota no dice.',
       'La historia del día aparece primero en todos los modos.',
       'Lo último se muestra completo y en orden cronológico en todos los modos.',
       'Nada se oculta: un hecho que baja en tu modo sigue en su sección, en el buscador y en su dirección.',
-      'La línea editorial y las reglas de redacción son las mismas en los cuatro modos.',
+      'La línea editorial y las reglas de redacción son las mismas en las tres miradas. Ninguna es propaganda.',
       'Siempre ves en qué modo estás leyendo y puedes cambiarlo con un toque.',
     ],
     privacyTitle: 'Tu modo y tus datos',
@@ -212,7 +296,8 @@ export const ui = {
     minutes: (n: number) => `${n} min de lectura`,
     close: 'Cerrar',
     lockedTitle: 'Esta nota completa es para Off the Record Pro',
-    lockedText: 'El contexto completo, los antecedentes y las fuentes de esta nota están reservados para suscriptores Pro.',
+    lockedText:
+      'El contexto completo, los antecedentes y las fuentes de esta nota están reservados para suscriptores Pro.',
     lockedCta: 'Conoce Off the Record Pro',
     share: 'Compartir',
     copyLink: 'Copiar enlace',
@@ -269,7 +354,8 @@ export const ui = {
     homeBoxLink: 'Elegir boletines',
     homeBoxNote: 'Recibirás El Mañanero y el Cierre de la noche.',
     tipsOr: 'o usa el formulario',
-    tipsPrivacy: 'Nombre y contacto son opcionales. Solo los usamos para verificar lo que nos cuentas.',
+    tipsPrivacy:
+      'Nombre y contacto son opcionales. Solo los usamos para verificar lo que nos cuentas.',
   },
   pro: {
     eyebrow: 'Para empresas',
@@ -280,10 +366,67 @@ export const ui = {
     ctaTips: 'Envíanos una denuncia',
     ctaNewsletters: 'Suscríbete a los boletines',
   },
+  home: {
+    topFiveTitle: 'Las 5 cosas que tienes que saber',
+    updated: (time: string, minutes: number) => `Actualizado ${time} · ${minutes} min en total`,
+    updatedShort: (time: string, minutes: number) => `${time} · ${minutes} min`,
+    orderFor: 'Orden para modo',
+    tabs: { principales: 'Principales', leidas: 'Más leídas', ultimo: 'Lo último' },
+    tabsAria: 'Orden de las notas',
+    seeMore: 'Ver más notas',
+    photo: 'Foto',
+    profundiza: (n: number) => `Profundiza · ${n} min de lectura`,
+    profundizaShort: (n: number) => `Profundiza · ${n} min`,
+    by: 'Por',
+  },
+  proCard: {
+    badge: 'PRO · No publicado',
+    plan: 'Plan mensual para empresas',
+    unlock: 'Desbloquear PRO',
+    footnote: (n: number) =>
+      `Información que no sale en medios · ${n} ${n === 1 ? 'nota sellada' : 'notas selladas'} esta semana`,
+    lockedAria: 'Contenido reservado para OTR PRO',
+  },
+  newsletterBand: {
+    title: 'Todo lo que tienes que saber, cada mañana.',
+    text: 'La newsletter gratuita de OTR respeta tu modo de lectura.',
+    cta: 'Suscríbete gratis',
+  },
+  header: {
+    pro: 'OTR PRO · Entra al círculo',
+    proShort: 'PRO',
+    menu: 'Menú',
+    closeMenu: 'Cerrar menú',
+  },
+  podcast: {
+    title: 'El podcast de Off the Record',
+    text: 'Boscán y La Moni conversan lo que pasó en la semana y lo que no salió en los medios. Muy pronto aquí. Mientras tanto, recibe la newsletter gratuita.',
+    cta: 'Suscríbete a la newsletter',
+  },
+  proPage: {
+    plansTitle: 'Planes',
+    whatTitle: 'Qué recibes',
+    formTitle: 'Activa OTR PRO para tu empresa',
+    formNote: 'Te escribimos en horas, no en días.',
+    role: 'Cargo',
+    phone: 'Teléfono o WhatsApp',
+    plan: 'Plan',
+    message: 'Qué temas le importan a tu empresa',
+    messagePlaceholder: 'Ej.: comercio exterior y petróleo',
+    nameRequired: 'Escribe tu nombre.',
+    companyRequired: 'Escribe el nombre de tu empresa.',
+    doneTitle: 'Recibimos tu solicitud',
+    teasersTitle: 'Lo que OTR PRO contó esta semana',
+  },
   modes: {
+    barLabel: 'Estás leyendo OTR en modo',
+    barHelp: 'Los hechos son los mismos para todos; el modo cambia el orden.',
+    barHow: 'Cómo funciona',
+    serviceOf: 'Un servicio de',
     chooserTitle: '¿Cómo quieres leer OTR?',
     chooserSubtitle: 'Puedes cambiarlo cuando quieras.',
-    chooserNote: 'Los hechos son los mismos para todos. Cambia el orden y qué cobertura ves primero.',
+    chooserNote:
+      'Los hechos son los mismos para todos. Cambia el orden y qué cobertura ves primero.',
     chooserSkip: 'Ahora no',
     sheetTitle: 'Elige cómo leer OTR',
     label: (mode: string) => `Estás leyendo OTR en modo ${mode}`,
@@ -292,10 +435,9 @@ export const ui = {
     howLink: 'Cómo funcionan los modos',
     current: 'Modo actual',
     forMode: (mode: string) => `Lo más relevante en modo ${mode}`,
-    contradictions: 'Lo que ninguno de los dos quiere que veas',
-    contradictionsNote: 'Contradicciones y promesas incumplidas de los dos lados.',
     otherSide: 'Lo que tu orilla no está mirando',
     otherSideNote: 'Hechos que pesan en la otra orilla y en la tuya pasan de largo.',
+    otherSideFor: (mode: string) => `Alta relevancia en modo ${mode}`,
     otherSideHide: 'Ocultar',
     otherSideShow: 'Mostrar lo que tu orilla no está mirando',
     partiesTitle: 'Lo que dicen las partes',
