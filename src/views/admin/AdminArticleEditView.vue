@@ -14,6 +14,7 @@ import VerificationPanel from '@/components/admin/VerificationPanel.vue'
 import UpdatesPanel from '@/components/admin/UpdatesPanel.vue'
 import HistoryPanel from '@/components/admin/HistoryPanel.vue'
 import LensPanel from '@/components/admin/LensPanel.vue'
+import FollowUpsPanel from '@/components/admin/FollowUpsPanel.vue'
 import RetractDialog from '@/components/admin/RetractDialog.vue'
 import EditorBar from '@/components/admin/EditorBar.vue'
 
@@ -124,6 +125,9 @@ onMounted(load)
               :busy="lensBusy"
               @recompute="recomputeLens"
             />
+          </div>
+          <div v-if="article" class="editor__card">
+            <FollowUpsPanel :article="article" />
           </div>
           <div v-if="article" class="editor__card">
             <VerificationPanel :verification="article.verification" />
