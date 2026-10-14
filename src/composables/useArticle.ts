@@ -2,35 +2,21 @@ import { ref, watch, type Ref } from 'vue'
 import { articlesService } from '@/services/articles.service'
 import { site } from '@/config/site'
 import { useReadingMode } from './useReadingMode'
-import type { ApiError, Article, ArticleCard, RetractedArticle } from '@/types'
-
-const RELATED_LIMIT = 4
+import type { ApiError, Article, RetractedArticle } from '@/types'
 
 export function useArticle(slug: Ref<string>) {
   const article = ref<Article | null>(null)
   const retracted = ref<RetractedArticle | null>(null)
-  const related = ref<ArticleCard[]>([])
   const loading = ref(true)
   const notFound = ref(false)
   const error = ref('')
   const { mode } = useReadingMode()
-
-  async function loadRelated(current: Article) {
-    try {
-      const page = await articlesService.list({ section: current.section, limit: RELATED_LIMIT + 1 })
-      related.value = page.items.filter((item) => item.id !== current.id).slice(0, RELATED_LIMIT)
-    } catch {
-      // Las relacionadas son un extra: si fallan, la nota se lee igual.
-      related.value = []
-    }
-  }
 
   async function load() {
     if (!slug.value) return
     loading.value = true
     notFound.value = false
     error.value = ''
-    related.value = []
     retracted.value = null
     try {
       const data = await articlesService.bySlug(slug.value, mode.value)
@@ -41,7 +27,6 @@ export function useArticle(slug: Ref<string>) {
         return
       }
       article.value = data as Article
-      loadRelated(article.value)
     } catch (e) {
       const apiError = e as ApiError
       article.value = null
@@ -52,7 +37,8 @@ export function useArticle(slug: Ref<string>) {
     }
   }
 
-  watch(slug, load, { immediate: true })
+  // Cambiar de mirada dentro de la nota la vuelve a pedir con su encuadre.
+  watch([slug, mode], load, { immediate: true })
 
-  return { article, retracted, related, loading, notFound, error, reload: load }
+  return { article, retracted, loading, notFound, error, reload: load }
 }
