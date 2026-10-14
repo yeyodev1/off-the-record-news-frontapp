@@ -69,3 +69,5 @@ En componentes: `$ink`, `$accent`, `@include from('md')`, `@include container` �
 - Cabecera (`TheHeader`, `ProButton`, `HeaderMenu`), barra de modo (`ModeBar` + `ModePills`), "Las 5 cosas" (`home/TopFiveBox`), stream con pestañas y scroll infinito (`home/StoryStream`, `useStream`), tarjeta PRO sellada (`home/ProTeaserCard`) cada 4 notas, "Lo que tu orilla no está mirando" (`home/OtherSideBox`).
 - Tres miradas: noboísta, correísta, independiente. El API ya devuelve el titular encuadrado según `?modo=`.
 - Fotos de alto fijo con `StoryPhoto`: si el medio bloquea la imagen cae a la portada de marca.
+- Nota con lectura continua (`ArticleView` + `ArticleStory` + `useArticleChain`): al final sigue la siguiente nota completa en el orden del modo; `useActiveStory` mueve la URL con `history.replaceState`. Sin bloque "Cómo hicimos esta nota".
+- Tres lenguajes visuales (`utils/media.ts`): `image.editorial` (documental, archivo, grafico, generica) lo pone el backend. La genérica no se muestra: cae a `DataCover` si hay cifras o a la ficha de marca.
