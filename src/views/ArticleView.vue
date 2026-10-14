@@ -1,33 +1,37 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { site } from '@/config/site'
+import { ui } from '@/config/site'
 import { useArticle } from '@/composables/useArticle'
-import ArticleHeader from '@/components/news/ArticleHeader.vue'
-import ArticleFigure from '@/components/news/ArticleFigure.vue'
-import ArticleBody from '@/components/news/ArticleBody.vue'
-import SourcesList from '@/components/news/SourcesList.vue'
-import ShareBar from '@/components/news/ShareBar.vue'
-import ArticleCard from '@/components/news/ArticleCard.vue'
-import SectionHeading from '@/components/news/SectionHeading.vue'
+import { useArticleChain } from '@/composables/useArticleChain'
+import { useActiveStory } from '@/composables/useActiveStory'
+import { useInfiniteScroll } from '@/composables/useInfiniteScroll'
+import ArticleStory from '@/components/news/ArticleStory.vue'
 import SkeletonStory from '@/components/news/SkeletonStory.vue'
 import StateMessage from '@/components/news/StateMessage.vue'
-import ArticleUpdates from '@/components/news/ArticleUpdates.vue'
-import ArticleDisclaimer from '@/components/news/ArticleDisclaimer.vue'
 import RetractionNotice from '@/components/news/RetractionNotice.vue'
-import { ui } from '@/config/site'
 
+/**
+ * Página de nota con lectura continua: debajo de la nota sigue la siguiente
+ * completa, sin fin, en el orden del modo del lector. La dirección sigue a la
+ * nota que se está leyendo.
+ */
 const route = useRoute()
 const slug = computed(() => String(route.params.slug ?? ''))
-const { article, retracted, related, loading, notFound, error, reload } = useArticle(slug)
+const { article, retracted, loading, notFound, error, reload } = useArticle(slug)
+const { chain, loading: loadingNext, done, next } = useArticleChain(slug)
 
-// El enlace que se comparte es el canónico del sitio, no el del túnel de desarrollo.
-const shareUrl = computed(() => `${site.url}/nota/${slug.value}`)
-const sectionName = computed(() => (article.value ? site.sections[article.value.section] : ''))
+const page = ref<HTMLElement | null>(null)
+useActiveStory(page)
+const scroll = useInfiniteScroll(() => {
+  if (article.value) next()
+})
+// La siguiente nota se pide apenas abre esta: cuando el lector llega al final ya está.
+watch(article, (current) => current && next())
 </script>
 
 <template>
-  <div class="article-page">
+  <div ref="page" class="article-page">
     <div v-if="loading" class="article-page__col">
       <SkeletonStory :count="1" with-image />
     </div>
@@ -56,33 +60,34 @@ const sectionName = computed(() => (article.value ? site.sections[article.value.
     </div>
 
     <template v-else-if="article">
-      <article class="article-page__col article-page__story">
-        <ArticleHeader :article="article" />
-        <ArticleUpdates v-if="article.updates?.length" :updates="article.updates" />
-        <ArticleFigure v-if="article.image" :image="article.image" :alt="article.title" eager />
-        <ArticleBody :article="article" />
-        <SourcesList v-if="article.sources?.length" :sources="article.sources" />
-        <ArticleDisclaimer v-if="article.disclaimer" :text="article.disclaimer" />
-        <ShareBar :url="shareUrl" :title="article.title" />
-      </article>
+      <ArticleStory class="article-page__col" :article="article" eager />
 
-      <section v-if="related.length" class="article-page__related">
-        <SectionHeading
-          :title="`${ui.article.related} ${sectionName}`"
-          :to="`/seccion/${article.section}`"
-          :link-label="ui.feed.seeSection"
-        />
-        <div class="article-page__cards">
-          <ArticleCard v-for="item in related" :key="item.id" :article="item" with-image :show-section="false" />
-        </div>
-      </section>
+      <template v-for="item in chain" :key="item.id">
+        <p class="article-page__col article-page__next">{{ ui.article.nextStory }}</p>
+        <ArticleStory class="article-page__col" :article="item" />
+      </template>
+
+      <div v-if="!done" class="article-page__col article-page__more">
+        <SkeletonStory v-if="loadingNext" :count="1" />
+        <button v-else type="button" class="article-page__more-btn" @click="next">
+          {{ ui.article.keepReading }}
+        </button>
+      </div>
     </template>
+
+    <!-- Fuera de los v-if: el observador lo toma al montar la página. -->
+    <div
+      :ref="(el) => (scroll.sentinel.value = el as HTMLElement | null)"
+      class="article-page__sentinel"
+      aria-hidden="true"
+    ></div>
   </div>
 </template>
 
 <style scoped lang="scss">
 .article-page {
   padding-top: 1.75rem;
+  padding-bottom: $space-xl;
 
   @include from('md') {
     padding-top: 3rem;
@@ -93,17 +98,43 @@ const sectionName = computed(() => (article.value ? site.sections[article.value.
     @include container(760px);
   }
 
-  &__story {
-    @include flex(column, stretch, flex-start, 1.75rem);
+  // Corte entre una nota y la siguiente: una regla gruesa, como en la portada.
+  &__next {
+    margin-top: 3rem;
+    margin-bottom: 1.75rem;
+    padding-top: 0.9rem;
+    border-top: 3px solid $ink;
+    font-family: $font-display;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $ink-muted;
   }
 
-  &__related {
-    @include container;
-    margin-top: $space-xl;
+  &__sentinel {
+    height: 1px;
   }
 
-  &__cards {
-    @include flex-cards(220px, 2rem);
+  &__more {
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  &__more-btn {
+    border: 1px solid $ink;
+    padding: 11px 22px;
+    font-family: $font-display;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 3px;
+    @include transition(background);
+    @include focus-ring;
+
+    &:hover {
+      background: $ink;
+      color: $paper;
+    }
   }
 }
 </style>
