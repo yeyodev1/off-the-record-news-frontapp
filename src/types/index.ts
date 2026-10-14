@@ -78,7 +78,13 @@ export interface ArticleImage {
   sourceName: string
   sourceUrl: string
   kind: 'photo' | 'illustration' | 'infographic'
+  /** Lenguaje visual que valoró la redacción; null = sin valorar (se muestra igual). */
+  editorial?: ImageEditorial | null
+  /** Qué muestra la imagen, en una oración factual. */
+  caption?: string
 }
+
+export type ImageEditorial = 'documental' | 'archivo' | 'grafico' | 'generica'
 
 export interface Infographic {
   title: string
