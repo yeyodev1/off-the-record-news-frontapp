@@ -40,6 +40,7 @@ const minutes = computed(() => props.items.reduce((sum, a) => sum + (a.readingMi
       <article class="five__lead">
         <StoryPhoto
           :image="first.image"
+          :infographic="first.infographic"
           :section="first.section"
           :alt="first.title"
           :height="300"
