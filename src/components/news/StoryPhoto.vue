@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { site, ui } from '@/config/site'
-import type { ArticleImage, Section } from '@/types'
+import { site } from '@/config/site'
+import { imageCredit, visibleImage } from '@/utils/media'
+import DataCover from './DataCover.vue'
+import type { ArticleImage, Infographic, Section } from '@/types'
 
 /**
  * Foto de alto fijo (portada v2: 300/360 en escritorio, 180/190 en el celular)
- * con su crédito. Sin foto, la portada de marca con la sección: nunca un hueco.
+ * con su crédito. La foto genérica no se muestra: si la nota tiene cifras se
+ * ven las cifras; si no, la ficha de marca con la sección. Nunca un hueco.
  */
 const props = withDefaults(
   defineProps<{
     image: ArticleImage | null
     section: Section
+    infographic?: Infographic | null
     alt?: string
     height: number
     mobileHeight: number
     caption?: boolean
     eager?: boolean
   }>(),
-  { alt: '', caption: false, eager: false },
+  { alt: '', caption: false, eager: false, infographic: null },
 )
 
 // Si el medio bloquea la foto (hotlink), se ve la portada de marca y no un ícono roto.
@@ -27,25 +31,24 @@ watch(
   () => (broken.value = false),
 )
 
-const credit = computed(() => {
-  if (!props.image || broken.value) return ''
-  if (props.image.credit) return props.image.credit
-  return props.image.sourceName ? `${ui.home.photo}: ${props.image.sourceName}` : ''
-})
+const shown = computed(() => (broken.value ? null : visibleImage(props.image)))
+const credit = computed(() => imageCredit(shown.value))
+const data = computed(() => (props.infographic?.items?.length ? props.infographic : null))
 </script>
 
 <template>
   <figure class="photo" :style="{ '--h': `${height}px`, '--mh': `${mobileHeight}px` }">
     <div class="photo__frame">
       <img
-        v-if="image && !broken"
-        :src="image.url"
-        :alt="alt"
+        v-if="shown"
+        :src="shown.url"
+        :alt="shown.caption || alt"
         :loading="eager ? 'eager' : 'lazy'"
         decoding="async"
         referrerpolicy="no-referrer"
         @error="broken = true"
       />
+      <DataCover v-else-if="data" :data="data" />
       <div v-else class="photo__fallback" aria-hidden="true">
         <span class="photo__stamp">{{ site.name }}</span>
         <span class="photo__section">{{ site.sections[section] ?? section }}</span>
