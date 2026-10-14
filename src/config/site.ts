@@ -182,9 +182,9 @@ export const site = {
       abbr: 'Noboísta',
       color: '#5B2D8E',
       icon: 'fa-solid fa-landmark',
-      wants: 'Seguir al gobierno y sus decisiones, y enterarte de lo que la oposición le reclama.',
+      wants: 'Leer los hechos que reafirman la narrativa oficial, sin que nadie los tuerza.',
       shows:
-        'Primero los hechos del Ejecutivo y su bloque, contados desde lo que hace y responde el gobierno, con la respuesta opositora debajo.',
+        'Primero los hechos que sostienen la versión del gobierno: lo que decide, logra y responde. Lo que dicen sus críticos va después, con su fuente.',
     },
     correista: {
       name: 'Correísta',
@@ -192,10 +192,9 @@ export const site = {
       abbr: 'Correísta',
       color: '#1AA3B2',
       icon: 'fa-solid fa-people-group',
-      wants:
-        'Seguir a la Revolución Ciudadana y a la oposición, y lo que el gobierno hace contra ella.',
+      wants: 'Leer los hechos desde la visión de la oposición, sin que nadie los tuerza.',
       shows:
-        'Primero los hechos del correísmo y la Asamblea, contados desde lo que dice y enfrenta la oposición, con la versión oficialista debajo.',
+        'Primero lo que la oposición cuestiona, denuncia o reclama, y las cifras que pesan contra el gobierno. La versión oficial va después, con su fuente.',
     },
     independiente: {
       name: 'Independientes',
@@ -203,8 +202,9 @@ export const site = {
       abbr: 'Indep.',
       color: '#111111',
       icon: 'fa-regular fa-newspaper',
-      wants: 'Todo, sin énfasis.',
-      shows: 'El orden editorial de Off the Record tal cual: valor noticioso y novedad.',
+      wants: 'Las dos orillas, equilibradas.',
+      shows:
+        'El orden editorial de Off the Record: valor noticioso y novedad, con la versión oficial y la de la oposición con el mismo peso.',
     },
   } satisfies Record<
     ReadingMode,
@@ -232,18 +232,18 @@ export const site = {
   howModes: {
     title: 'Cómo funcionan los modos de lectura',
     subtitle:
-      'Eliges una mirada para leer Off the Record: noboísta, correísta o independiente. La mirada cambia el orden, qué cobertura ves primero y desde dónde se cuenta cada titular. Los hechos son los mismos para todos.',
+      'Eliges una mirada para leer Off the Record: noboísta, correísta o independiente. El noboísta no tuerce los hechos, pero va primero a los que reafirman la narrativa oficial; el correísta busca la visión de la oposición; el independiente equilibra ambos. Los hechos son los mismos para todos.',
     changesTitle: 'Qué cambia con el modo',
     changes: [
-      'El orden de los hechos en la portada y en las secciones: cada hecho tiene una relevancia distinta para cada modo.',
+      'El orden de los hechos en la portada, también en "Las 5 cosas que tienes que saber", y en las secciones: cada hecho tiene una relevancia distinta para cada modo.',
       'Qué cobertura ves primero dentro de cada nota: "Lo que dicen las partes" abre con la orilla de tu modo y sigue con la otra. Las dos están siempre.',
-      'El encuadre del titular, la entrada y el "Por qué importa": el mismo hecho contado desde lo que le importa a tu mirada.',
+      'La redacción de la nota: el titular, la entrada, el "Por qué importa", los detalles y el cuerpo cuentan el mismo hecho con el enfoque de tu mirada.',
       'Si te suscribes y das tu consentimiento, el orden y los titulares de tus boletines.',
     ],
     neverTitle: 'Qué no cambia nunca',
     never: [
       'Los hechos son los mismos para todos: las mismas cifras, los mismos nombres y las mismas fuentes. Un verificador automático descarta cualquier titular de una mirada que diga algo que la nota no dice.',
-      'La historia del día aparece primero en todos los modos.',
+      'Lo grande le llega a todos: una noticia de primer orden está arriba en los tres modos.',
       'Lo último se muestra completo y en orden cronológico en todos los modos.',
       'Nada se oculta: un hecho que baja en tu modo sigue en su sección, en el buscador y en su dirección.',
       'La línea editorial y las reglas de redacción son las mismas en las tres miradas. Ninguna es propaganda.',
@@ -310,7 +310,8 @@ export const ui = {
     updatedAt: (time: string) => `Actualizada a las ${time}`,
     updatesTitle: 'Actualizaciones',
     updateLabel: (time: string) => `Actualización ${time}`,
-    disclaimerTitle: 'Cómo hicimos esta nota',
+    nextStory: 'Sigue leyendo',
+    keepReading: 'Siguiente nota',
     retractedTitle: 'Retiramos esta nota',
     retractedText: (date: string) =>
       `Off the Record publicó esta nota y la retiró el ${date}. Dejamos este aviso en la misma dirección para que quede registro.`,
@@ -375,6 +376,9 @@ export const ui = {
     tabsAria: 'Orden de las notas',
     seeMore: 'Ver más notas',
     photo: 'Foto',
+    archive: 'Archivo',
+    chart: 'Gráfico',
+    data: 'Datos / OTR',
     profundiza: (n: number) => `Profundiza · ${n} min de lectura`,
     profundizaShort: (n: number) => `Profundiza · ${n} min`,
     by: 'Por',
@@ -420,7 +424,7 @@ export const ui = {
   },
   modes: {
     barLabel: 'Estás leyendo OTR en modo',
-    barHelp: 'Los hechos son los mismos para todos; el modo cambia el orden.',
+    barHelp: 'Los hechos son los mismos para todos; el modo cambia el orden y el enfoque.',
     barHow: 'Cómo funciona',
     serviceOf: 'Un servicio de',
     chooserTitle: '¿Cómo quieres leer OTR?',
