@@ -4,6 +4,7 @@ import StoryMeta from './StoryMeta.vue'
 import SmartLabel from './SmartLabel.vue'
 import ReadMore from './ReadMore.vue'
 import CoverFallback from './CoverFallback.vue'
+import { visibleImage } from '@/utils/media'
 import type { ArticleCard } from '@/types'
 
 /**
@@ -11,7 +12,12 @@ import type { ArticleCard } from '@/types'
  * "Por qué importa"). compact: para rejillas por sección.
  */
 withDefaults(
-  defineProps<{ article: ArticleCard; variant?: 'brief' | 'compact'; withImage?: boolean; showSection?: boolean }>(),
+  defineProps<{
+    article: ArticleCard
+    variant?: 'brief' | 'compact'
+    withImage?: boolean
+    showSection?: boolean
+  }>(),
   { variant: 'compact', withImage: false, showSection: true },
 )
 </script>
@@ -25,7 +31,13 @@ withDefaults(
       tabindex="-1"
       aria-hidden="true"
     >
-      <img v-if="article.image" :src="article.image.url" alt="" loading="lazy" decoding="async" />
+      <img
+        v-if="visibleImage(article.image)"
+        :src="article.image!.url"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
       <CoverFallback v-else :section="article.section" />
     </RouterLink>
 
