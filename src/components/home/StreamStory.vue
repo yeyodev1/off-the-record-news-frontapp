@@ -58,6 +58,7 @@ const lowerFirst = (text: string) => text.charAt(0).toLowerCase() + text.slice(1
 
     <StoryPhoto
       :image="article.image"
+      :infographic="article.infographic"
       :section="article.section"
       :alt="article.title"
       :height="360"
