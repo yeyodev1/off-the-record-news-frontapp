@@ -3,6 +3,9 @@ import type {
   AdminStats,
   Article,
   Edition,
+  Lesson,
+  LessonInput,
+  MesaLive,
   ModeStats,
   NewsletterIssue,
   Paginated,
@@ -17,6 +20,7 @@ import type {
   TelegramTeam,
   Subscriber,
   Tip,
+  TryResult,
 } from '@/types'
 
 /** Las llamadas que esperan a la IA pueden tardar minutos. */
@@ -282,6 +286,43 @@ class AdminService extends APIBase {
 
   async runs(page = 1): Promise<Paginated<PipelineRun>> {
     const { data } = await this.get<Paginated<PipelineRun>>(`admin/newsroom/runs${qs({ page })}`)
+    return data
+  }
+
+  // ─── La mesa por dentro ───────────────────────────────────────────────
+  async mesaLive(hours = 12): Promise<MesaLive> {
+    const { data } = await this.get<MesaLive>(`admin/training/live${qs({ hours })}`)
+    return data
+  }
+
+  async lessons(): Promise<Lesson[]> {
+    const { data } = await this.get<Lesson[]>('admin/training/lessons')
+    return data
+  }
+
+  async createLesson(body: LessonInput): Promise<Lesson> {
+    const { data } = await this.post<Lesson>('admin/training/lessons', body)
+    return data
+  }
+
+  async updateLesson(
+    id: string,
+    body: Partial<Pick<Lesson, 'instruction' | 'area' | 'active'>>,
+  ): Promise<Lesson> {
+    const { data } = await this.put<Lesson>(`admin/training/lessons/${id}`, body)
+    return data
+  }
+
+  async deleteLesson(id: string): Promise<void> {
+    await this.delete(`admin/training/lessons/${id}`)
+  }
+
+  async tryHeadline(body: {
+    title: string
+    summary?: string
+    sourceName?: string
+  }): Promise<TryResult> {
+    const { data } = await this.post<TryResult>('admin/training/try', body, undefined, SLOW)
     return data
   }
 

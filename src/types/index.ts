@@ -405,3 +405,93 @@ export interface ModeStats {
   thermometer: Record<ReadingMode, { slug: string; title: string; views: number }[]>
   golden: { total: number; corrected: number }
 }
+
+// ─── La mesa por dentro (en vivo y entrenamiento) ──────────────────────
+
+export interface MesaHealthItem {
+  ok: boolean
+  message: string
+}
+
+export interface MesaSignal {
+  id: string
+  title: string
+  url: string
+  sourceName: string
+  createdAt: string
+  status: Signal['status']
+  section: string | null
+  score: { total: number; reasoning: string } | null
+  /** El porqué de la decisión, en una línea. */
+  decision: string
+  story: { id: string; title: string; status: StoryStatus; reason: string } | null
+  article: { id: string; slug: string; title: string; status: ArticleStatus } | null
+}
+
+export interface MesaLive {
+  health: {
+    ai: MesaHealthItem
+    search: MesaHealthItem
+    lastRunAt: string | null
+    withinSchedule: boolean
+  }
+  sources: {
+    total: number
+    active: number
+    rss: number
+    search: number
+    checked24h: number
+    withErrors: { name: string; lastError: string }[]
+  }
+  runs: PipelineRun[]
+  funnel: {
+    collected: number
+    discarded: number
+    scored: number
+    stories: number
+    drafted: number
+    published: number
+  }
+  signals: MesaSignal[]
+}
+
+export type LessonArea = 'general' | 'valoracion' | 'redaccion' | 'modos' | 'fotos'
+export type LessonVerdict = 'es_noticia' | 'no_es_noticia' | ''
+
+export interface Lesson {
+  id: string
+  area: LessonArea
+  instruction: string
+  example: { title: string; url: string; verdict: LessonVerdict } | null
+  active: boolean
+  origin: 'manual' | 'correccion'
+  createdByName: string
+  createdAt: string
+  updatedAt: string
+}
+
+export interface LessonInput {
+  area: LessonArea
+  instruction: string
+  example?: { title: string; url: string; verdict: LessonVerdict }
+}
+
+export interface TryResult {
+  score: {
+    cercania: number
+    inmediatez: number
+    personaje: number
+    relevancia: number
+    impacto: number
+    total: number
+    reasoning: string
+  }
+  section: string
+  notNews: boolean
+  duplicate: boolean
+  accusation: boolean
+  familyVeto: boolean
+  wouldDraft: boolean
+  threshold: number
+  lessonsUsed: number
+}

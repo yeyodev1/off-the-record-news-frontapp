@@ -163,13 +163,13 @@ export const site = {
     title: 'Qué es Off the Record',
     paragraphs: [
       'Off the Record cuenta lo que pasa en Ecuador de forma breve y directa. Cada nota te dice qué pasó, por qué importa y qué sigue, para que te enteres en dos minutos.',
-      'Una mesa de redacción asistida por inteligencia artificial monitorea cientos de fuentes: medios, periodistas, políticos e instituciones. Un equipo de periodistas revisa y aprueba lo que se publica.',
+      'Una mesa de redacción monitorea cientos de fuentes: medios, periodistas, políticos e instituciones. Un equipo de periodistas revisa y aprueba lo que se publica.',
       'Si quieres más, cada nota tiene un "Profundiza" con el contexto completo y las fuentes citadas.',
     ],
   },
 
   footer: {
-    note: 'Periodismo breve para Ecuador. Redacción asistida por IA y revisada por periodistas.',
+    note: 'Periodismo breve para Ecuador.',
   },
 
   // Modos de lectura. Los nombres los decide el fundador; agregar uno es una fila aquí

@@ -123,6 +123,24 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: 'Fuentes' },
       },
       {
+        path: 'mesa',
+        component: () => import('@/views/admin/AdminMesaView.vue'),
+        children: [
+          {
+            path: '',
+            name: 'AdminMesaLive',
+            component: () => import('@/views/admin/MesaLiveView.vue'),
+            meta: { title: 'La mesa en vivo' },
+          },
+          {
+            path: 'entrenar',
+            name: 'AdminMesaTrain',
+            component: () => import('@/views/admin/MesaTrainView.vue'),
+            meta: { title: 'Entrenar la mesa' },
+          },
+        ],
+      },
+      {
         path: 'pro',
         name: 'AdminPro',
         component: () => import('@/views/admin/AdminProView.vue'),
