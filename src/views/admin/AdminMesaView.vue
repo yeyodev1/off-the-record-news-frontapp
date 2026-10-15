@@ -5,6 +5,7 @@ import AdminPageHeader from '@/components/admin/AdminPageHeader.vue'
 const t = admin.mesa
 const tabs = [
   { to: '/admin/mesa', label: t.tabs.live, icon: 'fa-solid fa-tower-broadcast' },
+  { to: '/admin/mesa/agentes', label: t.tabs.agents, icon: 'fa-solid fa-robot' },
   { to: '/admin/mesa/entrenar', label: t.tabs.train, icon: 'fa-solid fa-brain' },
 ]
 </script>
@@ -41,7 +42,8 @@ const tabs = [
     @include flex(row, center, center, 0.45rem);
     flex: 1;
     min-height: 2.75rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.6rem;
+    text-align: center;
     font-size: $text-sm;
     font-weight: 700;
     color: $ink-muted;
@@ -50,6 +52,7 @@ const tabs = [
 
     @include from('md') {
       flex: 0 0 auto;
+      padding: 0.5rem 1rem;
     }
 
     &:hover {

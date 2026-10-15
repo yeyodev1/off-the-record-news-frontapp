@@ -1,5 +1,7 @@
 import APIBase from './httpBase'
 import type {
+  AgentConfig,
+  AgentSection,
   AdminStats,
   Article,
   Edition,
@@ -323,6 +325,22 @@ class AdminService extends APIBase {
     sourceName?: string
   }): Promise<TryResult> {
     const { data } = await this.post<TryResult>('admin/training/try', body, undefined, SLOW)
+    return data
+  }
+
+  // ─── Agentes: reglas base que la IA lee en cada paso ──────────────────
+  async agents(): Promise<AgentConfig[]> {
+    const { data } = await this.get<AgentConfig[]>('admin/agents')
+    return data
+  }
+
+  async saveAgentSection(agent: string, section: string, rules: string[]): Promise<AgentSection> {
+    const { data } = await this.put<AgentSection>(`admin/agents/${agent}/${section}`, { rules })
+    return data
+  }
+
+  async resetAgentSection(agent: string, section: string): Promise<AgentSection> {
+    const { data } = await this.delete<AgentSection>(`admin/agents/${agent}/${section}`)
     return data
   }
 

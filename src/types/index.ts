@@ -495,3 +495,21 @@ export interface TryResult {
   threshold: number
   lessonsUsed: number
 }
+
+export interface AgentSection {
+  key: string
+  title: string
+  help: string
+  rules: string[]
+  defaults: string[]
+  isDefault: boolean
+  updatedByName: string
+  updatedAt: string | null
+}
+
+export interface AgentConfig {
+  key: string
+  name: string
+  description: string
+  sections: AgentSection[]
+}

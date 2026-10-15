@@ -133,10 +133,16 @@ const routes: Array<RouteRecordRaw> = [
             meta: { title: 'La mesa en vivo' },
           },
           {
+            path: 'agentes',
+            name: 'AdminMesaAgents',
+            component: () => import('@/views/admin/MesaAgentsView.vue'),
+            meta: { title: 'Cómo trabaja cada agente' },
+          },
+          {
             path: 'entrenar',
             name: 'AdminMesaTrain',
             component: () => import('@/views/admin/MesaTrainView.vue'),
-            meta: { title: 'Entrenar la mesa' },
+            meta: { title: 'Instrucciones extra' },
           },
         ],
       },
