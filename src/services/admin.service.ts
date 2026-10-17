@@ -7,7 +7,9 @@ import type {
   Edition,
   Lesson,
   LessonInput,
+  MesaChatTurn,
   MesaLive,
+  MesaProposal,
   ModeStats,
   NewsletterIssue,
   Paginated,
@@ -341,6 +343,25 @@ class AdminService extends APIBase {
 
   async resetAgentSection(agent: string, section: string): Promise<AgentSection> {
     const { data } = await this.delete<AgentSection>(`admin/agents/${agent}/${section}`)
+    return data
+  }
+
+  // ─── Entrenar la mesa por chat ────────────────────────────────────────
+  async mesaChat(message: string, history: MesaChatTurn[]): Promise<{ proposal: MesaProposal }> {
+    const { data } = await this.post<{ proposal: MesaProposal }>(
+      'admin/training/chat',
+      { message, history },
+      undefined,
+      SLOW,
+    )
+    return data
+  }
+
+  async mesaChatApply(proposal: MesaProposal): Promise<{ applied: 'lesson' | 'agent_rule' }> {
+    const { data } = await this.post<{ applied: 'lesson' | 'agent_rule' }>(
+      'admin/training/chat/apply',
+      { proposal },
+    )
     return data
   }
 

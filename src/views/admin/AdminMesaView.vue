@@ -6,6 +6,7 @@ const t = admin.mesa
 const tabs = [
   { to: '/admin/mesa', label: t.tabs.live, icon: 'fa-solid fa-tower-broadcast' },
   { to: '/admin/mesa/agentes', label: t.tabs.agents, icon: 'fa-solid fa-robot' },
+  { to: '/admin/mesa/chat', label: t.tabs.chat, icon: 'fa-solid fa-comments' },
   { to: '/admin/mesa/entrenar', label: t.tabs.train, icon: 'fa-solid fa-brain' },
 ]
 </script>

@@ -88,7 +88,12 @@ export const admin = {
   mesa: {
     title: 'La mesa por dentro',
     subtitle: 'Mira cómo trabajan los agentes y enséñales lo que la Mesa quiere.',
-    tabs: { live: 'En vivo', agents: 'Agentes', train: 'Instrucciones extra' },
+    tabs: {
+      live: 'En vivo',
+      agents: 'Agentes',
+      train: 'Instrucciones extra',
+      chat: 'Entrenar por chat',
+    },
     agents: {
       intro:
         'Esto es lo que la IA lee en cada paso. Cambiarlo cambia cómo trabaja desde el próximo ciclo. Los formatos técnicos (campos de la nota) y la regla de no inventar datos quedan fijos.',
@@ -220,6 +225,26 @@ export const admin = {
       verdictYes: 'Sí era noticia',
       verdictNo: 'No era noticia',
       by: 'por',
+    },
+    chat: {
+      intro:
+        'Escríbele a la mesa lo que quieres cambiar, como se lo dirías a un periodista. Ella propone cómo aplicarlo y tú confirmas. Los formatos técnicos y la regla de no inventar datos quedan fijos.',
+      placeholder: 'Ej: no pongas las fuentes en el primer párrafo, ponlas al final',
+      send: 'Enviar',
+      sending: 'Pensando…',
+      greeting:
+        'Hola, soy la mesa. Dime qué quieres cambiar de cómo valoro, redacto o encuadro las notas, y te propongo cómo aplicarlo',
+      proposeLesson: 'Propongo una instrucción nueva',
+      proposeRule: 'Propongo una regla nueva',
+      forArea: 'para el área',
+      forAgent: 'para',
+      apply: 'Aplicar',
+      applying: 'Aplicando…',
+      appliedLesson: 'Instrucción guardada. La mesa la usa desde el próximo ciclo',
+      appliedRule: 'Regla agregada. La mesa la usa desde el próximo ciclo',
+      dismiss: 'Ahora no',
+      error: 'No pude procesar eso, intenta de nuevo',
+      reset: 'Empezar de nuevo',
     },
     tryIt: {
       title: 'Probar un titular',

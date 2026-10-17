@@ -139,6 +139,12 @@ const routes: Array<RouteRecordRaw> = [
             meta: { title: 'Cómo trabaja cada agente' },
           },
           {
+            path: 'chat',
+            name: 'AdminMesaChat',
+            component: () => import('@/views/admin/MesaChatView.vue'),
+            meta: { title: 'Entrenar por chat' },
+          },
+          {
             path: 'entrenar',
             name: 'AdminMesaTrain',
             component: () => import('@/views/admin/MesaTrainView.vue'),

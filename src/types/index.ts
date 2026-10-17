@@ -513,3 +513,20 @@ export interface AgentConfig {
   description: string
   sections: AgentSection[]
 }
+
+export type MesaChangeKind = 'lesson' | 'agent_rule' | 'question' | 'none'
+
+export interface MesaProposal {
+  kind: MesaChangeKind
+  area?: LessonArea
+  agent?: string
+  section?: string
+  instruction?: string
+  newRule?: string
+  summary: string
+}
+
+export interface MesaChatTurn {
+  role: 'editor' | 'mesa'
+  text: string
+}
