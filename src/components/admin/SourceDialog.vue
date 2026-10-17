@@ -19,6 +19,7 @@ const form = reactive<SourceInput>({
   isActive: true,
   everyMinutes: 0,
   notes: '',
+  photoLicensed: false,
 })
 
 watch(
@@ -36,6 +37,7 @@ watch(
       isActive: s?.isActive ?? true,
       everyMinutes: s?.everyMinutes ?? 0,
       notes: s?.notes ?? '',
+      photoLicensed: s?.photoLicensed ?? false,
     })
   },
 )
@@ -133,6 +135,10 @@ function submit() {
       <label class="source-form__check">
         <input v-model="form.isActive" type="checkbox" />
         {{ t.isActive }}
+      </label>
+      <label class="source-form__check">
+        <input v-model="form.photoLicensed" type="checkbox" />
+        {{ t.photoLicensed }}
       </label>
     </div>
   </AdminDialog>

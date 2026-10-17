@@ -291,6 +291,7 @@ export interface Source {
   everyMinutes?: number
   notes?: string
   fromSheet?: boolean
+  photoLicensed?: boolean
   lastCheckedAt: string | null
   lastError: string
   createdAt: string

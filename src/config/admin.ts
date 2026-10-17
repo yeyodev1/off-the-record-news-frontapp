@@ -504,6 +504,7 @@ export const admin = {
     query: 'Consulta para Perplexity',
     weight: 'Peso (0.5 a 2)',
     isActive: 'Activa',
+    photoLicensed: 'Con licencia para usar sus fotos',
     lastChecked: 'Última revisión',
     never: 'Nunca',
     saved: 'Fuente guardada',
