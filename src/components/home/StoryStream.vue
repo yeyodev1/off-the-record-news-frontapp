@@ -16,7 +16,9 @@ import type { ArticleCard, ProTeaser, StreamOrder } from '@/types'
  * primera nota) y, en noboísta o correísta, "Lo que tu orilla no está mirando"
  * después de la segunda.
  */
-const props = defineProps<{ otherSide: ArticleCard[] }>()
+const props = withDefaults(defineProps<{ otherSide: ArticleCard[]; topIds?: string[] }>(), {
+  topIds: () => [],
+})
 
 const TABS: StreamOrder[] = ['principales', 'leidas', 'ultimo']
 const PRO_EVERY = 4
@@ -24,6 +26,15 @@ const PRO_EVERY = 4
 const order = ref<StreamOrder>('principales')
 const { items, hasMore, loading, loadingMore, error, loadMore, reload } = useStream(order)
 const { teasers, sealedThisWeek } = useProTeasers()
+
+// En "Principales" el stream comparte el orden del modo con "Las 5 cosas": sin
+// esto, las primeras notas repetirían la caja de arriba. En las otras pestañas
+// el orden es distinto, así que no se filtra.
+const visibleItems = computed(() => {
+  if (order.value !== 'principales' || !props.topIds.length) return items.value
+  const top = new Set(props.topIds)
+  return items.value.filter((article) => !top.has(article.id))
+})
 const scroll = useInfiniteScroll(() => loadMore())
 
 type Row =
@@ -34,7 +45,7 @@ type Row =
 const rows = computed<Row[]>(() => {
   const out: Row[] = []
   let nextTeaser = 0
-  items.value.forEach((article, index) => {
+  visibleItems.value.forEach((article, index) => {
     out.push({ kind: 'story', key: article.id, article })
     const isProSlot = index === 0 || (index > 0 && index % PRO_EVERY === 0)
     if (isProSlot && nextTeaser < teasers.value.length) {

@@ -197,9 +197,9 @@ export const site = {
         'Primero lo que la oposición cuestiona, denuncia o reclama, y las cifras que pesan contra el gobierno. La versión oficial va después, con su fuente.',
     },
     independiente: {
-      name: 'Independientes',
+      name: 'Independiente',
       short: 'independiente',
-      abbr: 'Indep.',
+      abbr: 'Independiente',
       color: '#111111',
       icon: 'fa-regular fa-newspaper',
       wants: 'Las dos orillas, equilibradas.',

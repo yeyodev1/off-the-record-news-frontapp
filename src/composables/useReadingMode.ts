@@ -6,7 +6,8 @@ import type { ReadingMode } from '@/types'
 const MODE_KEY = 'otr_modo'
 const OTHER_SIDE_KEY = 'otr_otra_orilla'
 
-export const READING_MODES = Object.keys(site.modes) as ReadingMode[]
+// Independiente primero: es el modo canónico y el de quien llega por un enlace.
+export const READING_MODES = ['independiente', 'noboista', 'correista'] as ReadingMode[]
 
 function isMode(value: unknown): value is ReadingMode {
   return typeof value === 'string' && READING_MODES.includes(value as ReadingMode)

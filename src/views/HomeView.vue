@@ -30,7 +30,7 @@ const { feed, topFive, otherSide, loading, error, isEmpty, reload } = useHomeFee
     </div>
 
     <div class="home__stream">
-      <StoryStream :other-side="otherSide" />
+      <StoryStream :other-side="otherSide" :top-ids="topFive.map((a) => a.id)" />
     </div>
 
     <NewsletterBand class="home__band" />
