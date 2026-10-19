@@ -176,6 +176,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/admin/AdminNewslettersView.vue'),
         meta: { title: 'Boletines' },
       },
+      {
+        path: 'conector',
+        name: 'AdminConnector',
+        component: () => import('@/views/admin/AdminConnectorView.vue'),
+        meta: { title: 'Conector de gerencia', requiresMcp: true },
+      },
     ],
   },
   {
@@ -212,6 +218,10 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAdmin && !userStore.isAdmin) {
     return { name: 'Home', replace: true }
+  }
+
+  if (to.meta.requiresMcp && !userStore.user?.canUseMcp) {
+    return { name: 'AdminDashboard', replace: true }
   }
 
   if (to.meta.guestOnly && userStore.isAuthenticated) {
