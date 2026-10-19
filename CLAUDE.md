@@ -74,4 +74,4 @@ En componentes: `$ink`, `$accent`, `@include from('md')`, `@include container` �
 
 ## Conector de gerencia
 
-- `/admin/conector` (`AdminConnectorView` + `components/admin/connector/*` + `useConnector`): llave del conector MCP, guía para conectarlo en Claude y bitácora de cambios. Solo para `user.canUseMcp` (lo calcula el backend con `MCP_ALLOWED_EMAILS`): el ítem del menú lleva `gerencia: true` y la ruta `meta.requiresMcp`.
+- `/admin/mcp` (ítem "MCP" del menú; `/admin/conector` redirige) (`AdminConnectorView` + `components/admin/connector/*` + `useConnector`): llave del conector MCP, guía para conectarlo en Claude y bitácora de cambios. Solo para `user.canUseMcp` (lo calcula el backend con `MCP_ALLOWED_EMAILS`): el ítem del menú lleva `gerencia: true` y la ruta `meta.requiresMcp`.
