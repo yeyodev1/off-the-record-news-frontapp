@@ -49,7 +49,7 @@ export const adminNav: AdminNavItem[] = [
   { label: 'Denuncias', to: '/admin/denuncias', icon: 'fa-solid fa-user-secret' },
   { label: 'Boletines', to: '/admin/boletines', icon: 'fa-solid fa-envelope-open-text' },
   { label: 'Telegram', to: '/admin/telegram', icon: 'fa-brands fa-telegram' },
-  { label: 'Conector', to: '/admin/conector', icon: 'fa-solid fa-plug', gerencia: true },
+  { label: 'MCP', to: '/admin/mcp', icon: 'fa-solid fa-plug', gerencia: true },
 ]
 
 export const admin = {
@@ -587,7 +587,7 @@ export const admin = {
   },
 
   connector: {
-    title: 'Conector de gerencia',
+    title: 'MCP · Conectar con Claude',
     subtitle:
       'Pide cambios al sitio y a la mesa desde Claude, en lenguaje normal. Claude los guarda en GitHub y se publican solos.',
     privateNote: 'Página privada: solo la ven las cuentas de gerencia.',
@@ -611,6 +611,8 @@ export const admin = {
     copied: 'Copiada',
     notReady: 'Falta cargar el acceso a GitHub en el servidor. Avísale a Bakano.',
     stepsTitle: 'Cómo conectarlo',
+    openClaude: 'Abrir Claude para conectar',
+    claudeConnectorsUrl: 'https://claude.ai/settings/connectors',
     claudeAi: {
       title: 'En Claude (web o app)',
       steps: [
