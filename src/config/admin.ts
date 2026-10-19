@@ -26,6 +26,8 @@ export interface AdminNavItem {
   /** Aparece en la barra inferior del celular. */
   primary?: boolean
   badge?: 'pending'
+  /** Solo para las cuentas de gerencia (canUseMcp). */
+  gerencia?: boolean
 }
 
 export const adminNav: AdminNavItem[] = [
@@ -47,6 +49,7 @@ export const adminNav: AdminNavItem[] = [
   { label: 'Denuncias', to: '/admin/denuncias', icon: 'fa-solid fa-user-secret' },
   { label: 'Boletines', to: '/admin/boletines', icon: 'fa-solid fa-envelope-open-text' },
   { label: 'Telegram', to: '/admin/telegram', icon: 'fa-brands fa-telegram' },
+  { label: 'Conector', to: '/admin/conector', icon: 'fa-solid fa-plug', gerencia: true },
 ]
 
 export const admin = {
@@ -581,6 +584,64 @@ export const admin = {
     canceled: 'Suscripción cancelada',
     cancelTitle: '¿Cancelar esta suscripción?',
     cancelMessage: 'Dejará de recibir boletines y contenido Pro.',
+  },
+
+  connector: {
+    title: 'Conector de gerencia',
+    subtitle:
+      'Pide cambios al sitio y a la mesa desde Claude, en lenguaje normal. Claude los guarda en GitHub y se publican solos.',
+    privateNote: 'Página privada: solo la ven las cuentas de gerencia.',
+    keyTitle: 'Tu llave',
+    keyNone: 'Todavía no generaste una llave.',
+    keyActive: 'Llave activa terminada en',
+    keyCreated: 'Creada',
+    keyUsed: 'Último uso',
+    keyNeverUsed: 'Sin usar todavía',
+    generate: 'Generar llave',
+    regenerate: 'Generar una nueva',
+    regenerateConfirm: 'La llave actual deja de funcionar. ¿Generar una nueva?',
+    revoke: 'Apagar llave',
+    revokeConfirm: 'El conector deja de funcionar hasta que generes otra llave. ¿Apagarla?',
+    revoked: 'Llave apagada',
+    generated: 'Llave nueva lista. Cópiala ahora: no se vuelve a mostrar.',
+    urlLabel: 'URL del conector',
+    urlOnce:
+      'Se muestra solo esta vez. Guárdala en un lugar seguro: quien la tenga puede cambiar el sitio.',
+    copy: 'Copiar',
+    copied: 'Copiada',
+    notReady: 'Falta cargar el acceso a GitHub en el servidor. Avísale a Bakano.',
+    stepsTitle: 'Cómo conectarlo',
+    claudeAi: {
+      title: 'En Claude (web o app)',
+      steps: [
+        'Abre claude.ai → Configuración → Conectores.',
+        'Toca "Agregar conector personalizado".',
+        'Nombre: OTR gerencia. URL: pega la URL del conector.',
+        'En un chat nuevo, activa el conector desde el menú de herramientas.',
+      ],
+    },
+    claudeCode: {
+      title: 'En Claude Code (terminal)',
+      command: 'claude mcp add --transport http otr-gerencia URL_DEL_CONECTOR',
+    },
+    examplesTitle: 'Qué le puedes pedir',
+    examples: [
+      'Cambia el texto del botón "Siguiente nota" por "Leer la que sigue".',
+      'En la portada, que "Las 5 cosas" se llame "Lo esencial de hoy".',
+      'Muéstrame los últimos cambios del sitio y si el deploy salió bien.',
+      'Deshaz el último cambio del front.',
+    ],
+    rulesTitle: 'Cómo trabaja',
+    rules: [
+      'Antes de guardar te explica qué va a cambiar y te pide confirmación.',
+      'Cada cambio es un commit en GitHub y se publica en 1 o 2 minutos. Si el build falla, el sitio sigue con la versión anterior.',
+      'Cada cambio le llega por correo a Bakano y queda en la bitácora de abajo.',
+      'No puede ver ni tocar claves, secretos ni este mismo conector.',
+    ],
+    logTitle: 'Bitácora de cambios',
+    logEmpty: 'Todavía no hay cambios hechos con el conector.',
+    undo: 'Deshecho',
+    viewCommit: 'Ver en GitHub',
   },
 
   tips: {
