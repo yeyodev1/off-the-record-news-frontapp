@@ -178,9 +178,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'conector',
+        redirect: '/admin/mcp',
+      },
+      {
+        path: 'mcp',
         name: 'AdminConnector',
         component: () => import('@/views/admin/AdminConnectorView.vue'),
-        meta: { title: 'Conector de gerencia', requiresMcp: true },
+        meta: { title: 'MCP', requiresMcp: true },
       },
     ],
   },
