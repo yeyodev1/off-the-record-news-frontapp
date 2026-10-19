@@ -10,6 +10,8 @@ import type {
   MesaChatTurn,
   MesaLive,
   MesaProposal,
+  McpStatus,
+  McpAccess,
   ModeStats,
   NewsletterIssue,
   Paginated,
@@ -430,6 +432,22 @@ class AdminService extends APIBase {
       },
     )
     return data
+  }
+
+  // ─── Conector de gerencia ─────────────────────────────────────────────
+  async mcpStatus(): Promise<McpStatus> {
+    const { data } = await this.get<McpStatus>('admin/mcp')
+    return data
+  }
+
+  /** La URL completa llega solo en esta respuesta. */
+  async mcpRotate(): Promise<{ access: McpAccess; url: string }> {
+    const { data } = await this.post<{ access: McpAccess; url: string }>('admin/mcp/token', {})
+    return data
+  }
+
+  async mcpRevoke(): Promise<void> {
+    await this.delete('admin/mcp/token')
   }
 }
 
