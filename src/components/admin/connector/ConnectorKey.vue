@@ -62,6 +62,14 @@ async function copy() {
         </button>
       </div>
       <p class="key__once"><i class="fa-solid fa-eye-slash"></i> {{ t.urlOnce }}</p>
+      <a
+        class="btn btn--ghost key__open"
+        :href="t.claudeConnectorsUrl"
+        target="_blank"
+        rel="noopener"
+      >
+        <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ t.openClaude }}
+      </a>
     </div>
 
     <p v-if="access" class="key__meta">
@@ -158,6 +166,10 @@ async function copy() {
   &__once {
     font-size: $text-xs;
     color: $ink-soft;
+  }
+
+  &__open {
+    align-self: flex-start;
   }
 
   &__meta {
