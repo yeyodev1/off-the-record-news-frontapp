@@ -19,6 +19,8 @@ export interface SessionUser {
   name: string
   phone: string
   accountType: 'customer' | 'admin' | string
+  /** Gerencia: ve la página del conector. */
+  canUseMcp?: boolean
 }
 
 // ─── Off the Record: contrato del API ───────────────────────────────────
@@ -530,4 +532,35 @@ export interface MesaProposal {
 export interface MesaChatTurn {
   role: 'editor' | 'mesa'
   text: string
+}
+
+// ─── Conector de gerencia (MCP) ─────────────────────────────────────────
+export type McpRepo = 'back' | 'front'
+
+export interface McpAccess {
+  id: string
+  email: string
+  tokenHint: string
+  lastUsedAt: string | null
+  createdAt: string
+}
+
+export interface McpChange {
+  id: string
+  email: string
+  repo: McpRepo
+  kind: 'cambio' | 'deshacer'
+  message: string
+  sha: string
+  url: string
+  files: string[]
+  createdAt: string
+}
+
+export interface McpStatus {
+  access: McpAccess | null
+  /** El servidor tiene el token de GitHub cargado. */
+  ready: boolean
+  repos: Record<McpRepo, string>
+  changes: McpChange[]
 }
