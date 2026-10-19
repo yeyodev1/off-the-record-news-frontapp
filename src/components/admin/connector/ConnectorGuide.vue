@@ -14,6 +14,14 @@ const t = admin.connector
         <ol>
           <li v-for="step in t.claudeAi.steps" :key="step">{{ step }}</li>
         </ol>
+        <a
+          class="btn btn--dark guide__open"
+          :href="t.claudeConnectorsUrl"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> {{ t.openClaude }}
+        </a>
       </div>
       <div class="guide__block">
         <h3><i class="fa-solid fa-terminal"></i> {{ t.claudeCode.title }}</h3>
@@ -80,6 +88,10 @@ const t = admin.connector
 
     ul {
       list-style: disc;
+    }
+
+    .guide__open {
+      margin-top: 0.8rem;
     }
 
     pre {
