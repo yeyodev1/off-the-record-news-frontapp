@@ -71,3 +71,7 @@ En componentes: `$ink`, `$accent`, `@include from('md')`, `@include container` �
 - Fotos de alto fijo con `StoryPhoto`: si el medio bloquea la imagen cae a la portada de marca.
 - Nota con lectura continua (`ArticleView` + `ArticleStory` + `useArticleChain`): al final sigue la siguiente nota completa en el orden del modo; `useActiveStory` mueve la URL con `history.replaceState`. Sin bloque "Cómo hicimos esta nota".
 - Tres lenguajes visuales (`utils/media.ts`): `image.editorial` (documental, archivo, grafico, generica) lo pone el backend. La genérica no se muestra: cae a `DataCover` si hay cifras o a la ficha de marca.
+
+## Conector de gerencia
+
+- `/admin/conector` (`AdminConnectorView` + `components/admin/connector/*` + `useConnector`): llave del conector MCP, guía para conectarlo en Claude y bitácora de cambios. Solo para `user.canUseMcp` (lo calcula el backend con `MCP_ALLOWED_EMAILS`): el ítem del menú lleva `gerencia: true` y la ruta `meta.requiresMcp`.
