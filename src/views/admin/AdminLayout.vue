@@ -18,6 +18,9 @@ const { pending, refreshStats } = useAdminStats()
 const drawerOpen = ref(false)
 useBodyScroll(drawerOpen)
 
+// El conector de gerencia solo aparece para las cuentas habilitadas.
+const nav = computed(() => adminNav.filter((item) => !item.gerencia || userStore.user?.canUseMcp))
+
 const userName = computed(() => userStore.user?.name || '')
 const userEmail = computed(() => userStore.user?.email || '')
 
@@ -44,7 +47,7 @@ watch(
         <span class="admin__brand-name">{{ site.name }}</span>
         <span class="admin__brand-tag">{{ admin.brand }}</span>
       </RouterLink>
-      <AdminNavList :items="adminNav" :pending="pending" class="admin__nav" />
+      <AdminNavList :items="nav" :pending="pending" class="admin__nav" />
       <AdminUserBox :name="userName" :email="userEmail" @logout="logout" />
     </aside>
 
@@ -78,7 +81,7 @@ watch(
                 <i class="fa-solid fa-xmark"></i>
               </button>
             </div>
-            <AdminNavList :items="adminNav" :pending="pending" @navigate="drawerOpen = false" />
+            <AdminNavList :items="nav" :pending="pending" @navigate="drawerOpen = false" />
             <AdminUserBox :name="userName" :email="userEmail" @logout="logout" />
           </div>
         </div>
